@@ -22,7 +22,8 @@
   font-size:15px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html{height:100%;background:var(--gent-gray-ultra)}
+body{min-height:100%}
 body{
   background:var(--gent-gray-ultra);
   color:var(--gent-gray);
@@ -52,7 +53,8 @@ header{padding:20px 24px 0}
 .demo-pill button:hover{background:var(--gent-gray);color:var(--white)}
 
 /* ---------- day tabs ---------- */
-.days{display:flex;gap:5px;margin:0 24px;padding:12px 2px 2px;overflow-x:auto;scrollbar-width:thin}
+.days{display:flex;gap:5px;margin:0 24px;padding:12px 2px 2px;overflow-x:auto;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
 .day{
   flex:0 0 auto;min-width:76px;padding:8px 10px 9px;border-radius:var(--radius-3) var(--radius-3) 0 0;
   border:1px solid var(--gent-gray-light);border-bottom:none;text-align:center;color:var(--gent-gray-medium);
@@ -184,8 +186,7 @@ header{padding:20px 24px 0}
 .rowlabel-btn{cursor:pointer}
 .rowlabel-btn:hover .naam{color:var(--gent-blue);text-decoration:underline}
 
-.stickyhead{position:sticky;top:0;z-index:20;background:var(--gent-gray-ultra);
-  box-shadow:0 3px 12px rgba(0,24,35,.06)}
+.stickyhead{position:sticky;top:0;z-index:40;background:var(--gent-gray-ultra)}
 .stickyhead .days{margin-top:0;padding-top:10px}
 
 /* view-switch (icon segmented, rechts) */
@@ -255,7 +256,7 @@ header{padding:20px 24px 0}
 .leaflet-container{font-family:'Fira Sans',sans-serif}
 
 /* laad- en foutscherm */
-.loadstate{padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.loadstate{width:100%;min-height:46vh;padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;box-sizing:border-box}
 .loadstate .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--gent-gray-light);
   border-top-color:var(--gent-cyan);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -275,8 +276,9 @@ header{padding:20px 24px 0}
 
 /* ---------- mobiel: tijdliniaal + "nu & straks" per plein ---------- */
 .mob{display:flex;flex-direction:column;gap:12px;padding:12px 12px calc(24px + env(safe-area-inset-bottom))}
-.ruler{position:sticky;top:var(--headH,0px);z-index:6;background:var(--white);margin:-6px -12px 0;
-  border-bottom:1px solid var(--gent-gray-light);box-shadow:0 3px 10px rgba(0,24,35,.05);padding:4px 0 2px}
+.ruler{position:sticky;top:var(--headH,0px);z-index:6;background:var(--white);margin:0;
+  border-bottom:1px solid var(--gent-gray-light);border-top:1px solid var(--gent-gray-light);padding:4px 0 2px}
+#stickyHead .ruler{position:relative;top:auto}
 .ruler .nhead{position:absolute;left:50%;top:4px;transform:translateX(-50%);z-index:3;
   display:flex;align-items:center;gap:6px;pointer-events:none}
 .ruler .ntime{background:var(--gent-blue);color:var(--white);font-size:.74rem;font-weight:700;
@@ -330,8 +332,7 @@ header{padding:20px 24px 0}
 .rowlabel-btn{cursor:pointer}
 .rowlabel-btn:hover .naam{color:var(--gent-blue);text-decoration:underline}
 
-.stickyhead{position:sticky;top:0;z-index:20;background:var(--gent-gray-ultra);
-  box-shadow:0 3px 12px rgba(0,24,35,.06)}
+.stickyhead{position:sticky;top:0;z-index:40;background:var(--gent-gray-ultra)}
 .stickyhead .days{margin-top:0;padding-top:10px}
 
 /* view-switch (icon segmented, rechts) */
@@ -401,7 +402,7 @@ header{padding:20px 24px 0}
 .leaflet-container{font-family:'Fira Sans',sans-serif}
 
 /* laad- en foutscherm */
-.loadstate{padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.loadstate{width:100%;min-height:46vh;padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;box-sizing:border-box}
 .loadstate .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--gent-gray-light);
   border-top-color:var(--gent-cyan);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -534,7 +535,6 @@ header{padding:20px 24px 0}
   .grid{min-width:0}
   .scroller{overflow-x:visible}
   /* liniaal: stiller */
-  .ruler{margin:-6px -12px 0;padding:2px 0}
   .ruler .ntime{font-size:.7rem;padding:2px 9px 3px;top:6px}
   /* kaarten: zweven op schaduw i.p.v. rand */
   .pcard{border:none;box-shadow:0 1px 3px rgba(0,24,35,.08);padding:10px 12px 6px}
@@ -775,11 +775,13 @@ function render(){
   $('#countLabel').innerHTML=`<b>${visible.length}</b> op de pleinen · <b>${restCount}</b> doorlopend & elders`;
 
   document.querySelectorAll('.viewswitch button').forEach(b=>b.classList.toggle('on',b.dataset.v===(state.view||'tijd')));
+  const _sr=document.querySelector('#stickyHead .ruler'); if(_sr) _sr.remove();
   if(state.loading || state.loadError){ renderStatusScreen(); return; }
   if(state.view==='kaart'){ renderKaart(ROWS, dayEvents); return; }
   if(isMobile()){ renderMobile(ROWS, dayEvents); return; }
 
   grid.innerHTML='';
+  grid.style.minWidth='';
   /* elastische uurbreedte: vul de volledige beschikbare breedte, met 64px/u als minimum */
   const availW=$('#scroller').clientWidth - LABEL_W() - 2;
   const fitW=Math.max(88, Math.floor((availW/(END_H-START_H))*100)/100);
@@ -935,6 +937,7 @@ function render(){
 /* ================= LAAD- & FOUTSCHERM ================= */
 function renderStatusScreen(){
   grid.innerHTML='';
+  grid.style.minWidth='0';
   const box=document.createElement('div'); box.className='loadstate';
   if(state.loading){
     box.innerHTML=`<div class="spin" aria-hidden="true"></div>
@@ -1061,6 +1064,7 @@ function buildRuler(dayEvents,onTime){
 
 function renderMobile(ROWS, dayEvents){
   grid.innerHTML='';
+  grid.style.minWidth='0';
   grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
   const wrapM=document.createElement('div'); wrapM.className='mob';
   const listWrap=document.createElement('div');
@@ -1128,7 +1132,7 @@ function renderMobile(ROWS, dayEvents){
   };
 
   const r=buildRuler(dayEvents,buildList);
-  wrapM.appendChild(r.el);
+  $('#stickyHead').appendChild(r.el);
   wrapM.appendChild(listWrap);
   grid.appendChild(wrapM);
   r.mount();
@@ -1158,11 +1162,12 @@ function rowCoords(p){
 let MAP=null, MARKLAYER=null;
 function renderKaart(ROWS, dayEvents){
   grid.innerHTML='';
+  grid.style.minWidth='0';
   grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
   if(MAP){ MAP.remove(); MAP=null; MARKLAYER=null; }
   const wrapK=document.createElement('div'); wrapK.className='kwrap';
   const r=buildRuler(dayEvents,t=>updateMarkers(ROWS,dayEvents,t));
-  wrapK.appendChild(r.el);
+  (isMobile() ? $('#stickyHead') : wrapK).appendChild(r.el);
   const mapDiv=document.createElement('div'); mapDiv.id='kmap'; wrapK.appendChild(mapDiv);
   grid.appendChild(wrapK);
   ensureLeaflet().then(()=>{
@@ -1290,15 +1295,7 @@ async function loadLive(){
   try{
     /* ---- 1. ophalen ---- */
     const setMsg=t=>{ st.textContent=t; const lm=document.getElementById('loadMsg'); if(lm) lm.textContent=t; };
-    /* volledige dataset in één request via het export-endpoint */
-    const fetchExport=async id=>{
-      const r=await fetch(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/exports/json`);
-      if(!r.ok) throw new Error('export '+r.status);
-      const j=await r.json();
-      if(!Array.isArray(j)) throw new Error('exportvorm');
-      return j;
-    };
-    /* vangnet: gepagineerd, maar met parallelle batches */
+    /* gepagineerd met parallelle batches: snelste pad (API serveert uit cache) */
     const fetchPaged=async (id,label)=>{
       const base=`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/records`;
       const probe=await fetch(`${base}?limit=1`);
@@ -1307,25 +1304,21 @@ async function loadLive(){
       if(!total) return [];
       const offs=[]; for(let o=0;o<total;o+=100) offs.push(o);
       const out=new Array(offs.length); let done=0;
-      const CH=6; /* 6 requests tegelijk */
+      const CH=8; /* 8 requests tegelijk */
       for(let i=0;i<offs.length;i+=CH){
         await Promise.all(offs.slice(i,i+CH).map(async(off,ix)=>{
           const r=await fetch(`${base}?limit=100&offset=${off}`);
           out[i+ix]=r.ok ? ((await r.json()).results||[]) : [];
           done++;
-          if(label) setMsg(`${label} ${Math.min(done*100,total)}/${total}…`);
+          if(label) setMsg(`${label} ${Math.min(99,Math.round(Math.min(done*100,total)/total*100))}%`);
         }));
       }
       return out.flat();
     };
-    const fetchDS=async (id,label)=>{
-      if(label) setMsg(label);
-      try{ return await fetchExport(id); }
-      catch(_){ return fetchPaged(id,label); }
-    };
+    const fetchDS=(id,label)=>{ if(label) setMsg(label+'…'); return fetchPaged(id,label); };
     /* evenementen, locaties en thema's parallel */
     const loadSet=async id=>Promise.all([
-      fetchDS(id,'programma laden…'),
+      fetchDS(id,'programma laden'),
       fetchDS(id.replace('evenementen','locaties'),null).catch(()=>null),
       fetchDS(id.replace('evenementen','themas'),null).catch(()=>null),
     ]);
