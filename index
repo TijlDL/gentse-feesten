@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gentse Feesten '26 — Pleinenraster · Stad Gent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ====== Stad Gent stijlgids-tokens (stijlgids.stad.gent / StadGent gent-base) ====== */
+:root{
+  --gent-gray:#001823; --gent-gray-medium:#687278; --gent-gray-light:#e6e8ea; --gent-gray-ultra:#f0f1f2;
+  --gent-blue:#005ba9; --gent-blue-light:#ccdeee;
+  --gent-cyan:#009de0; --gent-cyan-pastel:#7ed9ff; --gent-cyan-light:#e6f8ff; --gent-cyan-hover:#1abcff;
+  --gent-yellow:#ffdb5a; --gent-yellow-pastel:#ffec93; --gent-yellow-light:#fff8d4;
+  --gent-red:#ea0d33; --gent-red-pastel:#ff8a9d; --gent-red-light:#fcdbe1;
+  --gent-orange:#e06c00; --gent-orange-light:#fff2e5;
+  --gent-green:#318b29; --gent-green-light:#e6f6e5; --gent-forest:#246420;
+  --white:#fff;
+  --radius-2:.3rem; --radius-3:1rem; --radius-pill:1.6rem;
+  --hourW:64px; --rowH:54px; --labelW:176px; --startHour:9; --endHour:31; /* 09:00 -> 07:00 (+1d) */
+  font-size:15px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--gent-gray-ultra);
+  color:var(--gent-gray);
+  font-family:'Fira Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--gent-blue)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--gent-gray);outline-offset:2px}
+
+/* ---------- header ---------- */
+.topband{height:6px;background:var(--gent-cyan)}
+header{padding:20px 24px 0}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand h1{
+  font-weight:800;font-size:clamp(24px,3vw,34px);letter-spacing:-.3px;line-height:1.05;color:var(--gent-blue);
+}
+.brand h1 .dp{color:var(--gent-cyan)} /* de dubbelepunt: knipoog naar het Gent-logo */
+.brand h1 .jaar{color:var(--gent-gray);font-weight:600}
+.brand .sub{color:var(--gent-gray-medium);font-size:.95rem}
+.demo-pill{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--gent-gray-medium)}
+.demo-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--gent-orange)}
+.demo-pill button{
+  border:2px solid var(--gent-gray);border-radius:var(--radius-pill);padding:5px 14px;font-size:.8rem;font-weight:600;
+  color:var(--gent-gray);background:var(--white);transition:background .15s;
+}
+.demo-pill button:hover{background:var(--gent-gray);color:var(--white)}
+
+/* ---------- day tabs ---------- */
+.days{display:flex;gap:5px;margin:8px 0 0;padding:12px 2px 2px;overflow-x:auto;scrollbar-width:thin}
+.day{
+  flex:0 0 auto;min-width:76px;padding:8px 10px 9px;border-radius:var(--radius-3) var(--radius-3) 0 0;
+  border:1px solid var(--gent-gray-light);border-bottom:none;text-align:center;color:var(--gent-gray-medium);
+  background:var(--white);position:relative;
+}
+.day .dow{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}
+.day .dnum{display:block;font-size:1.3rem;font-weight:700;line-height:1.1;color:var(--gent-gray)}
+.day.today{z-index:2}
+.day.today::after{
+  content:'vandaag';position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  background:var(--gent-yellow);color:var(--gent-gray);font-size:.62rem;font-weight:700;
+  padding:1px 8px;border-radius:var(--radius-pill);letter-spacing:.4px;
+}
+.day:hover{border-color:var(--gent-cyan-hover)}
+.day.active{background:var(--gent-blue);border-color:var(--gent-blue);color:var(--gent-blue-light)}
+.day.active .dnum{color:var(--white)}
+
+/* ---------- filter bar ---------- */
+.filters{
+  background:var(--white);border:1px solid var(--gent-gray-light);border-radius:0 var(--radius-3) 0 0;
+  padding:12px 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin:0 24px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;padding:5px 13px 6px;border-radius:var(--radius-pill);
+  white-space:nowrap;flex:0 0 auto;
+  border:1px solid var(--gent-gray-light);font-size:.85rem;font-weight:500;color:var(--gent-gray-medium);
+  background:var(--white);transition:all .12s;user-select:none;
+}
+.chip .sw{width:10px;height:10px;border-radius:3px;background:var(--c,var(--gent-gray-medium))}
+.chip:hover{border-color:var(--gent-gray-medium);color:var(--gent-gray)}
+.chip.on{background:color-mix(in srgb,var(--c,var(--gent-gray-medium)) 12%, var(--white));
+  border-color:var(--c,var(--gent-gray-medium));color:var(--gent-gray)}
+.chip.toggle .sw{border-radius:50%}
+.filters .sep{width:1px;height:22px;background:var(--gent-gray-light);margin:0 4px}
+.filters .zoek{
+  margin-left:auto;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
+  border-radius:var(--radius-pill);padding:6px 15px;color:var(--gent-gray);font-size:.85rem;width:210px;outline:none;
+  font-family:inherit;
+}
+.filters .zoek:focus{border-color:var(--gent-cyan)}
+.filters .reset{font-size:.8rem;color:var(--gent-blue);text-decoration:underline}
+.count{font-size:.8rem;color:var(--gent-gray-medium);white-space:nowrap}
+.count b{color:var(--gent-gray)}
+
+/* ---------- grid shell ---------- */
+.shell{margin:0 24px 40px;background:var(--white);
+  border:1px solid var(--gent-gray-light);border-top:none;border-radius:0 0 var(--radius-3) var(--radius-3);overflow:hidden}
+.scroller{overflow-x:auto;position:relative;scrollbar-width:thin}
+.grid{position:relative;min-width:calc(var(--labelW) + (var(--endHour) - var(--startHour)) * var(--hourW))}
+
+/* time header */
+.timehead{
+  position:sticky;top:0;z-index:30;display:flex;height:34px;
+  background:var(--white);border-bottom:2px solid var(--gent-gray-light);
+}
+.timehead .corner{flex:0 0 var(--labelW);position:sticky;left:0;z-index:31;background:var(--white);
+  border-right:1px solid var(--gent-gray-light);display:flex;align-items:center;padding:0 12px;
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.timehead .hours{position:relative;flex:1}
+.timehead .h{
+  position:absolute;top:0;height:100%;display:flex;align-items:center;
+  font-size:.8rem;color:var(--gent-gray-medium);transform:translateX(-50%);padding-top:2px;font-weight:500;
+}
+.timehead .h.mid{color:var(--gent-blue);font-weight:700}
+
+/* rows */
+.row{display:flex;position:relative;border-bottom:1px solid var(--gent-gray-light)}
+.row:last-child{border-bottom:none}
+.rowlabel{
+  flex:0 0 var(--labelW);position:sticky;left:0;z-index:20;background:var(--white);
+  border-right:1px solid var(--gent-gray-light);padding:8px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;
+}
+.rowlabel .naam{font-weight:700;font-size:.95rem;line-height:1.15;color:var(--gent-gray)}
+.rowlabel .tag{font-size:.68rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px}
+.lane{position:relative;flex:1;min-height:var(--rowH);background:color-mix(in srgb,var(--gent-gray-ultra) 45%,var(--white))}
+.lane .gridlines{position:absolute;inset:0;pointer-events:none;opacity:.6;
+  background-image:repeating-linear-gradient(to right,var(--gent-gray-light) 0 1px,transparent 1px var(--hourW));
+}
+
+/* event blocks */
+.ev{
+  position:absolute;
+  border-radius:var(--radius-2);padding:3px 8px 3px 6px;overflow:hidden;text-align:left;
+  background:var(--white);
+  border:1px solid var(--gent-gray-light);
+  border-left:3px solid var(--c);
+  box-shadow:0 1px 2px rgba(0,24,35,.07);
+  display:flex;align-items:center;gap:7px;
+  transition:transform .1s, box-shadow .1s;
+}
+.ev .bx{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.ev:hover,.ev:focus-visible{transform:translateY(-1px);box-shadow:0 3px 12px rgba(0,24,35,.18);z-index:5}
+.ev.dimmed{opacity:.22;pointer-events:none}
+.ev .t{font-weight:600;font-size:.8rem;line-height:1.15;color:var(--gent-gray);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .m{font-size:.68rem;color:var(--gent-gray-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .m .paid{color:var(--gent-orange);font-weight:700}
+
+/* doorlopend strip */
+.strip{background:var(--gent-gray-ultra)}
+.strip .rowlabel{background:var(--gent-gray-ultra)}
+.strip .pill{
+  position:absolute;top:9px;height:calc(var(--rowH) - 18px);
+  border-radius:var(--radius-pill);border:1px solid var(--gent-gray-light);padding:0 12px;
+  display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--gent-gray-medium);
+  background:var(--white);white-space:nowrap;transition:border-color .12s;
+}
+.strip .pill:hover{border-color:var(--gent-gray-medium)}
+.strip .pill b{font-weight:600}
+.strip .pill .n{background:var(--gent-gray-medium);border-radius:var(--radius-pill);padding:1px 8px;
+  font-size:.68rem;color:var(--white);font-weight:700}
+
+/* section headers within grid */
+.sectionhead{display:flex;align-items:center;background:var(--white);border-bottom:1px solid var(--gent-gray-light)}
+.sectionhead .rowlabel{background:var(--white);min-height:30px;padding:5px 12px}
+.sectionhead .rowlabel .naam{font-size:.7rem;color:var(--gent-blue);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+
+/* now line */
+.nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--gent-red);z-index:15;pointer-events:none}
+.nowline::before{content:'nu';position:sticky;top:38px;display:block;
+  background:var(--gent-red);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.5px;
+  padding:1px 7px 2px;border-radius:var(--radius-pill);transform:translateX(-50%);width:max-content;margin-left:1px}
+
+/* view-switch (segmented) */
+.viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
+  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto}
+.viewswitch button{border-radius:var(--radius-pill);padding:4px 13px;font-size:.82rem;font-weight:600;
+  color:var(--gent-gray-medium);white-space:nowrap}
+.viewswitch button.on{background:var(--gent-blue);color:var(--white)}
+
+/* kaartweergave */
+.kwrap{display:flex;flex-direction:column;gap:10px;padding:12px}
+.kwrap .ruler{position:static;margin:0 -12px;border-bottom:1px solid var(--gent-gray-light)}
+#kmap{height:calc(100vh - 320px);min-height:380px;border-radius:var(--radius-3);overflow:hidden;
+  border:1px solid var(--gent-gray-light);background:var(--gent-gray-ultra);z-index:0}
+.gmark-wrap{background:none;border:none}
+.gmark{display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:var(--white);border:3px solid var(--c);color:var(--c);
+  font-weight:800;font-size:.85rem;font-family:'Fira Sans',sans-serif;
+  box-shadow:0 2px 8px rgba(0,24,35,.25)}
+.gmark.idle{border-width:2px;border-color:var(--gent-gray-medium);color:var(--gent-gray-medium);opacity:.75}
+.kpop h4{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:.95rem;color:var(--gent-gray);margin:0 0 6px}
+.kpop .krow{display:flex;align-items:baseline;gap:7px;width:100%;text-align:left;padding:5px 4px;
+  border-radius:6px;font-family:'Fira Sans',sans-serif;font-size:.82rem;color:var(--gent-gray);border:0;background:none;cursor:pointer}
+.kpop .krow:hover{background:var(--gent-gray-ultra)}
+.kpop .krow b{font-variant-numeric:tabular-nums;color:var(--gent-gray-medium);font-weight:600;flex:0 0 34px}
+.kpop .kdot{width:8px;height:8px;border-radius:2px;background:var(--c);flex:0 0 auto;align-self:center}
+.kpop .kleeg{font-size:.8rem;color:var(--gent-gray-medium);margin:0}
+.leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 6px 22px rgba(0,24,35,.2)}
+.leaflet-popup-content{margin:12px 14px;font-family:'Fira Sans',sans-serif}
+.leaflet-container{font-family:'Fira Sans',sans-serif}
+
+/* laad- en foutscherm */
+.loadstate{padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.loadstate .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--gent-gray-light);
+  border-top-color:var(--gent-cyan);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loadstate .lt{font-weight:700;font-size:1.05rem;color:var(--gent-gray)}
+.loadstate .ls{color:var(--gent-gray-medium);font-size:.88rem;max-width:420px;line-height:1.5}
+.loadstate .retry{background:var(--gent-gray);color:var(--white);border:2px solid var(--gent-gray);
+  border-radius:var(--radius-pill);padding:10px 20px;font-weight:600}
+.loadstate .retry:hover{background:var(--gent-gray-medium);border-color:var(--gent-gray-medium)}
+
+/* crosshair (tijd aflezen onder je muis) */
+.crosshair{position:absolute;top:34px;bottom:0;width:0;border-left:1px dashed var(--gent-gray-medium);
+  z-index:12;pointer-events:none;display:none;opacity:.75}
+.crosshair .ct{position:sticky;top:38px;display:block;transform:translateX(-50%);width:max-content;
+  background:var(--gent-gray);color:var(--white);font-size:.68rem;font-weight:600;
+  padding:1px 8px 2px;border-radius:var(--radius-pill);margin-left:1px}
+
+
+/* ---------- mobiel: tijdliniaal + "nu & straks" per plein ---------- */
+.mob{display:flex;flex-direction:column;gap:12px;padding:12px 12px calc(24px + env(safe-area-inset-bottom))}
+.ruler{position:sticky;top:0;z-index:6;background:var(--white);margin:-6px -12px 0;
+  border-bottom:1px solid var(--gent-gray-light);padding:4px 0 2px}
+.ruler .ntime{position:absolute;left:50%;top:4px;transform:translateX(-50%);z-index:3;pointer-events:none;
+  background:var(--gent-gray);color:var(--white);font-size:.74rem;font-weight:700;
+  padding:2px 11px 3px;border-radius:var(--radius-pill);font-variant-numeric:tabular-nums}
+.ruler .needle{position:absolute;left:50%;top:26px;bottom:6px;width:2px;margin-left:-1px;
+  background:var(--gent-red);z-index:2;pointer-events:none}
+.ruler .nowbtn{position:absolute;right:8px;top:3px;z-index:4;border:1px solid var(--gent-yellow);
+  background:var(--gent-yellow-light);color:var(--gent-gray);font-size:.7rem;font-weight:700;
+  padding:3px 10px;border-radius:var(--radius-pill)}
+.ruler .track{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:22px 0 0;cursor:grab;user-select:none}
+.ruler .track.grabbing{cursor:grabbing}
+.ruler .track::-webkit-scrollbar{display:none}
+.ruler .strip{position:relative;height:52px}
+.ruler .dens{position:absolute;bottom:17px;border-radius:2px 2px 0 0;background:var(--gent-cyan-light)}
+.ruler .tick{position:absolute;bottom:17px;width:1px;height:7px;background:var(--gent-gray-light)}
+.ruler .tick.h{height:12px;background:var(--gent-gray-medium)}
+.ruler .hlab{position:absolute;bottom:0;transform:translateX(-50%);font-size:.66rem;
+  color:var(--gent-gray-medium);font-variant-numeric:tabular-nums}
+.pcard{border:1px solid var(--gent-gray-light);border-radius:var(--radius-3);background:var(--white);
+  padding:10px 12px 6px;display:flex;flex-direction:column;gap:2px}
+.pcard .phead{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px}
+.pcard h3{font-size:.98rem;font-weight:700;color:var(--gent-gray)}
+.pcard .tag2{font-size:.64rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px}
+.lrow{display:flex;gap:11px;align-items:center;padding:6px 2px;text-align:left;width:100%;border-radius:var(--radius-2)}
+.lrow:active{background:var(--gent-gray-ultra)}
+.lrow .th{position:relative;flex:0 0 40px;width:40px;height:40px;border-radius:8px;overflow:hidden;
+  background:color-mix(in srgb,var(--c) 16%,var(--white));color:var(--c);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem}
+.lrow .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lrow .bx{flex:1;min-width:0;display:flex;flex-direction:column}
+.lrow .ti{font-weight:600;font-size:.92rem;color:var(--gent-gray);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .me{font-size:.74rem;color:var(--gent-gray-medium);display:flex;align-items:center;gap:6px;
+  white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.lrow .gd{width:8px;height:8px;border-radius:2px;background:var(--c);flex:0 0 auto}
+.lrow .liv{color:var(--gent-green);font-weight:700}
+.stil{font-size:.8rem;color:var(--gent-gray-medium);line-height:1.55;padding:2px 6px 8px}
+.stil b{color:var(--gent-gray)}
+.mobcats{display:flex;flex-wrap:wrap;gap:8px;padding:2px 4px 10px}
+.mobcats .pill2{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);background:var(--white);
+  padding:6px 12px;font-size:.78rem;color:var(--gent-gray-medium);display:inline-flex;gap:7px;align-items:center}
+.mobcats .pill2 .n{background:var(--gent-gray-medium);color:var(--white);border-radius:var(--radius-pill);
+  padding:1px 7px;font-size:.66rem;font-weight:700}
+
+/* view-switch (segmented) */
+.viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
+  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto}
+.viewswitch button{border-radius:var(--radius-pill);padding:4px 13px;font-size:.82rem;font-weight:600;
+  color:var(--gent-gray-medium);white-space:nowrap}
+.viewswitch button.on{background:var(--gent-blue);color:var(--white)}
+
+/* kaartweergave */
+.kwrap{display:flex;flex-direction:column;gap:10px;padding:12px}
+.kwrap .ruler{position:static;margin:0 -12px;border-bottom:1px solid var(--gent-gray-light)}
+#kmap{height:calc(100vh - 320px);min-height:380px;border-radius:var(--radius-3);overflow:hidden;
+  border:1px solid var(--gent-gray-light);background:var(--gent-gray-ultra);z-index:0}
+.gmark-wrap{background:none;border:none}
+.gmark{display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:var(--white);border:3px solid var(--c);color:var(--c);
+  font-weight:800;font-size:.85rem;font-family:'Fira Sans',sans-serif;
+  box-shadow:0 2px 8px rgba(0,24,35,.25)}
+.gmark.idle{border-width:2px;border-color:var(--gent-gray-medium);color:var(--gent-gray-medium);opacity:.75}
+.kpop h4{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:.95rem;color:var(--gent-gray);margin:0 0 6px}
+.kpop .krow{display:flex;align-items:baseline;gap:7px;width:100%;text-align:left;padding:5px 4px;
+  border-radius:6px;font-family:'Fira Sans',sans-serif;font-size:.82rem;color:var(--gent-gray);border:0;background:none;cursor:pointer}
+.kpop .krow:hover{background:var(--gent-gray-ultra)}
+.kpop .krow b{font-variant-numeric:tabular-nums;color:var(--gent-gray-medium);font-weight:600;flex:0 0 34px}
+.kpop .kdot{width:8px;height:8px;border-radius:2px;background:var(--c);flex:0 0 auto;align-self:center}
+.kpop .kleeg{font-size:.8rem;color:var(--gent-gray-medium);margin:0}
+.leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 6px 22px rgba(0,24,35,.2)}
+.leaflet-popup-content{margin:12px 14px;font-family:'Fira Sans',sans-serif}
+.leaflet-container{font-family:'Fira Sans',sans-serif}
+
+/* laad- en foutscherm */
+.loadstate{padding:70px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.loadstate .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--gent-gray-light);
+  border-top-color:var(--gent-cyan);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loadstate .lt{font-weight:700;font-size:1.05rem;color:var(--gent-gray)}
+.loadstate .ls{color:var(--gent-gray-medium);font-size:.88rem;max-width:420px;line-height:1.5}
+.loadstate .retry{background:var(--gent-gray);color:var(--white);border:2px solid var(--gent-gray);
+  border-radius:var(--radius-pill);padding:10px 20px;font-weight:600}
+.loadstate .retry:hover{background:var(--gent-gray-medium);border-color:var(--gent-gray-medium)}
+
+/* crosshair (tijd aflezen onder je muis) */
+.crosshair{position:absolute;top:34px;bottom:0;width:0;border-left:1px dashed var(--gent-gray-medium);
+  z-index:12;pointer-events:none;display:none;opacity:.75}
+.crosshair .ct{position:sticky;top:38px;display:block;transform:translateX(-50%);width:max-content;
+  background:var(--gent-gray);color:var(--white);font-size:.68rem;font-weight:600;
+  padding:1px 8px 2px;border-radius:var(--radius-pill);margin-left:1px}
+
+
+/* ---------- mobiel: "nu & straks" per plein ---------- */
+.mob{display:flex;flex-direction:column;gap:10px;padding:12px}
+.scrub{display:flex;gap:6px;overflow-x:auto;padding:8px 2px;scrollbar-width:none;
+  position:sticky;top:0;background:var(--white);z-index:6;margin:-4px -2px 0}
+.scrub::-webkit-scrollbar{display:none}
+.tchip{flex:0 0 auto;border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);
+  padding:6px 14px;font-size:.85rem;font-weight:600;color:var(--gent-gray-medium);background:var(--white)}
+.tchip.nu{border-color:var(--gent-yellow);background:var(--gent-yellow-light);color:var(--gent-gray)}
+.tchip.act{background:var(--gent-blue);border-color:var(--gent-blue);color:var(--white)}
+.tchip.nu.act{background:var(--gent-yellow);border-color:var(--gent-yellow);color:var(--gent-gray)}
+.pcard{border:1px solid var(--gent-gray-light);border-radius:var(--radius-3);background:var(--white);
+  padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+.pcard .phead{display:flex;align-items:baseline;gap:8px}
+.pcard h3{font-size:1rem;font-weight:700;color:var(--gent-gray)}
+.pcard .tag2{font-size:.66rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px}
+.mrow{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:var(--radius-2);
+  border-left:4px solid var(--c);background:color-mix(in srgb,var(--c) 9%,var(--white));
+  text-align:left;width:100%}
+.mrow .mt{flex:0 0 44px;font-variant-numeric:tabular-nums;font-size:.78rem;color:var(--gent-gray-medium);font-weight:600}
+.mrow .mn{font-size:.9rem;font-weight:600;color:var(--gent-gray);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .bez{flex:0 0 auto;font-size:.6rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  background:var(--gent-yellow);color:var(--gent-gray);border-radius:var(--radius-pill);padding:2px 8px}
+.stil{font-size:.8rem;color:var(--gent-gray-medium);line-height:1.55;padding:2px 6px 8px}
+.stil b{color:var(--gent-gray)}
+.mobcats{display:flex;flex-wrap:wrap;gap:8px;padding:2px 4px 10px}
+.mobcats .pill2{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);background:var(--white);
+  padding:6px 12px;font-size:.78rem;color:var(--gent-gray-medium);display:inline-flex;gap:7px;align-items:center}
+.mobcats .pill2 .n{background:var(--gent-gray-medium);color:var(--white);border-radius:var(--radius-pill);
+  padding:1px 7px;font-size:.66rem;font-weight:700}
+
+/* ---------- detail panel ---------- */
+.panelwrap{position:fixed;inset:0;z-index:100;display:none}
+.panelwrap.open{display:block}
+.panelwrap .scrim{position:absolute;inset:0;background:rgba(230,248,255,.75)} /* cyan-light overlay cf. stijlgids modal */
+.detail{
+  position:absolute;top:0;right:0;bottom:0;width:min(430px,100%);
+  background:var(--white);border-left:1px solid var(--gent-gray-light);
+  box-shadow:-6px 0 24px rgba(0,24,35,.12);
+  padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;
+  animation:slidein .18s ease-out;
+}
+@keyframes slidein{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+.detail .close{align-self:flex-end;color:var(--gent-gray-medium);font-size:1.5rem;line-height:1;margin:-10px -8px 0 0}
+.detail .photo{
+  position:relative;width:calc(100% + 48px);margin:-6px -24px 2px;aspect-ratio:16/8;overflow:hidden;
+  background:linear-gradient(125deg,color-mix(in srgb,var(--c) 80%, var(--gent-gray)) 0%,var(--c) 55%,color-mix(in srgb,var(--c) 45%, var(--white)) 100%);
+}
+.detail .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.detail .photo .ph{
+  position:absolute;inset:0;display:flex;align-items:flex-end;padding:14px 20px;
+  color:var(--white);font-weight:800;font-size:2.6rem;letter-spacing:-.5px;line-height:1;
+  text-shadow:0 2px 10px rgba(0,24,35,.35);
+}
+.detail .photo .ph small{position:absolute;top:12px;right:16px;font-size:.62rem;font-weight:600;letter-spacing:.6px;
+  text-transform:uppercase;background:rgba(0,24,35,.35);padding:2px 9px;border-radius:var(--radius-pill)}
+.detail .close:hover{color:var(--gent-gray)}
+.detail .genrebadge{display:inline-flex;align-items:center;gap:7px;font-size:.73rem;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.detail .genrebadge .sw{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.detail h2{font-size:1.45rem;font-weight:800;line-height:1.15;color:var(--gent-blue)}
+.detail .meta{display:flex;flex-direction:column;gap:6px;font-size:.9rem;color:var(--gent-gray-medium)}
+.detail .meta b{color:var(--gent-gray);font-weight:600}
+.detail .badges{display:flex;gap:8px;flex-wrap:wrap}
+.detail .badge{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:3px 11px;
+  font-size:.73rem;color:var(--gent-gray-medium);font-weight:500}
+.detail .badge.gratis{border-color:var(--gent-green);color:var(--gent-green);background:var(--gent-green-light)}
+.detail p{color:var(--gent-gray);line-height:1.55;font-size:.9rem}
+.detail .link{
+  margin-top:auto;background:var(--gent-gray);color:var(--white);border:2px solid var(--gent-gray);
+  border-radius:var(--radius-pill);padding:11px 16px;text-align:center;text-decoration:none;font-weight:600;
+  transition:background .15s;
+}
+.detail .link:hover{background:var(--gent-gray-medium);border-color:var(--gent-gray-medium)}
+.detail .listing{display:flex;flex-direction:column;gap:2px}
+.detail .listing button{
+  text-align:left;padding:9px 10px;border-radius:var(--radius-2);border:1px solid transparent;
+  display:flex;gap:10px;align-items:baseline;
+}
+.detail .listing button:hover{background:var(--gent-cyan-light);border-color:var(--gent-cyan-pastel)}
+.detail .listing .tt{color:var(--gent-gray-medium);font-size:.76rem;flex:0 0 52px;font-variant-numeric:tabular-nums}
+.detail .listing .nm{font-size:.87rem}
+
+/* footer note */
+.foot{margin:0 0 60px;padding:0 24px;color:var(--gent-gray-medium);font-size:.8rem;line-height:1.65}
+.foot b{color:var(--gent-gray)}
+
+@media (max-width:720px){
+  :root{--hourW:52px;--labelW:120px;--rowH:50px}
+  /* header: compact, zonder dev-status */
+  header{padding:14px 14px 0}
+  .brand h1{font-size:22px}
+  .brand .sub{display:none}
+  .demo-pill{display:none}
+  /* dagtabs: kleine pills, geel stipje i.p.v. badge */
+  .days{gap:5px;margin:10px 0 0;padding:4px 2px 8px}
+  .day{min-width:52px;padding:5px 9px 6px;border-radius:10px;border-bottom:1px solid var(--gent-gray-light)}
+  .day .dow{font-size:.6rem}
+  .day .dnum{font-size:1rem}
+  .day.today{z-index:auto}
+  .day.today::after{content:'';top:5px;right:6px;left:auto;transform:none;
+    width:6px;height:6px;padding:0;border-radius:50%;background:var(--gent-yellow)}
+  /* filters: losse chip-rij, geen kader */
+  .filters{background:none;border:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    padding:2px 14px 8px;border-radius:0}
+  .filters::-webkit-scrollbar{display:none}
+  .filters .zoek{flex:0 0 auto;width:150px;background:var(--white)}
+  .filters .count,.filters .sep{display:none}
+  /* raster-schil: full-bleed, geen doos */
+  .shell{border:none;border-radius:0;background:none;margin:0 0 20px}
+  .filters{margin:0}
+  .grid{min-width:0}
+  .scroller{overflow-x:visible}
+  /* liniaal: stiller */
+  .ruler{margin:-6px -12px 0;padding:2px 0}
+  .ruler .ntime{font-size:.7rem;padding:2px 9px 3px;top:6px}
+  .ruler .needle{top:24px;width:1.5px}
+  .ruler .tick{display:none}
+  .ruler .tick.h{display:block;height:8px;background:var(--gent-gray-light)}
+  .ruler .nowbtn{top:5px;font-size:.66rem;padding:3px 9px}
+  /* kaarten: zweven op schaduw i.p.v. rand */
+  .pcard{border:none;box-shadow:0 1px 3px rgba(0,24,35,.08);padding:10px 12px 6px}
+  .mobcats .pill2{font-size:.74rem;padding:5px 11px}
+  .kwrap{padding:8px 12px 12px}
+  #kmap{height:62vh;min-height:340px;border-radius:var(--radius-3)}
+  /* detailpaneel wordt bottom sheet */
+  .detail{top:auto;bottom:0;left:0;right:0;width:100%;height:min(82vh,640px);
+    border-left:none;border-top:1px solid var(--gent-gray-light);
+    border-radius:var(--radius-3) var(--radius-3) 0 0;animation:slideup .2s ease-out}
+  @keyframes slideup{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="topband"></div>
+<header>
+  <div class="brand">
+    <h1>Gentse Feesten<span class="dp">:</span> <span class="jaar">pleinenraster ’26</span></h1>
+    <span class="sub">17 – 26 juli · zie in één blik wat er leeft, waar en wanneer</span>
+    <div class="demo-pill">
+      <span class="dot"></span><span id="dataStatus">laden…</span>
+      <button id="liveBtn" title="Haalt het programma opnieuw op via data.stad.gent">Vernieuwen</button>
+    </div>
+  </div>
+  <nav class="days" id="dayTabs" aria-label="Kies een feestdag"></nav>
+</header>
+
+<div class="filters" id="filterBar">
+  <div class="viewswitch" role="tablist" aria-label="Weergave">
+    <button data-v="tijd" class="on">Tijdlijn</button><button data-v="kaart">Kaart</button>
+  </div>
+  <span class="count" id="countLabel"></span>
+  <span class="sep"></span>
+  <!-- genre chips injected -->
+  <span class="sep"></span>
+  <button class="chip toggle" data-toggle="gratis"><span class="sw" style="--c:var(--gent-green)"></span>Gratis</button>
+  <button class="chip toggle" data-toggle="kids"><span class="sw" style="--c:var(--gent-red-pastel)"></span>Met kinderen</button>
+  <input class="zoek" id="zoek" type="search" placeholder="Zoek artiest of activiteit…">
+  <button class="reset" id="resetBtn" hidden>wis filters</button>
+</div>
+
+<div class="shell">
+  <div class="scroller" id="scroller">
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<p class="foot">
+  <b>Prototype in de huisstijl van de Stad Gent</b> — kleuren, typografie (Fira Sans) en componentstijl volgen de publieke
+  stijlgids (stijlgids.stad.gent); het stadslogo is bewust weggelaten omdat het gebruik ervan toestemming vereist.
+  Het programma wordt live opgehaald via het open-dataportaal van Stad Gent (data.stad.gent, datasets
+  <i>gentse-feesten-evenementen</i>, <i>-locaties</i> en <i>-themas</i>). Duurtijden zonder betrouwbare eindtijd worden
+  afgeleid van de start van het volgende optreden op dezelfde plek. Een feestdag loopt hier tot 07.00 u ’s ochtends:
+  wat na middernacht speelt, hoort bij de avond ervoor. Kaartweergave: &copy; OpenStreetMap-bijdragers.
+</p>
+
+<div class="panelwrap" id="panelWrap">
+  <div class="scrim" id="scrim"></div>
+  <aside class="detail" id="detail" role="dialog" aria-modal="true"></aside>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const START_H = 9, END_H = 31;              // 09:00 -> 07:00 (+1d)
+const HOUR_W = () => { const g=document.getElementById('grid'); return parseFloat(getComputedStyle(g||document.documentElement).getPropertyValue('--hourW'))||64; };
+const LABEL_W = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--labelW'));
+const DAYS = [17,18,19,20,21,22,23,24,25,26];
+const DOW  = {17:'vr',18:'za',19:'zo',20:'ma',21:'di',22:'wo',23:'do',24:'vr',25:'za',26:'zo'};
+
+/* Genrekleuren = de 9 secundaire huisstijlkleuren van de Stad Gent */
+const GENRES = {
+  dj:      {label:'DJ & electro',    c:'var(--gent-cyan)'},
+  rock:    {label:'Rock & punk',     c:'var(--gent-red)'},
+  world:   {label:'World & latin',   c:'var(--gent-orange)'},
+  pop:     {label:'Pop & covers',    c:'var(--gent-yellow)'},
+  folk:    {label:'Folk & Gents',    c:'var(--gent-green)'},
+  klassiek:{label:'Klassiek & jazz', c:'var(--gent-blue)'},
+  kids:    {label:'Kinderen',        c:'var(--gent-red-pastel)'},
+  theater: {label:'Theater & circus',c:'var(--gent-forest)'},
+};
+
+const PLEINEN = [
+  {id:'sintjacobs', naam:'Walter De Buckplein', tag:'Trefpunt · tot 02u'},
+  {id:'vlasmarkt',  naam:'Camping Vlasmarkt',   tag:'nachtpodium · tot 06u'},
+  {id:'polepole',   naam:'Polé Polé',           tag:'Graslei · world'},
+  {id:'baudelo',    naam:'Baudelopark',         tag:'familie & singer-songwriter'},
+  {id:'boomtown',   naam:'Boomtown',            tag:'Ha Concerts · nieuwe Belgische pop'},
+  {id:'korenmarkt', naam:'Korenmarkt',          tag:'covers & ambiance'},
+  {id:'vrijdagmarkt',naam:'Vrijdagmarkt',       tag:'volks & Nederlandstalig'},
+  {id:'sintbaafs',  naam:'Sint-Baafsplein',     tag:'klassiek & Gents'},
+  {id:'veerle',     naam:'Sint-Veerleplein',    tag:'luisterplein'},
+  {id:'miramiro',   naam:'Miramiro',            tag:'straattheater & circus'},
+  {id:'braun',      naam:'Emile Braunplein',    tag:'dans & urban'},
+  {id:'kouter',     naam:'Kouter',              tag:'bal & harmonie'},
+];
+
+/* korte, leesbare beschrijvingen per genre (fallback als de dataset er geen heeft) */
+const DESCR = {
+  dj:(t,p)=>`${t} draait op ${p} een set die de dansvloer niet loslaat. Van warme opbouw naar stevige piek — kom op tijd, het plein loopt snel vol.`,
+  rock:(t,p)=>`Gitaren, zweet en decibels: ${t} zet ${p} op stelten. Vooraan wordt gesprongen, achteraan meegebruld.`,
+  world:(t,p)=>`${t} brengt zuiderse en wereldse ritmes naar ${p}. Heupen los — stilstaan is hier geen optie.`,
+  pop:(t,p)=>`${t} speelt de hits die iedereen kent, van klassiekers tot recente knallers. Ambiance verzekerd op ${p}.`,
+  folk:(t,p)=>`${t} brengt volkse klanken en meezingers op ${p}, ergens tussen café chantant en kroegconcert. Het publiek zingt vanzelf mee.`,
+  klassiek:(t,p)=>`${t} zorgt voor een muzikaal rustpunt op ${p}: een zittend (of leunend) concert om even op adem te komen tussen het feestgedruis.`,
+  kids:(t,p)=>`${t}: een voorstelling op maat van kinderen, op ${p}. Vooraan zitten mag, meedoen ook. Ideaal met het hele gezin.`,
+  theater:(t,p)=>`${t} verrast op ${p} met straattheater en circus: acrobatie, humor en momenten waarop je de adem inhoudt.`,
+};
+
+
+let EVENTS = [];
+let LIVE_ROWS = null;   // vervangt PLEINEN wanneer live data geladen is
+let LIVE_REST = null;   // doorlopende/overige live events voor de strook
+let state = { dag: null, genres:new Set(), gratis:false, kids:false, q:'', tijd:'nu', view:'tijd', loading:true, loadError:null };
+const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : {matches:false, addEventListener(){}};
+const isMobile = () => MQ.matches;
+MQ.addEventListener && MQ.addEventListener('change', ()=>render());
+
+(function initDay(){
+  const now=new Date();
+  let d=now.getDate(), m=now.getMonth();
+  if(now.getHours()<7) d-=1;
+  state.dag = (m===6 && DAYS.includes(d)) ? d : 17;
+})();
+
+/* ================= RENDER ================= */
+const $=s=>document.querySelector(s);
+const isNowTime=t=>{
+  const now=new Date();
+  const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
+  if(!isToday) return false;
+  let nh=now.getHours()+now.getMinutes()/60; if(nh<7) nh+=24;
+  return Math.abs(t-nh)<=0.09; /* ± ~5 min */
+};
+const initialOf=e=>{
+  const w=(e.titel||'').trim().split(/\s+/);
+  return ((w[0]?.[0]||'')+(w[1]?.[0]||'')).toUpperCase()||'•';
+};
+const grid=$('#grid'), tabs=$('#dayTabs');
+
+function fmt(h){ const hh=Math.floor(h)%24, mm=Math.round((h%1)*60); return String(hh).padStart(2,'0')+'.'+String(mm).padStart(2,'0'); }
+function xPos(h){ return LABEL_W() + (h-START_H)*HOUR_W(); }
+
+function renderTabs(){
+  tabs.innerHTML='';
+  const now=new Date(); const todayFest = now.getMonth()===6 ? (now.getHours()<7?now.getDate()-1:now.getDate()) : -1;
+  for(const d of DAYS){
+    const b=document.createElement('button');
+    b.className='day'+(d===state.dag?' active':'')+(d===todayFest?' today':'');
+    b.innerHTML=`<span class="dow">${DOW[d]}</span><span class="dnum">${d}</span>`;
+    b.onclick=()=>{state.dag=d; render();};
+    tabs.appendChild(b);
+  }
+}
+
+function renderChips(){
+  const bar=$('#filterBar');
+  bar.querySelectorAll('.chip.genre').forEach(n=>n.remove());
+  const anchor=bar.querySelectorAll('.sep')[1];
+  Object.entries(GENRES).forEach(([k,g])=>{
+    const b=document.createElement('button');
+    b.className='chip genre'+(state.genres.has(k)?' on':'');
+    b.style.setProperty('--c',g.c);
+    b.innerHTML=`<span class="sw"></span>${g.label}`;
+    b.onclick=()=>{state.genres.has(k)?state.genres.delete(k):state.genres.add(k); render();};
+    bar.insertBefore(b,anchor);
+  });
+  bar.querySelector('[data-toggle="gratis"]').classList.toggle('on',state.gratis);
+  bar.querySelector('[data-toggle="kids"]').classList.toggle('on',state.kids);
+  $('#resetBtn').hidden = !(state.genres.size||state.gratis||state.kids||state.q);
+}
+
+function matches(e){
+  if(state.genres.size && !state.genres.has(e.genre)) return false;
+  if(state.gratis && !e.gratis) return false;
+  if(state.kids && !e.kids) return false;
+  if(state.q && !e.titel.toLowerCase().includes(state.q)) return false;
+  return true;
+}
+
+function render(){
+  renderTabs(); renderChips();
+  const ROWS = LIVE_ROWS || PLEINEN;
+  const dayEvents = EVENTS.filter(e=>e.dag===state.dag);
+  const visible = dayEvents.filter(matches);
+  const restCount = LIVE_REST ? LIVE_REST.filter(e=>e.dag===state.dag).length : 0;
+  $('#countLabel').innerHTML=`<b>${visible.length}</b> op de pleinen · <b>${restCount}</b> doorlopend & elders`;
+
+  document.querySelectorAll('.viewswitch button').forEach(b=>b.classList.toggle('on',b.dataset.v===(state.view||'tijd')));
+  if(state.loading || state.loadError){ renderStatusScreen(); return; }
+  if(state.view==='kaart'){ renderKaart(ROWS, dayEvents); return; }
+  if(isMobile()){ renderMobile(ROWS, dayEvents); return; }
+
+  grid.innerHTML='';
+  /* elastische uurbreedte: vul de volledige beschikbare breedte, met 64px/u als minimum */
+  const availW=$('#scroller').clientWidth - LABEL_W() - 2;
+  const fitW=Math.max(64, Math.floor((availW/(END_H-START_H))*100)/100);
+  grid.style.setProperty('--hourW', fitW+'px');
+  const th=document.createElement('div'); th.className='timehead';
+  th.innerHTML=`<div class="corner">${DOW[state.dag]} ${state.dag} juli</div>`;
+  const hours=document.createElement('div'); hours.className='hours';
+  for(let h=START_H;h<=END_H;h++){
+    const el=document.createElement('span');
+    el.className='h'+(h===24?' mid':'');
+    el.style.left=((h-START_H)*HOUR_W())+'px';
+    el.textContent = h===24 ? 'middernacht' : (h%24)+'u';
+    hours.appendChild(el);
+  }
+  th.appendChild(hours); grid.appendChild(th);
+
+  /* ---- feestpleinen eerst ---- */
+  const sh2=document.createElement('div'); sh2.className='sectionhead';
+  sh2.innerHTML=`<div class="rowlabel"><span class="naam">Feestpleinen${LIVE_ROWS?' & drukste locaties':''}</span></div>`;
+  grid.appendChild(sh2);
+
+  const LANE_H=38, LANE_GAP=4, PAD=7;
+  for(const p of ROWS){
+    const row=document.createElement('div'); row.className='row';
+    row.innerHTML=`<div class="rowlabel"><span class="naam">${p.naam}</span><span class="tag">${p.tag}</span></div>`;
+    const lane=document.createElement('div'); lane.className='lane';
+    lane.innerHTML='<div class="gridlines"></div>';
+    /* sub-lanes: overlappende events stapelen onder elkaar i.p.v. over elkaar */
+    const evs=dayEvents.filter(e=>e.plein===p.id).sort((a,b)=>a.start-b.start || (b.dur-a.dur));
+    const laneEndsPx=[];
+    evs.forEach(e=>{
+      const durVis=Math.max(.5, Math.min(e.dur, 6, END_H-e.start));
+      const pxL=(e.start-START_H)*HOUR_W();
+      const pxW=Math.max(durVis*HOUR_W()-4,46); // min. breedte voor tikbaarheid
+      /* lanes op pixelniveau: ook een opgeblazen mini-blok mag niet over zijn opvolger schuiven */
+      let li=laneEndsPx.findIndex(end=>pxL>=end+2);
+      if(li<0){ li=laneEndsPx.length; laneEndsPx.push(0); }
+      laneEndsPx[li]=pxL+pxW;
+      const b=document.createElement('button');
+      const on=matches(e);
+      b.className='ev'+(on?'':' dimmed');
+      b.style.setProperty('--c',GENRES[e.genre].c);
+      b.style.left=pxL+'px';
+      b.style.width=pxW+'px';
+      b.style.top=(PAD+li*(LANE_H+LANE_GAP))+'px';
+      b.style.height=LANE_H+'px';
+      b.innerHTML=`<span class="bx"><span class="t">${e.titel}</span><span class="m">${fmt(e.start)}${e.gratis?'':' · <span class="paid">€</span>'}</span></span>`;
+      b.onclick=()=>openEvent(e,p);
+      lane.appendChild(b);
+    });
+    const rowH=Math.max(54, PAD*2 + laneEndsPx.length*LANE_H + Math.max(0,laneEndsPx.length-1)*LANE_GAP);
+    lane.style.minHeight=rowH+'px';
+    row.appendChild(lane); grid.appendChild(row);
+  }
+
+  /* ---- doorlopend & elders onderaan, in mineur ---- */
+  const sh=document.createElement('div'); sh.className='sectionhead';
+  sh.innerHTML=`<div class="rowlabel"><span class="naam">Doorlopend & elders in de stad</span></div>`;
+  grid.appendChild(sh);
+  const strip=document.createElement('div'); strip.className='row strip';
+  strip.innerHTML=`<div class="rowlabel"><span class="naam">Rest van de stad</span><span class="tag">hele dag</span></div>`;
+  const slane=document.createElement('div'); slane.className='lane';
+  let px=12;
+  const stripCats = stripCatsFor(state.dag);
+  stripCats.forEach(c=>{
+    const b=document.createElement('button'); b.className='pill'; b.style.left=px+'px';
+    b.innerHTML=`<b>${c.cat}</b><span class="n">${c.n}</span>`;
+    b.onclick=()=>openCategory(c);
+    slane.appendChild(b);
+    px+=c.cat.length*7.4+74;
+  });
+  strip.appendChild(slane); grid.appendChild(strip);
+
+  /* ---- crosshair: tijd aflezen waar je muis staat ---- */
+  const cross=document.createElement('div'); cross.className='crosshair';
+  cross.innerHTML='<span class="ct"></span>';
+  grid.appendChild(cross);
+  const scr=$('#scroller');
+  scr.onmousemove=ev=>{
+    const rect=grid.getBoundingClientRect();
+    const x=ev.clientX-rect.left;
+    if(x<LABEL_W()+2){ cross.style.display='none'; return; }
+    const h=START_H+(x-LABEL_W())/HOUR_W();
+    if(h>END_H){ cross.style.display='none'; return; }
+    cross.style.display='block';
+    cross.style.left=x+'px';
+    cross.querySelector('.ct').textContent=fmt(Math.round(h*12)/12)+' u';
+  };
+  scr.onmouseleave=()=>{ cross.style.display='none'; };
+
+  const now=new Date();
+  const festDay = now.getHours()<7 ? now.getDate()-1 : now.getDate();
+  if(now.getMonth()===6 && festDay===state.dag){
+    let h=now.getHours()+now.getMinutes()/60; if(h<7)h+=24;
+    if(h>=START_H && h<=END_H){
+      const nl=document.createElement('div'); nl.className='nowline';
+      nl.style.left=xPos(h)+'px'; grid.appendChild(nl);
+      requestAnimationFrame(()=>{ $('#scroller').scrollLeft = xPos(h)-LABEL_W()-160; });
+    }
+  }
+}
+
+/* ================= LAAD- & FOUTSCHERM ================= */
+function renderStatusScreen(){
+  grid.innerHTML='';
+  const box=document.createElement('div'); box.className='loadstate';
+  if(state.loading){
+    box.innerHTML=`<div class="spin" aria-hidden="true"></div>
+      <p class="lt" id="loadMsg">Programma laden van data.stad.gent…</p>
+      <p class="ls">Het volledige programma van de Gentse Feesten 2026 — even geduld.</p>`;
+  }else{
+    box.innerHTML=`<p class="lt">Programma kon niet geladen worden</p>
+      <p class="ls">${state.loadError}</p>
+      <button class="retry" id="retryBtn">Opnieuw proberen</button>`;
+  }
+  grid.appendChild(box);
+  const rb=document.getElementById('retryBtn'); if(rb) rb.onclick=loadLive;
+}
+
+/* ================= MOBIELE WEERGAVE: nu & straks ================= */
+function stripCatsFor(dag){
+  return LIVE_REST
+    ? (()=>{ const todays=LIVE_REST.filter(e=>e.dag===dag);
+        const byCat={};
+        todays.forEach(e=>{ (byCat[e.cat||'Doorlopend & elders'] ||= []).push(e); });
+        return Object.entries(byCat).map(([cat,list])=>({cat,n:list.length,
+          items:list.sort((a,b)=>a.start-b.start).slice(0,30)
+                    .map(e=>({tt:fmt(e.start)+' u', nm:e.titel+(e.loc?' — '+e.loc:'')}))}));
+      })()
+    : [];
+}
+function buildRuler(dayEvents,onTime){
+  const now=new Date();
+  const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
+  let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
+  nowH=Math.min(Math.max(nowH,START_H),END_H);
+  const T = (state.tijd==='nu' || typeof state.tijd!=='number')
+        ? (isToday ? nowH : 20)
+        : Math.min(Math.max(state.tijd,START_H),END_H);
+  const PXH=110;
+  const ruler=document.createElement('div'); ruler.className='ruler';
+  ruler.innerHTML='<span class="ntime"></span><span class="needle"></span>';
+  const track=document.createElement('div'); track.className='track';
+  const strip=document.createElement('div'); strip.className='strip';
+  strip.style.width=((END_H-START_H)*PXH)+'px';
+  let maxAct=1; const acts=[];
+  for(let t=START_H;t<END_H;t+=.5){
+    const n=dayEvents.filter(e=>matches(e)&&e.start<=t&&t<e.start+e.dur).length;
+    acts.push(n); if(n>maxAct)maxAct=n;
+  }
+  acts.forEach((n,i)=>{
+    if(!n) return;
+    const d=document.createElement('span'); d.className='dens';
+    d.style.left=(i*.5*PXH)+'px'; d.style.width=(.5*PXH-2)+'px';
+    d.style.height=(4+22*(n/maxAct))+'px';
+    strip.appendChild(d);
+  });
+  for(let t=START_H;t<=END_H;t+=.5){
+    const x=(t-START_H)*PXH;
+    const tick=document.createElement('span'); tick.className='tick'+(t%1===0?' h':'');
+    tick.style.left=x+'px'; strip.appendChild(tick);
+    if(t%1===0){
+      const l=document.createElement('span'); l.className='hlab';
+      l.style.left=x+'px'; l.textContent=(t%24)+'u';
+      strip.appendChild(l);
+    }
+  }
+  track.appendChild(strip); ruler.appendChild(track);
+  const ntime=ruler.querySelector('.ntime');
+  if(isToday){
+    const nb=document.createElement('button'); nb.className='nowbtn'; nb.textContent='Nu';
+    nb.onclick=()=>track.scrollTo({left:(nowH-START_H)*PXH,behavior:'smooth'});
+    ruler.appendChild(nb);
+  }
+  let lastStep=null, raf=false;
+  const applyScroll=()=>{
+    raf=false;
+    const t=Math.min(Math.max(START_H + track.scrollLeft/PXH, START_H), END_H);
+    state.tijd=t;
+    const t5=Math.round(t*12)/12;
+    ntime.textContent=fmt(t5)+' u';
+    if(t5!==lastStep){ lastStep=t5; onTime(t5); }
+  };
+  track.addEventListener('scroll',()=>{ if(!raf){ raf=true; requestAnimationFrame(applyScroll); } },{passive:true});
+  /* desktop: slepen met de muis, scrollwiel, en klikken om te springen */
+  let dragging=false, moved=0, startX=0, startSL=0;
+  track.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='mouse') return;
+    dragging=true; moved=0; startX=e.clientX; startSL=track.scrollLeft;
+    track.setPointerCapture(e.pointerId); track.classList.add('grabbing');
+  });
+  track.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const dx=e.clientX-startX; moved=Math.max(moved,Math.abs(dx));
+    track.scrollLeft=startSL-dx;
+  });
+  const endDrag=e=>{
+    if(!dragging) return;
+    dragging=false; track.classList.remove('grabbing');
+    if(moved<4){ /* klik: spring naar dat tijdstip */
+      const rect=track.getBoundingClientRect();
+      const xInStrip = track.scrollLeft + (e.clientX-rect.left) - (parseFloat(strip.style.marginLeft)||0);
+      const t=Math.min(Math.max(START_H + xInStrip/PXH, START_H), END_H);
+      track.scrollTo({left:(t-START_H)*PXH, behavior:'smooth'});
+    }
+  };
+  track.addEventListener('pointerup',endDrag);
+  track.addEventListener('pointercancel',()=>{dragging=false;track.classList.remove('grabbing');});
+  track.addEventListener('wheel',e=>{
+    track.scrollLeft += Math.abs(e.deltaX)>Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    e.preventDefault();
+  },{passive:false});
+  const mount=()=>{
+    const pad=Math.round(track.clientWidth/2)||180;
+    strip.style.marginLeft=pad+'px'; strip.style.marginRight=pad+'px';
+    const t5=Math.round(T*12)/12;
+    ntime.textContent=fmt(t5)+' u';
+    lastStep=t5; onTime(t5);
+    track.scrollLeft=(T-START_H)*PXH;
+  };
+  return {el:ruler, mount};
+}
+
+function renderMobile(ROWS, dayEvents){
+  grid.innerHTML='';
+  const wrapM=document.createElement('div'); wrapM.className='mob';
+  const listWrap=document.createElement('div');
+  listWrap.style.cssText='display:flex;flex-direction:column;gap:10px';
+
+  const mkRow=(e,p,bezig,echtNu)=>{
+    const b=document.createElement('button'); b.className='lrow';
+    b.style.setProperty('--c',GENRES[e.genre].c);
+    const eind=fmt(e.start+e.dur);
+    const meta = bezig
+      ? `<span class="liv">${echtNu?'nu bezig':'bezig'} · tot ${eind}</span><span class="gd"></span>${GENRES[e.genre].label}`
+      : `om ${fmt(e.start)}<span class="gd"></span>${GENRES[e.genre].label}`;
+    b.innerHTML=`<span class="th">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
+      <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span></span>`;
+    b.onclick=()=>openEvent(e,p);
+    return b;
+  };
+  const buildList=t=>{
+    listWrap.innerHTML='';
+    const echtNu=isNowTime(t);
+    const stil=[];
+    ROWS.forEach(p=>{
+      const evs=dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
+      const bezig=evs.filter(e=>e.start<=t && t<e.start+e.dur);
+      const straks=evs.filter(e=>e.start>t && e.start<=t+2.5).slice(0,3);
+      if(!bezig.length && !straks.length){ if(evs.length) stil.push(p.naam); return; }
+      const card=document.createElement('section'); card.className='pcard';
+      card.innerHTML=`<div class="phead"><h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span></div>`;
+      bezig.forEach(e=>card.appendChild(mkRow(e,p,true,echtNu)));
+      straks.forEach(e=>card.appendChild(mkRow(e,p,false,echtNu)));
+      listWrap.appendChild(card);
+    });
+    if(stil.length){
+      const st2=document.createElement('p'); st2.className='stil';
+      st2.innerHTML=`<b>Rond ${fmt(t)} u even stil:</b> ${stil.join(' · ')}.`;
+      listWrap.appendChild(st2);
+    }
+    const cats=stripCatsFor(state.dag);
+    if(cats.length){
+      const mc=document.createElement('div'); mc.className='mobcats';
+      cats.forEach(c=>{
+        const b=document.createElement('button'); b.className='pill2';
+        b.innerHTML=`${c.cat}<span class="n">${c.n}</span>`;
+        b.onclick=()=>openCategory(c);
+        mc.appendChild(b);
+      });
+      listWrap.appendChild(mc);
+    }
+  };
+
+  const r=buildRuler(dayEvents,buildList);
+  wrapM.appendChild(r.el);
+  wrapM.appendChild(listWrap);
+  grid.appendChild(wrapM);
+  r.mount();
+}
+
+/* ================= KAARTWEERGAVE ================= */
+let leafP=null;
+function ensureLeaflet(){
+  if(window.L) return Promise.resolve();
+  if(leafP) return leafP;
+  leafP=new Promise((res,rej)=>{
+    const l=document.createElement('link'); l.rel='stylesheet';
+    l.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+    document.head.appendChild(l);
+    const sc=document.createElement('script');
+    sc.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    sc.onload=()=>res(); sc.onerror=()=>rej(new Error('leaflet niet bereikbaar'));
+    document.head.appendChild(sc);
+    setTimeout(()=>window.L?res():rej(new Error('leaflet timeout')),9000);
+  });
+  return leafP;
+}
+function rowCoords(p){
+  const geo=window._GF_LOCGEO, fixed=window._GF_PLEIN_COORDS;
+  return (geo&&geo.get((p.naam||'').toLowerCase().trim())) || (fixed&&fixed[p.id]) || null;
+}
+let MAP=null, MARKLAYER=null;
+function renderKaart(ROWS, dayEvents){
+  grid.innerHTML='';
+  if(MAP){ MAP.remove(); MAP=null; MARKLAYER=null; }
+  const wrapK=document.createElement('div'); wrapK.className='kwrap';
+  const r=buildRuler(dayEvents,t=>updateMarkers(ROWS,dayEvents,t));
+  wrapK.appendChild(r.el);
+  const mapDiv=document.createElement('div'); mapDiv.id='kmap'; wrapK.appendChild(mapDiv);
+  grid.appendChild(wrapK);
+  ensureLeaflet().then(()=>{
+    MAP=L.map(mapDiv).setView([51.0555,3.7255],15);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
+    MARKLAYER=L.layerGroup().addTo(MAP);
+    r.mount();
+  }).catch(()=>{
+    mapDiv.innerHTML=`<div class="loadstate"><p class="lt">Kaart kon niet laden</p>
+      <p class="ls">Leaflet of OpenStreetMap is niet bereikbaar in deze omgeving — open de pagina lokaal in je browser.</p></div>`;
+  });
+}
+function updateMarkers(ROWS,dayEvents,t){
+  if(!MAP||!MARKLAYER) return;
+  MARKLAYER.clearLayers();
+  ROWS.forEach(p=>{
+    const c=rowCoords(p); if(!c) return;
+    const evs=dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
+    const bezig=evs.filter(e=>e.start<=t && t<e.start+e.dur);
+    const straks=evs.filter(e=>e.start>t && e.start<=t+2.5).slice(0,3);
+    if(!evs.length) return;
+    const n=bezig.length;
+    const col=n?GENRES[bezig[0].genre].c:'';
+    const size=n?32+Math.min(n,4)*4:22;
+    const icon=L.divIcon({className:'gmark-wrap',
+      html:`<div class="gmark${n?'':' idle'}" style="${n?`--c:${col};`:''}width:${size}px;height:${size}px">${n||''}</div>`,
+      iconSize:[size,size],iconAnchor:[size/2,size/2]});
+    const m=L.marker(c,{icon}).addTo(MARKLAYER);
+    const echtNu=isNowTime(t);
+    const rows=[...bezig.map(e=>({e,b:1})),...straks.map(e=>({e,b:0}))].slice(0,5)
+      .map(({e,b})=>`<button class="krow" onclick="window._gfOpen('${e.id}')">`+
+        `<span class="kdot" style="--c:${GENRES[e.genre].c}"></span><b>${b?(echtNu?'nu':'bezig'):fmt(e.start)}</b> ${e.titel.replace(/</g,'&lt;')}</button>`).join('');
+    m.bindPopup(`<div class="kpop"><h4>${p.naam}</h4>${rows||'<p class="kleeg">Niets rond dit uur</p>'}</div>`,
+      {closeButton:false,maxWidth:280});
+    if(!isMobile()) m.bindTooltip(p.naam,{direction:'top',offset:[0,-size/2-2]});
+  });
+}
+window._gfOpen=id=>{
+  const e=EVENTS.find(x=>x.id===id); if(!e) return;
+  const R=LIVE_ROWS||PLEINEN;
+  openEvent(e, R.find(r=>r.id===e.plein)||{naam:e.loc||''});
+};
+
+const wrap=$('#panelWrap'), det=$('#detail');
+function openPanel(){wrap.classList.add('open')}
+function closePanel(){wrap.classList.remove('open')}
+$('#scrim').onclick=closePanel;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+
+function openEvent(e,p){
+  const g=GENRES[e.genre];
+  const descr = e.descr || DESCR[e.genre](e.titel, p.naam);
+  det.innerHTML=`
+    <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
+    <div class="photo" style="--c:${g.c}">
+      <span class="ph">${e.titel.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()}<small>${p.naam}</small></span>
+      ${e.img?`<img src="${e.img}" alt="${e.titel}" onerror="this.remove()">`:''}
+    </div>
+    <span class="genrebadge" style="--c:${g.c}"><span class="sw"></span>${g.label}</span>
+    <h2>${e.titel}</h2>
+    <div class="meta">
+      <span>📍 <b>${p.naam}</b></span>
+      <span>🕘 ${DOW[e.dag]} ${e.dag} juli · <b>${fmt(e.start)} – ${fmt(e.start+e.dur)} u</b></span>
+    </div>
+    <div class="badges">
+      ${e.gratis?'<span class="badge gratis">gratis</span>':''}
+      ${e.kids?'<span class="badge">kindvriendelijk</span>':''}
+      ${e.demo?'<span class="badge" title="Fictief programmapunt ter illustratie">demodata</span>':''}
+    </div>
+    <p>${descr}</p>
+    <a class="link" href="${e.url||('https://gentsefeesten.stad.gent/nl/day/'+e.dag+'/time')}" target="_blank" rel="noopener">${e.url?'Meer info & tickets':'Bekijk op gentsefeesten.stad.gent'}</a>`;
+  openPanel();
+}
+function openCategory(c){
+  det.innerHTML=`
+    <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
+    <span class="genrebadge" style="--c:var(--gent-cyan)"><span class="sw"></span>Doorlopend · ${DOW[state.dag]} ${state.dag} juli</span>
+    <h2>${c.cat}</h2>
+    <p>${c.n} activiteiten in deze categorie lopen vandaag door of hebben meerdere sessies. Een greep (echte programmapunten 2026):</p>
+    <div class="listing">
+      ${c.items.map(i=> typeof i==='string'
+          ? `<button><span class="tt">10–18u</span><span class="nm">${i}</span></button>`
+          : `<button><span class="tt">${i.tt}</span><span class="nm">${i.nm}</span></button>`).join('')}
+    </div>
+    <a class="link" href="https://gentsefeesten.stad.gent/nl/day/${state.dag}/time" target="_blank" rel="noopener">Volledige lijst op de officiële site</a>`;
+  openPanel();
+}
+
+/* ================= FILTER EVENTS ================= */
+document.querySelectorAll('.viewswitch button').forEach(b=>{
+  b.onclick=()=>{ state.view=b.dataset.v; render(); };
+});
+document.querySelectorAll('[data-toggle]').forEach(b=>{
+  b.onclick=()=>{ state[b.dataset.toggle]=!state[b.dataset.toggle]; render(); };
+});
+$('#zoek').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
+$('#resetBtn').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false; state.q=''; $('#zoek').value=''; render(); };
+
+/* ================= LIVE DATA (open data Stad Gent) ================= */
+async function loadLive(){
+  state.loading=true; state.loadError=null; render();
+  const st=$('#dataStatus');
+  const ids=['gentse-feesten-evenementen-2026','gentse-feesten-evenementen-2025'];
+  const parseTime=v=>{ if(v==null)return null; const m=String(v).match(/(\d{1,2})\s*[:.uh]\s*(\d{2})/); return m? (+m[1])+(+m[2])/60 : null; };
+  try{
+    /* ---- 1. ophalen ---- */
+    const fetchAll=async (id,label)=>{
+      const base=`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/records`;
+      const probe=await fetch(`${base}?limit=1`);
+      if(!probe.ok) return null;
+      const out=[]; let total=Infinity;
+      for(let off=0; off<Math.min(total,9900); off+=100){
+        const r=await fetch(`${base}?limit=100&offset=${off}`);
+        if(!r.ok) break;
+        const j=await r.json();
+        if(j.total_count!=null) total=j.total_count;
+        const batch=j.results||[];
+        out.push(...batch);
+        if(label){ const t=`${label} ${out.length}${total<Infinity?'/'+total:''}…`; st.textContent=t;
+          const lm=document.getElementById('loadMsg'); if(lm) lm.textContent=t; }
+        if(batch.length<100) break;
+      }
+      return out;
+    };
+    let recs=null, used=null;
+    for(const id of ids){
+      recs=await fetchAll(id,'laden…'); if(recs){used=id; break;}
+    }
+    if(recs===null) throw {msg:'dataset niet gevonden op data.stad.gent'};
+    if(!recs.length) throw {msg:`dataset ${used} is leeg`};
+
+    /* gejoinde datasets: locaties & thema's — evenementen verwijzen ernaar via API-url */
+    const val=v=>{
+      if(v==null) return null;
+      if(typeof v==='string' && /^\s*\{/.test(v)){ try{ v=JSON.parse(v); }catch(_){ return v; } }
+      if(typeof v==='object') return v.nl ?? v.naam ?? v.name ?? v.titel ?? v.title ?? v.label ?? v.url ?? null;
+      return v;
+    };
+    const buildMap=recsIn=>{
+      const map=new Map();
+      if(!recsIn||!recsIn.length) return map;
+      const lk=Object.keys(recsIn[0]);
+      const nameK=lk.find(k=>/(^|_)name_nl$|(^|_)naam/.test(k.toLowerCase()))
+               || lk.find(k=>/naam|name|titel|title/.test(k.toLowerCase())&&typeof val(recsIn[0][k])==='string')||lk[0];
+      recsIn.forEach(lr=>{
+        const nm=val(lr[nameK]); if(!nm) return;
+        lk.forEach(k=>{ const v=lr[k]; if(v!=null&&typeof v!=='object'&&(v+'').length<200) map.set((v+'').toLowerCase().trim(),nm); });
+      });
+      return map;
+    };
+    let LOCMAP=new Map(), THEMEMAP=new Map(); const LOCGEO=new Map();
+    const geoOf=lr=>{
+      for(const v of Object.values(lr)){
+        if(v&&typeof v==='object'){
+          const la=v.lat??v.latitude, lo=v.lon??v.lng??v.longitude;
+          if(typeof la==='number'&&typeof lo==='number'&&la>50&&la<52&&lo>3&&lo<4.5) return [la,lo];
+        }
+        if(typeof v==='string'){ const m=v.match(/(5[01]\.\d{3,})[,;\s]+(3\.\d{3,})/); if(m) return [+m[1],+m[2]]; }
+      }
+      return null;
+    };
+    try{
+      const locRecs=await fetchAll(used.replace('evenementen','locaties'),'locaties laden…');
+      LOCMAP=buildMap(locRecs);
+      if(locRecs) locRecs.forEach(lr=>{
+        const g=geoOf(lr); if(!g) return;
+        const lk=Object.keys(lr);
+        const nameK=lk.find(k=>/(^|_)name_nl$|(^|_)naam/.test(k.toLowerCase()))
+                 || lk.find(k=>/naam|name|titel|title/.test(k.toLowerCase()));
+        const nm=val(lr[nameK]); if(nm) LOCGEO.set((nm+'').toLowerCase().trim(),g);
+      });
+    }catch(_){/* optioneel */}
+    try{ THEMEMAP=buildMap(await fetchAll(used.replace('evenementen','themas'),'thema’s laden…')); }catch(_){/* optioneel */}
+    const resolveVia=(map,raw)=>{
+      const s=((raw??'')+'').toLowerCase().trim();
+      if(!s) return '';
+      return map.get(s) || map.get(s.split('/').filter(Boolean).pop()||'') || raw;
+    };
+    const resolveLoc=raw=>{ const r=resolveVia(LOCMAP,raw); return (val(r)??r??'')+''; };
+
+    /* ---- 2. velddetectie: exact schema (Gentse Feesten event-API 2026) eerst, heuristiek als vangnet ---- */
+    const scan=recs.slice(0,100);
+    const K=Object.keys(scan[0]||{});
+    const prefer=(...ns)=>ns.find(n=>K.includes(n));
+    const keysWithValue=pred=>{
+      const hits={};
+      scan.forEach(r=>Object.entries(r).forEach(([k,v])=>{ if(v!=null && pred(k.toLowerCase(),v)) hits[k]=(hits[k]||0)+1; }));
+      return Object.entries(hits).sort((a,b)=>b[1]-a[1]).map(([k])=>k);
+    };
+    const isoKeys = keysWithValue((k,v)=>typeof v==='string' && /^20\d\d-\d\d-\d\dT\d\d:/.test(v));
+    const endish=k=>/eind|stop|end(_|$|date|datum|time|tijd)|_end($|_)/.test(k.toLowerCase());
+    const isoStartKey = prefer('startdate','start_date')
+                     || isoKeys.find(k=>/start|begin|van|datum|date/.test(k.toLowerCase()) && !endish(k))
+                     || isoKeys.find(k=>!endish(k));
+    const isoEndKey   = prefer('enddate','end_date')
+                     || isoKeys.find(k=>k!==isoStartKey && endish(k));
+    const exactIso = !!(prefer('startdate','start_date') && prefer('enddate','end_date'));
+    const dateKey = keysWithValue((k,v)=>typeof v==='string' && /^20\d\d-\d\d-\d\d$/.test(v))[0];
+    const dagKey  = keysWithValue((k,v)=>/(^|_)(dag|day)/.test(k) && +v>=17 && +v<=26)[0];
+    const startKey= keysWithValue((k,v)=>k!==isoStartKey && k!==isoEndKey && /start|begin|van/.test(k) && parseTime(v)!=null)[0];
+    const endKey  = keysWithValue((k,v)=>k!==isoStartKey && k!==isoEndKey && endish(k) && parseTime(v)!=null)[0];
+    const titleKey= prefer('name_nl') || keysWithValue((k,v)=>/titel|title|naam|name|artiest|event/.test(k) && typeof v==='string')[0];
+    const locKey  = prefer('location','locatie') || keysWithValue((k,v)=>/locatie|location|plein|venue|waar/.test(k) && typeof v==='string')[0];
+    const genreKey= prefer('music_genre') || keysWithValue((k,v)=>/genre|categorie|category|discipline/.test(k) && typeof v==='string')[0];
+    const kwKey   = prefer('keywords');
+    const themeKey= prefer('theme','thema');
+    const ageKey  = prefer('typicalagerange');
+    const imgKey  = prefer('image_thumbnail','image') || keysWithValue((k,v)=>/foto|image|afbeelding|img/.test(k) && /^http/.test(String(typeof v==='object'? (v.url||'') : v)))[0];
+    const descrKey= prefer('description_nl') || keysWithValue((k,v)=>/beschrijving|omschrijving|description/.test(k) && typeof v==='string' && v.length>40)[0];
+    const gratisKey=prefer('isaccessibleforfree') || keysWithValue((k,v)=>/gratis|free/.test(k))[0];
+    const urlKey  = prefer('url');
+
+    if(!titleKey || !(isoStartKey||((dateKey||dagKey)&&startKey)))
+      throw {msg:`${recs.length} records geladen, maar titel/tijd-velden niet herkend — velden: ${K.join(', ')}`, dump:scan[0]};
+
+    /* eindveld-strategie: bij exact herkend schema vertrouwen we start/einde per sessie;
+       anders sanity-check op de mediaan (reeks-eindes zijn onbruikbaar) */
+    const median=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]};
+    let endMode='none';
+    if(exactIso) endMode='iso';
+    if(endMode==='none' && isoEndKey && isoStartKey){
+      const ds=scan.map(r=>{const a=r[isoStartKey]?new Date(r[isoStartKey]):null, b=r[isoEndKey]?new Date(r[isoEndKey]):null;
+        return a&&b&&!isNaN(a)&&!isNaN(b)?(b-a)/3.6e6:null;}).filter(v=>v!=null&&v>0);
+      if(ds.length>=5 && median(ds)<=6) endMode='iso';
+    }
+    if(endMode==='none' && endKey){
+      const ds=scan.map(r=>{const t0=parseTime((startKey&&r[startKey]) ?? (isoStartKey&&r[isoStartKey]));
+        let t1=parseTime(r[endKey]); if(t0==null||t1==null)return null;
+        let dd=t1-t0; if(dd<=0)dd+=24; return dd;}).filter(v=>v!=null);
+      if(ds.length>=5 && median(ds)<=6) endMode='time';
+    }
+    console.info('GF velddetectie:',{titleKey,isoStartKey,isoEndKey,exactIso,dateKey,dagKey,startKey,endKey,locKey,genreKey,kwKey,themeKey,imgKey,descrKey,gratisKey,endMode});
+    console.log('GF voorbeeldrecord:',scan[0]);
+
+    const parseStart=(()=>{
+      let useIso = !!isoStartKey;
+      if(useIso && (dateKey||dagKey) && startKey){
+        const daysIso=new Set(scan.map(r=>{const v=r[isoStartKey]; const dd=v?new Date(v):null; return dd&&!isNaN(dd)?dd.getDate():null;}).filter(v=>v!=null));
+        const daysAlt=new Set(scan.map(r=>dateKey?((r[dateKey]||'')+'').slice(8,10):r[dagKey]).filter(Boolean));
+        if(daysIso.size<3 && daysAlt.size>daysIso.size) useIso=false; // ISO-veld is vermoedelijk reeks-start
+      }
+      return r=>{
+        if(useIso && r[isoStartKey]){ const d=new Date(r[isoStartKey]); if(!isNaN(d)) return d; }
+        const t=parseTime(startKey&&r[startKey]);
+        if(t==null) return null;
+        if(dateKey && r[dateKey]){ const d=new Date(r[dateKey]+'T00:00:00'); if(!isNaN(d)){ d.setHours(Math.floor(t),Math.round(t%1*60)); return d; } }
+        if(dagKey && r[dagKey]) return new Date(2026,6,+r[dagKey],Math.floor(t),Math.round(t%1*60));
+        return null;
+      };
+    })();
+
+    /* ---- 3. records -> events ---- */
+    const PLEIN_COORDS={ // vaste ankers voor de gekende pleinen (dataset-coords krijgen voorrang)
+      sintjacobs:[51.0561,3.7290], vlasmarkt:[51.0553,3.7286], polepole:[51.0551,3.7205],
+      baudelo:[51.0587,3.7300], boomtown:[51.0503,3.7250], korenmarkt:[51.0546,3.7215],
+      vrijdagmarkt:[51.0570,3.7267], sintbaafs:[51.0533,3.7261], veerle:[51.0576,3.7208],
+      miramiro:[51.0596,3.7331], braun:[51.0538,3.7238], kouter:[51.0501,3.7255],
+    };
+    window._GF_PLEIN_COORDS=PLEIN_COORDS; window._GF_LOCGEO=LOCGEO;
+    const PLEIN_MATCH=[
+      ['sintjacobs',['walter de buck','sint-jacobs','sint jacobs','bij sint']],
+      ['vlasmarkt',['vlasmarkt']], ['polepole',['polé','pole pole','pole-pole','graslei']],
+      ['baudelo',['baudelo']], ['boomtown',['boomtown','ha concerts']],
+      ['korenmarkt',['korenmarkt']], ['vrijdagmarkt',['vrijdagmarkt']],
+      ['sintbaafs',['baafsplein','sint bavo']], ['veerle',['veerleplein']],
+      ['miramiro',['miramiro']], ['braun',['braunplein']], ['kouter',['kouter']],
+    ];
+    const all=[], rest=[];
+    recs.forEach((r,i)=>{
+      const titel=(val(r[titleKey])||'Zonder titel')+'';
+      const d=parseStart(r);
+      if(!d||isNaN(d)) return;
+      let dag=d.getDate(), h=d.getHours()+d.getMinutes()/60;
+      if(h<7){dag-=1; h+=24;}
+      if(!DAYS.includes(dag)) return;
+      /* rawDur = alleen als een vertrouwd eindveld iets zinnigs oplevert, anders null */
+      let rawDur=null;
+      if(endMode==='iso' && r[isoEndKey]){
+        const de=new Date(r[isoEndKey]);
+        if(!isNaN(de)){ rawDur=(de-d)/3.6e6; if(rawDur<=0) rawDur+=24; }
+      }else if(endMode==='time'){
+        const te=parseTime(r[endKey]);
+        if(te!=null){ rawDur=te-(h%24); if(rawDur<=0) rawDur+=24; }
+      }
+      if(rawDur!=null && !(rawDur>0 && rawDur<24)) rawDur=null;
+      let loc=resolveLoc(locKey&&r[locKey]);
+      if((!locKey||!loc) && LOCMAP.size){ // geen locatieveld? zoek een veld dat via de locaties-dataset resolvet
+        for(const v of Object.values(r)){ const nm=LOCMAP.get(((val(v)||'')+'').toLowerCase().trim()); if(nm){loc=(val(nm)??nm)+''; break;} }
+      }
+      const themeName=themeKey? (val(resolveVia(THEMEMAP,r[themeKey]))||'')+'' : '';
+      const kw=((val(kwKey&&r[kwKey])||'')+'').toLowerCase();
+      const genreRaw=[val(genreKey&&r[genreKey]),themeName,kw].filter(Boolean).join(' ').toLowerCase();
+      const genre=Object.keys(GENRES).find(g=>genreRaw.includes(g))
+        || (/kind|famil|jeugd|kleuter/.test(genreRaw)?'kids'
+          : /dj|electro|dance|techno|house|urban|hiphop|hip-hop/.test(genreRaw)?'dj'
+          : /theater|circus|comedy|humor|straat/.test(genreRaw)?'theater'
+          : /jazz|klassiek|koor|harmonie|blues/.test(genreRaw)?'klassiek'
+          : /world|latin|reggae|afro/.test(genreRaw)?'world'
+          : /folk|chanson|gents|volks|café chantant/.test(genreRaw)?'folk'
+          : /rock|punk|metal/.test(genreRaw)?'rock' : 'pop');
+      const age=(val(ageKey&&r[ageKey])||'')+'';
+      const kids= genre==='kids' || /kind|famil|jeugd|kleuter|vlieg/.test(kw) || /^(?:[0-9]|1[0-2])\b/.test(age);
+      const ev={id:'l'+i,dag,plein:null,start:h,dur:null,rawDur,genre,titel,loc,
+        img:val(imgKey&&r[imgKey])||null, descr:val(descrKey&&r[descrKey])||null,
+        url:val(urlKey&&r[urlKey])||null,
+        gratis:/true|ja|^1$|gratis/i.test(((val(gratisKey&&r[gratisKey])??'')+'').trim()), kids, demo:false};
+      const catFor=()=> /tentoonstell|expo|museum/.test(kw)?'Expo’s & musea'
+        : /wandel|zoektocht|fiets|route/.test(kw)?'Wandelingen & zoektochten'
+        : /boot|water|sup|kajak|kano/.test(kw)?'Op het water'
+        : (rawDur!=null&&rawDur>6)?'Doorlopend (hele dag)':'Elders in de stad';
+      if(rawDur!=null && rawDur>6){ rest.push(Object.assign(ev,{cat:catFor()})); return; }
+      const hit=PLEIN_MATCH.find(([,words])=>words.some(w=>loc.toLowerCase().includes(w)));
+      if(hit){ ev.plein=hit[0]; all.push(ev); }
+      else rest.push(Object.assign(ev,{cat:catFor()}));
+    });
+    if(!all.length && !rest.length)
+      throw {msg:`${recs.length} records geladen, maar geen enkel event viel binnen 17–26 juli`, dump:recs[0]};
+
+    /* ---- 4. rijen: gekende pleinen met data, aangevuld met drukste overige locaties ---- */
+    const withData=new Set(all.map(e=>e.plein));
+    let rows=PLEINEN.filter(p=>withData.has(p.id));
+    const counts={};
+    rest.filter(e=>e.cat==='Elders in de stad').forEach(e=>{ if(e.loc) counts[e.loc]=(counts[e.loc]||0)+1; });
+    Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,14-rows.length)).forEach(([loc,n])=>{
+      const rid='loc_'+loc.replace(/\W+/g,'_').toLowerCase();
+      rows.push({id:rid,naam:loc,tag:n+' activiteiten'});
+      rest.forEach(e=>{ if(e.loc===loc){ e.plein=rid; all.push(e); } });
+    });
+    for(let i=rest.length-1;i>=0;i--) if(rest[i].plein) rest.splice(i,1);
+
+    /* ---- 5. duur bepalen: einde = start van het volgende event op dezelfde rij ---- */
+    const byRow={};
+    all.forEach(e=>{ (byRow[e.plein+'|'+e.dag] ||= []).push(e); });
+    Object.values(byRow).forEach(list=>{
+      list.sort((a,b)=>a.start-b.start);
+      list.forEach((e,i)=>{
+        const next=list[i+1];
+        let dur=e.rawDur;
+        if(next && next.start>e.start){
+          const gap=next.start-e.start;
+          dur = (dur!=null && dur<=gap+.01) ? dur : Math.min(Math.max(gap,.5),4);
+        }
+        if(dur==null) dur=1.25;              // laatste van de avond zonder eindtijd
+        e.dur=Math.max(.5,Math.min(dur,6));
+      });
+    });
+    rest.forEach(e=>{ if(e.dur==null) e.dur=e.rawDur??1.25; });
+
+    EVENTS=all; LIVE_ROWS=rows; LIVE_REST=rest;
+    state.loading=false;
+    st.textContent = all.length
+      ? `live · ${used} · ${all.length} in het raster, ${rest.length} doorlopend/elders`
+      : `live · ${used} · locaties niet gekoppeld — diagnose geopend`;
+    if(!all.length){
+      const locSamples=[...new Set(rest.slice(0,40).map(e=>e.loc).filter(Boolean))].slice(0,10);
+      det.innerHTML=`
+        <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
+        <span class="genrebadge" style="--c:var(--gent-orange)"><span class="sw"></span>Diagnose live data</span>
+        <h2>Records geladen, maar niet gekoppeld</h2>
+        <p>${recs.length} records opgehaald uit <b>${used}</b>. De velddetectie koos deze velden:</p>
+        <pre style="background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);border-radius:var(--radius-2);padding:10px;font-size:.72rem;overflow:auto;white-space:pre-wrap">${JSON.stringify({titleKey,isoStartKey,isoEndKey,dateKey,dagKey,startKey,endKey,locKey,genreKey,endMode},null,1)}</pre>
+        <p>Voorbeeld van locatiewaarden: ${locSamples.length?locSamples.map(l=>`<i>${l}</i>`).join(' · '):'<b>geen — het locatieveld werd niet gevonden of is leeg</b>'}</p>
+        <p>Eerste record uit de dataset:</p>
+        <pre style="background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);border-radius:var(--radius-2);padding:10px;font-size:.72rem;overflow:auto;white-space:pre-wrap">${JSON.stringify(scan[0],null,1).replace(/</g,'&lt;')}</pre>
+        <p>Deel dit paneel en de mapping wordt exact gemaakt.</p>`;
+      openPanel();
+    }
+    render();
+  }catch(err){
+    if(err&&err.dump) console.warn('Voorbeeldrecord open data:', err.dump);
+    state.loading=false;
+    state.loadError = err&&err.msg ? err.msg
+      : 'Geen verbinding met data.stad.gent. In een afgeschermde preview is dit normaal — download de pagina en open ze lokaal in je browser.';
+    st.textContent='niet geladen';
+    render();
+  }
+}
+$('#liveBtn').onclick=loadLive;
+
+let _rsz=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(_rsz);
+  _rsz=setTimeout(()=>{ if(!state.loading) render(); },200);
+});
+render();
+loadLive();
+</script>
+</body>
+</html>
