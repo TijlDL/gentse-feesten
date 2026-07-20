@@ -18,7 +18,7 @@
   --gent-green:#318b29; --gent-green-light:#e6f6e5; --gent-forest:#246420;
   --white:#fff;
   --radius-2:.3rem; --radius-3:1rem; --radius-pill:1.6rem;
-  --hourW:64px; --rowH:54px; --labelW:176px; --startHour:9; --endHour:31; /* 09:00 -> 07:00 (+1d) */
+  --hourW:88px; --rowH:54px; --labelW:176px; --startHour:9; --endHour:31; /* 09:00 -> 07:00 (+1d) */
   font-size:15px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -52,7 +52,7 @@ header{padding:20px 24px 0}
 .demo-pill button:hover{background:var(--gent-gray);color:var(--white)}
 
 /* ---------- day tabs ---------- */
-.days{display:flex;gap:5px;margin:8px 0 0;padding:12px 2px 2px;overflow-x:auto;scrollbar-width:thin}
+.days{display:flex;gap:5px;margin:0 24px;padding:12px 2px 2px;overflow-x:auto;scrollbar-width:thin}
 .day{
   flex:0 0 auto;min-width:76px;padding:8px 10px 9px;border-radius:var(--radius-3) var(--radius-3) 0 0;
   border:1px solid var(--gent-gray-light);border-bottom:none;text-align:center;color:var(--gent-gray-medium);
@@ -177,12 +177,60 @@ header{padding:20px 24px 0}
   background:var(--gent-red);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.5px;
   padding:1px 7px 2px;border-radius:var(--radius-pill);transform:translateX(-50%);width:max-content;margin-left:1px}
 
-/* view-switch (segmented) */
+.pcard .pmore{width:100%;text-align:left;padding:8px 2px 5px;margin-top:3px;
+  border-top:1px solid var(--gent-gray-ultra);color:var(--gent-blue);font-size:.8rem;font-weight:600}
+.stilchips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:4px 4px 2px}
+.stilchips .lbl{font-size:.78rem;color:var(--gent-gray-medium);flex:0 0 100%}
+.rowlabel-btn{cursor:pointer}
+.rowlabel-btn:hover .naam{color:var(--gent-blue);text-decoration:underline}
+
+.stickyhead{position:sticky;top:0;z-index:20;background:var(--gent-gray-ultra);
+  box-shadow:0 3px 12px rgba(0,24,35,.06)}
+.stickyhead .days{margin-top:0;padding-top:10px}
+
+/* view-switch (icon segmented, rechts) */
 .viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
-  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto}
-.viewswitch button{border-radius:var(--radius-pill);padding:4px 13px;font-size:.82rem;font-weight:600;
-  color:var(--gent-gray-medium);white-space:nowrap}
+  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto;margin-left:8px}
+.viewswitch button{border-radius:var(--radius-pill);padding:5px 11px;display:flex;align-items:center;
+  color:var(--gent-gray-medium)}
 .viewswitch button.on{background:var(--gent-blue);color:var(--white)}
+
+/* genre-dropdown */
+.gdrop{position:relative}
+.gbtn .car{font-size:.7rem;margin-left:2px;color:var(--gent-gray-medium)}
+.gbtn.on{border-color:var(--gent-blue);color:var(--gent-gray)}
+.gcount{display:none;background:var(--gent-blue);color:var(--white);border-radius:var(--radius-pill);
+  padding:0 7px;font-size:.7rem;font-weight:700;line-height:1.5;margin-left:2px}
+.gpanel{position:absolute;top:calc(100% + 6px);left:0;z-index:60;min-width:216px;
+  background:var(--white);border:1px solid var(--gent-gray-light);border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,24,35,.16);padding:6px;display:none}
+.gdrop.open .gpanel{display:block}
+.gdrop.open .gbtn{border-color:var(--gent-blue)}
+.gpanel button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:8px;
+  font-size:.86rem;color:var(--gent-gray);text-align:left}
+.gpanel button:hover{background:var(--gent-gray-ultra)}
+.gpanel .sw2{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.gpanel .ck{margin-left:auto;color:var(--gent-blue);font-weight:700;opacity:0}
+.gpanel button.on .ck{opacity:1}
+.gpanel .gclear{justify-content:center;color:var(--gent-blue);font-size:.78rem;font-weight:600;
+  border-top:1px solid var(--gent-gray-ultra);border-radius:0;margin-top:4px}
+.gpanel .gsec{font-size:.66rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);
+  font-weight:700;padding:8px 10px 3px}
+.gpanel .gtijd{display:flex;align-items:center;gap:7px;padding:4px 10px 8px;font-size:.85rem;color:var(--gent-gray)}
+.gpanel .gtijd select{border:1px solid var(--gent-gray-light);border-radius:8px;padding:5px 8px;
+  font-family:inherit;font-size:.85rem;color:var(--gent-gray);background:var(--white)}
+
+/* tijdsvenster-selectie op het raster (brush) */
+.selband{position:absolute;top:34px;bottom:0;z-index:0;pointer-events:none;
+  background:rgba(0,157,224,.09);
+  border-left:1.5px solid var(--gent-cyan);border-right:1.5px solid var(--gent-cyan)}
+.selband .selx{position:absolute;top:6px;right:6px;pointer-events:auto;z-index:40;
+  width:20px;height:20px;border-radius:50%;background:var(--gent-cyan);color:var(--white);
+  font-size:.72rem;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 4px rgba(0,24,35,.25)}
+.selband .sellbl{position:absolute;top:7px;left:8px;font-size:.68rem;font-weight:700;color:var(--gent-cyan);
+  font-variant-numeric:tabular-nums;background:var(--white);padding:1px 7px;border-radius:var(--radius-pill);
+  border:1px solid var(--gent-cyan-pastel)}
 
 /* kaartweergave */
 .kwrap{display:flex;flex-direction:column;gap:10px;padding:12px}
@@ -227,28 +275,30 @@ header{padding:20px 24px 0}
 
 /* ---------- mobiel: tijdliniaal + "nu & straks" per plein ---------- */
 .mob{display:flex;flex-direction:column;gap:12px;padding:12px 12px calc(24px + env(safe-area-inset-bottom))}
-.ruler{position:sticky;top:0;z-index:6;background:var(--white);margin:-6px -12px 0;
-  border-bottom:1px solid var(--gent-gray-light);padding:4px 0 2px}
-.ruler .ntime{position:absolute;left:50%;top:4px;transform:translateX(-50%);z-index:3;pointer-events:none;
-  background:var(--gent-gray);color:var(--white);font-size:.74rem;font-weight:700;
-  padding:2px 11px 3px;border-radius:var(--radius-pill);font-variant-numeric:tabular-nums}
+.ruler{position:sticky;top:var(--headH,0px);z-index:6;background:var(--white);margin:-6px -12px 0;
+  border-bottom:1px solid var(--gent-gray-light);box-shadow:0 3px 10px rgba(0,24,35,.05);padding:4px 0 2px}
+.ruler .nhead{position:absolute;left:50%;top:4px;transform:translateX(-50%);z-index:3;
+  display:flex;align-items:center;gap:6px;pointer-events:none}
+.ruler .ntime{background:var(--gent-blue);color:var(--white);font-size:.74rem;font-weight:700;
+  padding:2px 11px 3px;border-radius:var(--radius-pill);font-variant-numeric:tabular-nums;
+  box-shadow:0 2px 6px rgba(0,91,169,.3)}
 .ruler .needle{position:absolute;left:50%;top:26px;bottom:6px;width:2px;margin-left:-1px;
-  background:var(--gent-red);z-index:2;pointer-events:none}
-.ruler .nowbtn{position:absolute;right:8px;top:3px;z-index:4;border:1px solid var(--gent-yellow);
-  background:var(--gent-yellow-light);color:var(--gent-gray);font-size:.7rem;font-weight:700;
-  padding:3px 10px;border-radius:var(--radius-pill)}
+  background:var(--gent-blue);border-radius:1px;z-index:2;pointer-events:none}
 .ruler .track{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:22px 0 0;cursor:grab;user-select:none}
 .ruler .track.grabbing{cursor:grabbing}
 .ruler .track::-webkit-scrollbar{display:none}
 .ruler .strip{position:relative;height:52px}
-.ruler .dens{position:absolute;bottom:17px;border-radius:2px 2px 0 0;background:var(--gent-cyan-light)}
-.ruler .tick{position:absolute;bottom:17px;width:1px;height:7px;background:var(--gent-gray-light)}
-.ruler .tick.h{height:12px;background:var(--gent-gray-medium)}
+.ruler .strip::before{content:'';position:absolute;left:-100vw;right:-100vw;bottom:14px;height:1px;
+  background:var(--gent-gray-light)}
+.ruler .curve{position:absolute;left:0;top:0;width:100%;height:52px;pointer-events:none}
+.ruler .tick{position:absolute;bottom:9px;width:1px;height:5px;background:var(--gent-gray-light)}
 .ruler .hlab{position:absolute;bottom:0;transform:translateX(-50%);font-size:.66rem;
   color:var(--gent-gray-medium);font-variant-numeric:tabular-nums}
 .pcard{border:1px solid var(--gent-gray-light);border-radius:var(--radius-3);background:var(--white);
   padding:10px 12px 6px;display:flex;flex-direction:column;gap:2px}
-.pcard .phead{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px}
+.pcard .phead{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px;width:100%;text-align:left}
+.pcard .phead .chev{margin-left:auto;color:var(--gent-gray-medium);font-size:1.2rem;line-height:1;align-self:center}
+.pcard .phead:active h3{color:var(--gent-blue)}
 .pcard h3{font-size:.98rem;font-weight:700;color:var(--gent-gray)}
 .pcard .tag2{font-size:.64rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px}
 .lrow{display:flex;gap:11px;align-items:center;padding:6px 2px;text-align:left;width:100%;border-radius:var(--radius-2)}
@@ -263,7 +313,8 @@ header{padding:20px 24px 0}
 .lrow .me{font-size:.74rem;color:var(--gent-gray-medium);display:flex;align-items:center;gap:6px;
   white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
 .lrow .gd{width:8px;height:8px;border-radius:2px;background:var(--c);flex:0 0 auto}
-.lrow .liv{color:var(--gent-green);font-weight:700}
+.lrow .tr{font-variant-numeric:tabular-nums;font-weight:600;color:var(--gent-gray-medium)}
+.lrow .tr.on{color:var(--gent-green);font-weight:700}
 .stil{font-size:.8rem;color:var(--gent-gray-medium);line-height:1.55;padding:2px 6px 8px}
 .stil b{color:var(--gent-gray)}
 .mobcats{display:flex;flex-wrap:wrap;gap:8px;padding:2px 4px 10px}
@@ -272,12 +323,60 @@ header{padding:20px 24px 0}
 .mobcats .pill2 .n{background:var(--gent-gray-medium);color:var(--white);border-radius:var(--radius-pill);
   padding:1px 7px;font-size:.66rem;font-weight:700}
 
-/* view-switch (segmented) */
+.pcard .pmore{width:100%;text-align:left;padding:8px 2px 5px;margin-top:3px;
+  border-top:1px solid var(--gent-gray-ultra);color:var(--gent-blue);font-size:.8rem;font-weight:600}
+.stilchips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:4px 4px 2px}
+.stilchips .lbl{font-size:.78rem;color:var(--gent-gray-medium);flex:0 0 100%}
+.rowlabel-btn{cursor:pointer}
+.rowlabel-btn:hover .naam{color:var(--gent-blue);text-decoration:underline}
+
+.stickyhead{position:sticky;top:0;z-index:20;background:var(--gent-gray-ultra);
+  box-shadow:0 3px 12px rgba(0,24,35,.06)}
+.stickyhead .days{margin-top:0;padding-top:10px}
+
+/* view-switch (icon segmented, rechts) */
 .viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
-  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto}
-.viewswitch button{border-radius:var(--radius-pill);padding:4px 13px;font-size:.82rem;font-weight:600;
-  color:var(--gent-gray-medium);white-space:nowrap}
+  border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto;margin-left:8px}
+.viewswitch button{border-radius:var(--radius-pill);padding:5px 11px;display:flex;align-items:center;
+  color:var(--gent-gray-medium)}
 .viewswitch button.on{background:var(--gent-blue);color:var(--white)}
+
+/* genre-dropdown */
+.gdrop{position:relative}
+.gbtn .car{font-size:.7rem;margin-left:2px;color:var(--gent-gray-medium)}
+.gbtn.on{border-color:var(--gent-blue);color:var(--gent-gray)}
+.gcount{display:none;background:var(--gent-blue);color:var(--white);border-radius:var(--radius-pill);
+  padding:0 7px;font-size:.7rem;font-weight:700;line-height:1.5;margin-left:2px}
+.gpanel{position:absolute;top:calc(100% + 6px);left:0;z-index:60;min-width:216px;
+  background:var(--white);border:1px solid var(--gent-gray-light);border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,24,35,.16);padding:6px;display:none}
+.gdrop.open .gpanel{display:block}
+.gdrop.open .gbtn{border-color:var(--gent-blue)}
+.gpanel button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:8px;
+  font-size:.86rem;color:var(--gent-gray);text-align:left}
+.gpanel button:hover{background:var(--gent-gray-ultra)}
+.gpanel .sw2{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.gpanel .ck{margin-left:auto;color:var(--gent-blue);font-weight:700;opacity:0}
+.gpanel button.on .ck{opacity:1}
+.gpanel .gclear{justify-content:center;color:var(--gent-blue);font-size:.78rem;font-weight:600;
+  border-top:1px solid var(--gent-gray-ultra);border-radius:0;margin-top:4px}
+.gpanel .gsec{font-size:.66rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);
+  font-weight:700;padding:8px 10px 3px}
+.gpanel .gtijd{display:flex;align-items:center;gap:7px;padding:4px 10px 8px;font-size:.85rem;color:var(--gent-gray)}
+.gpanel .gtijd select{border:1px solid var(--gent-gray-light);border-radius:8px;padding:5px 8px;
+  font-family:inherit;font-size:.85rem;color:var(--gent-gray);background:var(--white)}
+
+/* tijdsvenster-selectie op het raster (brush) */
+.selband{position:absolute;top:34px;bottom:0;z-index:0;pointer-events:none;
+  background:rgba(0,157,224,.09);
+  border-left:1.5px solid var(--gent-cyan);border-right:1.5px solid var(--gent-cyan)}
+.selband .selx{position:absolute;top:6px;right:6px;pointer-events:auto;z-index:40;
+  width:20px;height:20px;border-radius:50%;background:var(--gent-cyan);color:var(--white);
+  font-size:.72rem;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 4px rgba(0,24,35,.25)}
+.selband .sellbl{position:absolute;top:7px;left:8px;font-size:.68rem;font-weight:700;color:var(--gent-cyan);
+  font-variant-numeric:tabular-nums;background:var(--white);padding:1px 7px;border-radius:var(--radius-pill);
+  border:1px solid var(--gent-cyan-pastel)}
 
 /* kaartweergave */
 .kwrap{display:flex;flex-direction:column;gap:10px;padding:12px}
@@ -415,7 +514,7 @@ header{padding:20px 24px 0}
   .brand .sub{display:none}
   .demo-pill{display:none}
   /* dagtabs: kleine pills, geel stipje i.p.v. badge */
-  .days{gap:5px;margin:10px 0 0;padding:4px 2px 8px}
+  .days{gap:5px;margin:0;padding:6px 14px 8px}
   .day{min-width:52px;padding:5px 9px 6px;border-radius:10px;border-bottom:1px solid var(--gent-gray-light)}
   .day .dow{font-size:.6rem}
   .day .dnum{font-size:1rem}
@@ -423,23 +522,20 @@ header{padding:20px 24px 0}
   .day.today::after{content:'';top:5px;right:6px;left:auto;transform:none;
     width:6px;height:6px;padding:0;border-radius:50%;background:var(--gent-yellow)}
   /* filters: losse chip-rij, geen kader */
-  .filters{background:none;border:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  .filters{background:none;border:none;flex-wrap:wrap;overflow:visible;
     padding:2px 14px 8px;border-radius:0}
-  .filters::-webkit-scrollbar{display:none}
-  .filters .zoek{flex:0 0 auto;width:150px;background:var(--white)}
+  .filters .zoek{flex:1 1 100%;order:9;background:var(--white);margin-left:0}
   .filters .count,.filters .sep{display:none}
+  .viewswitch{margin-left:auto}
   /* raster-schil: full-bleed, geen doos */
-  .shell{border:none;border-radius:0;background:none;margin:0 0 20px}
+  .shell{border:none;border-radius:0;background:none;margin:0 0 20px;overflow:visible}
+  .scroller{overflow:visible}
   .filters{margin:0}
   .grid{min-width:0}
   .scroller{overflow-x:visible}
   /* liniaal: stiller */
   .ruler{margin:-6px -12px 0;padding:2px 0}
   .ruler .ntime{font-size:.7rem;padding:2px 9px 3px;top:6px}
-  .ruler .needle{top:24px;width:1.5px}
-  .ruler .tick{display:none}
-  .ruler .tick.h{display:block;height:8px;background:var(--gent-gray-light)}
-  .ruler .nowbtn{top:5px;font-size:.66rem;padding:3px 9px}
   /* kaarten: zweven op schaduw i.p.v. rand */
   .pcard{border:none;box-shadow:0 1px 3px rgba(0,24,35,.08);padding:10px 12px 6px}
   .mobcats .pill2{font-size:.74rem;padding:5px 11px}
@@ -468,21 +564,28 @@ header{padding:20px 24px 0}
       <button id="liveBtn" title="Haalt het programma opnieuw op via data.stad.gent">Vernieuwen</button>
     </div>
   </div>
-  <nav class="days" id="dayTabs" aria-label="Kies een feestdag"></nav>
 </header>
 
+<div class="stickyhead" id="stickyHead">
+<nav class="days" id="dayTabs" aria-label="Kies een feestdag"></nav>
 <div class="filters" id="filterBar">
-  <div class="viewswitch" role="tablist" aria-label="Weergave">
-    <button data-v="tijd" class="on">Tijdlijn</button><button data-v="kaart">Kaart</button>
-  </div>
   <span class="count" id="countLabel"></span>
   <span class="sep"></span>
-  <!-- genre chips injected -->
-  <span class="sep"></span>
-  <button class="chip toggle" data-toggle="gratis"><span class="sw" style="--c:var(--gent-green)"></span>Gratis</button>
-  <button class="chip toggle" data-toggle="kids"><span class="sw" style="--c:var(--gent-red-pastel)"></span>Met kinderen</button>
-  <input class="zoek" id="zoek" type="search" placeholder="Zoek artiest of activiteit…">
+  <div class="gdrop" id="gdrop">
+    <button class="chip gbtn" id="gbtn">Filters<span class="gcount" id="gcount"></span><span class="car">▾</span></button>
+    <div class="gpanel" id="gpanel"></div>
+  </div>
+  <div class="gdrop" id="tdrop">
+    <button class="chip gbtn" id="tbtn">Tijd<span class="car">▾</span></button>
+    <div class="gpanel" id="tpanel"></div>
+  </div>
   <button class="reset" id="resetBtn" hidden>wis filters</button>
+  <input class="zoek" id="zoek" type="search" placeholder="Zoek artiest of activiteit…">
+  <div class="viewswitch" role="tablist" aria-label="Weergave">
+    <button data-v="tijd" class="on" title="Tijdlijn" aria-label="Tijdlijn"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h8M2 8h12M2 12h6"/></svg></button>
+    <button data-v="kaart" title="Kaart" aria-label="Kaart"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 14.2S3.5 9.8 3.5 6.8a4.5 4.5 0 1 1 9 0c0 3-4.5 7.4-4.5 7.4z"/><circle cx="8" cy="6.8" r="1.6"/></svg></button>
+  </div>
+</div>
 </div>
 
 <div class="shell">
@@ -508,7 +611,7 @@ header{padding:20px 24px 0}
 <script>
 /* ================= CONFIG ================= */
 const START_H = 9, END_H = 31;              // 09:00 -> 07:00 (+1d)
-const HOUR_W = () => { const g=document.getElementById('grid'); return parseFloat(getComputedStyle(g||document.documentElement).getPropertyValue('--hourW'))||64; };
+const HOUR_W = () => { const g=document.getElementById('grid'); return parseFloat(getComputedStyle(g||document.documentElement).getPropertyValue('--hourW'))||88; };
 const LABEL_W = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--labelW'));
 const DAYS = [17,18,19,20,21,22,23,24,25,26];
 const DOW  = {17:'vr',18:'za',19:'zo',20:'ma',21:'di',22:'wo',23:'do',24:'vr',25:'za',26:'zo'};
@@ -556,7 +659,7 @@ const DESCR = {
 let EVENTS = [];
 let LIVE_ROWS = null;   // vervangt PLEINEN wanneer live data geladen is
 let LIVE_REST = null;   // doorlopende/overige live events voor de strook
-let state = { dag: null, genres:new Set(), gratis:false, kids:false, q:'', tijd:'nu', view:'tijd', loading:true, loadError:null };
+let state = { dag: null, genres:new Set(), gratis:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
 const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : {matches:false, addEventListener(){}};
 const isMobile = () => MQ.matches;
 MQ.addEventListener && MQ.addEventListener('change', ()=>render());
@@ -599,23 +702,63 @@ function renderTabs(){
 }
 
 function renderChips(){
-  const bar=$('#filterBar');
-  bar.querySelectorAll('.chip.genre').forEach(n=>n.remove());
-  const anchor=bar.querySelectorAll('.sep')[1];
-  Object.entries(GENRES).forEach(([k,g])=>{
-    const b=document.createElement('button');
-    b.className='chip genre'+(state.genres.has(k)?' on':'');
-    b.style.setProperty('--c',g.c);
-    b.innerHTML=`<span class="sw"></span>${g.label}`;
-    b.onclick=()=>{state.genres.has(k)?state.genres.delete(k):state.genres.add(k); render();};
-    bar.insertBefore(b,anchor);
-  });
-  bar.querySelector('[data-toggle="gratis"]').classList.toggle('on',state.gratis);
-  bar.querySelector('[data-toggle="kids"]').classList.toggle('on',state.kids);
-  $('#resetBtn').hidden = !(state.genres.size||state.gratis||state.kids||state.q);
+  document.querySelectorAll('#gpanel [data-g]').forEach(b=>b.classList.toggle('on',state.genres.has(b.dataset.g)));
+  document.querySelectorAll('#gpanel [data-toggle2]').forEach(b=>b.classList.toggle('on',state[b.dataset.toggle2]));
+  const n=state.genres.size+(state.gratis?1:0)+(state.kids?1:0);
+  const gc=$('#gcount');
+  gc.textContent=n; gc.style.display=n?'inline-block':'none';
+  $('#gbtn').classList.toggle('on',n>0);
+  const win=state.van!=null||state.tot!=null;
+  const uur=t=>t==null?null:(t%1?fmt(t):(t%24)+'u');
+  $('#tbtn').innerHTML=(win?`${uur(state.van)??'…'} – ${uur(state.tot)??'einde'}`:'Tijd')+'<span class="car">▾</span>';
+  $('#tbtn').classList.toggle('on',win);
+  $('#resetBtn').hidden = !(n||win||state.q);
 }
+(function initFilterPanel(){
+  const panel=$('#gpanel');
+  const uurOpts=(sel,from)=>{ let o='<option value="">—</option>';
+    for(let h=from;h<=END_H;h++) o+=`<option value="${h}"${sel===h?' selected':''}>${h%24}u</option>`; return o; };
+  panel.innerHTML=
+    '<p class="gsec">Genres</p>'
+    +Object.entries(GENRES).map(([k,g])=>
+      `<button data-g="${k}"><span class="sw2" style="background:${g.c}"></span>${g.label}<span class="ck">✓</span></button>`).join('')
+    +'<p class="gsec">Praktisch</p>'
+    +'<button data-toggle2="gratis"><span class="sw2" style="background:var(--gent-green)"></span>Gratis<span class="ck">✓</span></button>'
+    +'<button data-toggle2="kids"><span class="sw2" style="background:var(--gent-red-pastel)"></span>Met kinderen<span class="ck">✓</span></button>'
+    +'<button class="gclear" id="gclear">Alles wissen</button>';
+  const tpanel=$('#tpanel');
+  tpanel.innerHTML=
+    '<p class="gsec">Toon enkel tussen</p>'
+    +`<div class="gtijd">van <select id="selVan">${uurOpts(state.van,START_H)}</select> tot <select id="selTot">${uurOpts(state.tot,START_H+1)}</select></div>`
+    +'<button class="gclear" id="tclear">Wis tijdsvenster</button>';
+  panel.querySelectorAll('[data-g]').forEach(b=>{
+    b.onclick=()=>{ const k=b.dataset.g; state.genres.has(k)?state.genres.delete(k):state.genres.add(k); render(); };
+  });
+  panel.querySelectorAll('[data-toggle2]').forEach(b=>{
+    b.onclick=()=>{ state[b.dataset.toggle2]=!state[b.dataset.toggle2]; render(); };
+  });
+  const sync=()=>{ state.van=$('#selVan').value?+$('#selVan').value:null;
+    state.tot=$('#selTot').value?+$('#selTot').value:null;
+    if(state.van!=null&&state.tot!=null&&state.tot<=state.van) state.tot=null;
+    render(); };
+  $('#selVan').onchange=sync; $('#selTot').onchange=sync;
+  $('#gclear').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false;
+    state.van=null; state.tot=null; $('#selVan').value=''; $('#selTot').value=''; render(); };
+  $('#tclear').onclick=()=>{ state.van=null; state.tot=null;
+    $('#selVan').value=''; $('#selTot').value=''; render(); };
+  $('#gbtn').onclick=e=>{ e.stopPropagation(); $('#tdrop').classList.remove('open'); $('#gdrop').classList.toggle('open'); };
+  $('#tbtn').onclick=e=>{ e.stopPropagation(); $('#gdrop').classList.remove('open'); $('#tdrop').classList.toggle('open'); };
+  panel.onclick=e=>e.stopPropagation();
+  tpanel.onclick=e=>e.stopPropagation();
+  document.addEventListener('click',e=>{
+    if(!$('#gdrop').contains(e.target)) $('#gdrop').classList.remove('open');
+    if(!$('#tdrop').contains(e.target)) $('#tdrop').classList.remove('open');
+  });
+})();
 
 function matches(e){
+  if(state.van!=null && e.start+e.dur<=state.van) return false;
+  if(state.tot!=null && e.start>=state.tot) return false;
   if(state.genres.size && !state.genres.has(e.genre)) return false;
   if(state.gratis && !e.gratis) return false;
   if(state.kids && !e.kids) return false;
@@ -639,7 +782,7 @@ function render(){
   grid.innerHTML='';
   /* elastische uurbreedte: vul de volledige beschikbare breedte, met 64px/u als minimum */
   const availW=$('#scroller').clientWidth - LABEL_W() - 2;
-  const fitW=Math.max(64, Math.floor((availW/(END_H-START_H))*100)/100);
+  const fitW=Math.max(88, Math.floor((availW/(END_H-START_H))*100)/100);
   grid.style.setProperty('--hourW', fitW+'px');
   const th=document.createElement('div'); th.className='timehead';
   th.innerHTML=`<div class="corner">${DOW[state.dag]} ${state.dag} juli</div>`;
@@ -653,6 +796,53 @@ function render(){
   }
   th.appendChild(hours); grid.appendChild(th);
 
+  /* actief tijdsvenster als band in het raster */
+  if(state.van!=null && state.tot!=null){
+    const band=document.createElement('div'); band.className='selband';
+    band.style.left=xPos(state.van)+'px';
+    band.style.width=((state.tot-state.van)*HOUR_W())+'px';
+    band.innerHTML=`<span class="sellbl">${fmt(state.van)} – ${fmt(state.tot)}</span><button class="selx" title="Venster wissen">×</button>`;
+    band.querySelector('.selx').onclick=()=>{ state.van=null; state.tot=null;
+      const sv=$('#selVan'), st2=$('#selTot'); if(sv)sv.value=''; if(st2)st2.value=''; render(); };
+    grid.appendChild(band);
+  }
+
+  /* brush: sleep over de achtergrond om een tijdsvenster te kiezen */
+  let brushing=null, tempBand=null;
+  grid.onpointerdown=e=>{
+    if(isMobile() || e.button!==0) return;
+    if(e.target && e.target.closest && e.target.closest('.ruler,.ev,.rowlabel,.pill,.timehead,.selband,button,select,input')) return;
+    const rect=grid.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    if(x<=LABEL_W()) return;
+    brushing={x0:x};
+    grid.setPointerCapture(e.pointerId);
+  };
+  grid.onpointermove=e=>{
+    if(!brushing) return;
+    const rect=grid.getBoundingClientRect();
+    const x=Math.max(LABEL_W(), e.clientX-rect.left);
+    brushing.x1=x;
+    if(Math.abs(x-brushing.x0)>6){
+      if(!tempBand){ tempBand=document.createElement('div'); tempBand.className='selband'; grid.appendChild(tempBand); }
+      const l=Math.min(brushing.x0,x), w=Math.abs(x-brushing.x0);
+      tempBand.style.left=l+'px'; tempBand.style.width=w+'px';
+    }
+  };
+  grid.onpointerup=e=>{
+    if(!brushing) return;
+    const {x0,x1}=brushing; brushing=null;
+    if(tempBand){ tempBand.remove(); tempBand=null; }
+    const toT=x=>Math.round((START_H+(x-LABEL_W())/HOUR_W())*4)/4; /* kwartier-raster */
+    if(x1!=null && Math.abs(x1-x0)>10){
+      state.van=Math.max(START_H,Math.min(toT(x0),toT(x1)));
+      state.tot=Math.min(END_H,Math.max(toT(x0),toT(x1)));
+      const sv=$('#selVan'), st2=$('#selTot');
+      if(sv)sv.value=Number.isInteger(state.van)?state.van:''; if(st2)st2.value=Number.isInteger(state.tot)?state.tot:'';
+      render();
+    }
+  };
+
   /* ---- feestpleinen eerst ---- */
   const sh2=document.createElement('div'); sh2.className='sectionhead';
   sh2.innerHTML=`<div class="rowlabel"><span class="naam">Feestpleinen${LIVE_ROWS?' & drukste locaties':''}</span></div>`;
@@ -661,7 +851,10 @@ function render(){
   const LANE_H=38, LANE_GAP=4, PAD=7;
   for(const p of ROWS){
     const row=document.createElement('div'); row.className='row';
-    row.innerHTML=`<div class="rowlabel"><span class="naam">${p.naam}</span><span class="tag">${p.tag}</span></div>`;
+    const rl=document.createElement('button'); rl.className='rowlabel rowlabel-btn';
+    rl.innerHTML=`<span class="naam">${p.naam}</span><span class="tag">${p.tag}</span>`;
+    rl.onclick=()=>openPlein(p);
+    row.appendChild(rl);
     const lane=document.createElement('div'); lane.className='lane';
     lane.innerHTML='<div class="gridlines"></div>';
     /* sub-lanes: overlappende events stapelen onder elkaar i.p.v. over elkaar */
@@ -778,39 +971,43 @@ function buildRuler(dayEvents,onTime){
         : Math.min(Math.max(state.tijd,START_H),END_H);
   const PXH=110;
   const ruler=document.createElement('div'); ruler.className='ruler';
-  ruler.innerHTML='<span class="ntime"></span><span class="needle"></span>';
+  ruler.innerHTML='<div class="nhead"><span class="ntime"></span></div><span class="needle"></span>';
   const track=document.createElement('div'); track.className='track';
   const strip=document.createElement('div'); strip.className='strip';
   strip.style.width=((END_H-START_H)*PXH)+'px';
+  /* druktecurve: vloeiende silhouet van de feestdag */
   let maxAct=1; const acts=[];
   for(let t=START_H;t<END_H;t+=.5){
     const n=dayEvents.filter(e=>matches(e)&&e.start<=t&&t<e.start+e.dur).length;
     acts.push(n); if(n>maxAct)maxAct=n;
   }
-  acts.forEach((n,i)=>{
-    if(!n) return;
-    const d=document.createElement('span'); d.className='dens';
-    d.style.left=(i*.5*PXH)+'px'; d.style.width=(.5*PXH-2)+'px';
-    d.style.height=(4+22*(n/maxAct))+'px';
-    strip.appendChild(d);
-  });
-  for(let t=START_H;t<=END_H;t+=.5){
+  const stripW=(END_H-START_H)*PXH, base=38, topY=6;
+  const pts=acts.map((n,i)=>({x:(i+.5)*.5*PXH, y: n? base-(3+(base-topY-3)*(n/maxAct)) : base}));
+  let dp=`M0 ${base} L${pts[0].x} ${pts[0].y}`;
+  for(let i=1;i<pts.length;i++){
+    const mx=(pts[i-1].x+pts[i].x)/2, my=(pts[i-1].y+pts[i].y)/2;
+    dp+=` Q${pts[i-1].x} ${pts[i-1].y} ${mx} ${my}`;
+  }
+  dp+=` L${pts[pts.length-1].x} ${pts[pts.length-1].y} L${stripW} ${base} Z`;
+  const curve=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  curve.setAttribute('class','curve');
+  curve.setAttribute('viewBox',`0 0 ${stripW} 52`);
+  curve.setAttribute('preserveAspectRatio','none');
+  curve.innerHTML=`<defs><linearGradient id="gfcurve" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#009de0" stop-opacity=".26"/>
+      <stop offset="1" stop-color="#009de0" stop-opacity=".03"/></linearGradient></defs>
+    <path d="${dp}" fill="url(#gfcurve)" stroke="#009de0" stroke-opacity=".4" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+  strip.appendChild(curve);
+  for(let t=START_H;t<=END_H;t++){
     const x=(t-START_H)*PXH;
-    const tick=document.createElement('span'); tick.className='tick'+(t%1===0?' h':'');
+    const tick=document.createElement('span'); tick.className='tick';
     tick.style.left=x+'px'; strip.appendChild(tick);
-    if(t%1===0){
-      const l=document.createElement('span'); l.className='hlab';
-      l.style.left=x+'px'; l.textContent=(t%24)+'u';
-      strip.appendChild(l);
-    }
+    const l=document.createElement('span'); l.className='hlab';
+    l.style.left=x+'px'; l.textContent=(t%24)+'u';
+    strip.appendChild(l);
   }
   track.appendChild(strip); ruler.appendChild(track);
   const ntime=ruler.querySelector('.ntime');
-  if(isToday){
-    const nb=document.createElement('button'); nb.className='nowbtn'; nb.textContent='Nu';
-    nb.onclick=()=>track.scrollTo({left:(nowH-START_H)*PXH,behavior:'smooth'});
-    ruler.appendChild(nb);
-  }
   let lastStep=null, raf=false;
   const applyScroll=()=>{
     raf=false;
@@ -824,11 +1021,13 @@ function buildRuler(dayEvents,onTime){
   /* desktop: slepen met de muis, scrollwiel, en klikken om te springen */
   let dragging=false, moved=0, startX=0, startSL=0;
   track.addEventListener('pointerdown',e=>{
+    e.stopPropagation();
     if(e.pointerType!=='mouse') return;
     dragging=true; moved=0; startX=e.clientX; startSL=track.scrollLeft;
     track.setPointerCapture(e.pointerId); track.classList.add('grabbing');
   });
   track.addEventListener('pointermove',e=>{
+    if(dragging) e.stopPropagation();
     if(!dragging) return;
     const dx=e.clientX-startX; moved=Math.max(moved,Math.abs(dx));
     track.scrollLeft=startSL-dx;
@@ -843,7 +1042,7 @@ function buildRuler(dayEvents,onTime){
       track.scrollTo({left:(t-START_H)*PXH, behavior:'smooth'});
     }
   };
-  track.addEventListener('pointerup',endDrag);
+  track.addEventListener('pointerup',e=>{ e.stopPropagation(); endDrag(e); });
   track.addEventListener('pointercancel',()=>{dragging=false;track.classList.remove('grabbing');});
   track.addEventListener('wheel',e=>{
     track.scrollLeft += Math.abs(e.deltaX)>Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
@@ -862,17 +1061,16 @@ function buildRuler(dayEvents,onTime){
 
 function renderMobile(ROWS, dayEvents){
   grid.innerHTML='';
+  grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
   const wrapM=document.createElement('div'); wrapM.className='mob';
   const listWrap=document.createElement('div');
   listWrap.style.cssText='display:flex;flex-direction:column;gap:10px';
 
-  const mkRow=(e,p,bezig,echtNu)=>{
+  const mkRow=(e,p,running)=>{
     const b=document.createElement('button'); b.className='lrow';
     b.style.setProperty('--c',GENRES[e.genre].c);
-    const eind=fmt(e.start+e.dur);
-    const meta = bezig
-      ? `<span class="liv">${echtNu?'nu bezig':'bezig'} · tot ${eind}</span><span class="gd"></span>${GENRES[e.genre].label}`
-      : `om ${fmt(e.start)}<span class="gd"></span>${GENRES[e.genre].label}`;
+    const meta = `<span class="tr${running?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
+      `<span class="gd"></span>${GENRES[e.genre].label}`;
     b.innerHTML=`<span class="th">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
       <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span></span>`;
     b.onclick=()=>openEvent(e,p);
@@ -880,23 +1078,41 @@ function renderMobile(ROWS, dayEvents){
   };
   const buildList=t=>{
     listWrap.innerHTML='';
-    const echtNu=isNowTime(t);
-    const stil=[];
+    const stil=[], entries=[];
     ROWS.forEach(p=>{
       const evs=dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
-      const bezig=evs.filter(e=>e.start<=t && t<e.start+e.dur);
-      const straks=evs.filter(e=>e.start>t && e.start<=t+2.5).slice(0,3);
-      if(!bezig.length && !straks.length){ if(evs.length) stil.push(p.naam); return; }
+      if(!evs.length) return;
+      const live=evs.filter(e=>e.start<=t && t<e.start+e.dur);
+      const next=evs.find(e=>e.start>t);
+      if(!live.length && !next){ stil.push(p); return; } /* dagprogramma zit erop */
+      entries.push({p,live,next});
+    });
+    entries.sort((a,b)=>(a.live.length?0:1)-(b.live.length?0:1)
+      || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99)));
+    entries.forEach(({p,live,next})=>{
       const card=document.createElement('section'); card.className='pcard';
-      card.innerHTML=`<div class="phead"><h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span></div>`;
-      bezig.forEach(e=>card.appendChild(mkRow(e,p,true,echtNu)));
-      straks.forEach(e=>card.appendChild(mkRow(e,p,false,echtNu)));
+      const ph=document.createElement('button'); ph.className='phead';
+      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
+      ph.onclick=()=>openPlein(p);
+      card.appendChild(ph);
+      live.forEach(e=>card.appendChild(mkRow(e,p,true)));
+      if(next) card.appendChild(mkRow(next,p,false));
+      const more=document.createElement('button'); more.className='pmore';
+      more.textContent='Volledig programma ›';
+      more.onclick=()=>openPlein(p);
+      card.appendChild(more);
       listWrap.appendChild(card);
     });
     if(stil.length){
-      const st2=document.createElement('p'); st2.className='stil';
-      st2.innerHTML=`<b>Rond ${fmt(t)} u even stil:</b> ${stil.join(' · ')}.`;
-      listWrap.appendChild(st2);
+      const sc=document.createElement('div'); sc.className='stilchips';
+      sc.innerHTML='<span class="lbl">Vandaag niets meer op:</span>';
+      stil.forEach(p=>{
+        const b=document.createElement('button'); b.className='pill2';
+        b.textContent=p.naam;
+        b.onclick=()=>openPlein(p);
+        sc.appendChild(b);
+      });
+      listWrap.appendChild(sc);
     }
     const cats=stripCatsFor(state.dag);
     if(cats.length){
@@ -942,6 +1158,7 @@ function rowCoords(p){
 let MAP=null, MARKLAYER=null;
 function renderKaart(ROWS, dayEvents){
   grid.innerHTML='';
+  grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
   if(MAP){ MAP.remove(); MAP=null; MARKLAYER=null; }
   const wrapK=document.createElement('div'); wrapK.className='kwrap';
   const r=buildRuler(dayEvents,t=>updateMarkers(ROWS,dayEvents,t));
@@ -975,14 +1192,32 @@ function updateMarkers(ROWS,dayEvents,t){
       html:`<div class="gmark${n?'':' idle'}" style="${n?`--c:${col};`:''}width:${size}px;height:${size}px">${n||''}</div>`,
       iconSize:[size,size],iconAnchor:[size/2,size/2]});
     const m=L.marker(c,{icon}).addTo(MARKLAYER);
-    const echtNu=isNowTime(t);
     const rows=[...bezig.map(e=>({e,b:1})),...straks.map(e=>({e,b:0}))].slice(0,5)
       .map(({e,b})=>`<button class="krow" onclick="window._gfOpen('${e.id}')">`+
-        `<span class="kdot" style="--c:${GENRES[e.genre].c}"></span><b>${b?(echtNu?'nu':'bezig'):fmt(e.start)}</b> ${e.titel.replace(/</g,'&lt;')}</button>`).join('');
+        `<span class="kdot" style="--c:${GENRES[e.genre].c}"></span><b>${fmt(e.start)}</b> ${e.titel.replace(/</g,'&lt;')}</button>`).join('');
     m.bindPopup(`<div class="kpop"><h4>${p.naam}</h4>${rows||'<p class="kleeg">Niets rond dit uur</p>'}</div>`,
       {closeButton:false,maxWidth:280});
     if(!isMobile()) m.bindTooltip(p.naam,{direction:'top',offset:[0,-size/2-2]});
   });
+}
+function openPlein(p){
+  const evs=EVENTS.filter(e=>e.dag===state.dag && e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
+  let t; if(typeof state.tijd==='number') t=state.tijd;
+  else { const n=new Date(); let h=n.getHours()+n.getMinutes()/60; if(h<7)h+=24; t=h; }
+  const rows=evs.map(e=>{
+    const bezig=e.start<=t && t<e.start+e.dur;
+    return `<button onclick="window._gfOpen('${e.id}')"${bezig?' style="background:var(--gent-green-light)"':''}>`+
+      `<span class="tt">${fmt(e.start)}</span>`+
+      `<span style="width:8px;height:8px;border-radius:2px;background:${GENRES[e.genre].c};align-self:center;flex:0 0 auto"></span>`+
+      `<span class="nm">${e.titel}</span></button>`;
+  }).join('');
+  det.innerHTML=`
+    <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
+    <span class="genrebadge" style="--c:var(--gent-cyan)"><span class="sw"></span>${DOW[state.dag]} ${state.dag} juli · volledig programma</span>
+    <h2>${p.naam}</h2>
+    ${p.tag?`<p style="margin-top:-6px;color:var(--gent-gray-medium);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">${p.tag}</p>`:''}
+    <div class="listing">${rows||'<p style="color:var(--gent-gray-medium);font-size:.88rem">Geen programma vandaag binnen je huidige filters.</p>'}</div>`;
+  openPanel();
 }
 window._gfOpen=id=>{
   const e=EVENTS.find(x=>x.id===id); if(!e) return;
@@ -1039,11 +1274,12 @@ function openCategory(c){
 document.querySelectorAll('.viewswitch button').forEach(b=>{
   b.onclick=()=>{ state.view=b.dataset.v; render(); };
 });
-document.querySelectorAll('[data-toggle]').forEach(b=>{
-  b.onclick=()=>{ state[b.dataset.toggle]=!state[b.dataset.toggle]; render(); };
-});
+
 $('#zoek').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
-$('#resetBtn').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false; state.q=''; $('#zoek').value=''; render(); };
+$('#resetBtn').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false; state.q='';
+  state.van=null; state.tot=null;
+  const sv=$('#selVan'), st=$('#selTot'); if(sv)sv.value=''; if(st)st.value='';
+  $('#zoek').value=''; render(); };
 
 /* ================= LIVE DATA (open data Stad Gent) ================= */
 async function loadLive(){
@@ -1053,29 +1289,50 @@ async function loadLive(){
   const parseTime=v=>{ if(v==null)return null; const m=String(v).match(/(\d{1,2})\s*[:.uh]\s*(\d{2})/); return m? (+m[1])+(+m[2])/60 : null; };
   try{
     /* ---- 1. ophalen ---- */
-    const fetchAll=async (id,label)=>{
+    const setMsg=t=>{ st.textContent=t; const lm=document.getElementById('loadMsg'); if(lm) lm.textContent=t; };
+    /* volledige dataset in één request via het export-endpoint */
+    const fetchExport=async id=>{
+      const r=await fetch(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/exports/json`);
+      if(!r.ok) throw new Error('export '+r.status);
+      const j=await r.json();
+      if(!Array.isArray(j)) throw new Error('exportvorm');
+      return j;
+    };
+    /* vangnet: gepagineerd, maar met parallelle batches */
+    const fetchPaged=async (id,label)=>{
       const base=`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/records`;
       const probe=await fetch(`${base}?limit=1`);
       if(!probe.ok) return null;
-      const out=[]; let total=Infinity;
-      for(let off=0; off<Math.min(total,9900); off+=100){
-        const r=await fetch(`${base}?limit=100&offset=${off}`);
-        if(!r.ok) break;
-        const j=await r.json();
-        if(j.total_count!=null) total=j.total_count;
-        const batch=j.results||[];
-        out.push(...batch);
-        if(label){ const t=`${label} ${out.length}${total<Infinity?'/'+total:''}…`; st.textContent=t;
-          const lm=document.getElementById('loadMsg'); if(lm) lm.textContent=t; }
-        if(batch.length<100) break;
+      const total=Math.min((await probe.json()).total_count||0,9900);
+      if(!total) return [];
+      const offs=[]; for(let o=0;o<total;o+=100) offs.push(o);
+      const out=new Array(offs.length); let done=0;
+      const CH=6; /* 6 requests tegelijk */
+      for(let i=0;i<offs.length;i+=CH){
+        await Promise.all(offs.slice(i,i+CH).map(async(off,ix)=>{
+          const r=await fetch(`${base}?limit=100&offset=${off}`);
+          out[i+ix]=r.ok ? ((await r.json()).results||[]) : [];
+          done++;
+          if(label) setMsg(`${label} ${Math.min(done*100,total)}/${total}…`);
+        }));
       }
-      return out;
+      return out.flat();
     };
-    let recs=null, used=null;
-    for(const id of ids){
-      recs=await fetchAll(id,'laden…'); if(recs){used=id; break;}
-    }
-    if(recs===null) throw {msg:'dataset niet gevonden op data.stad.gent'};
+    const fetchDS=async (id,label)=>{
+      if(label) setMsg(label);
+      try{ return await fetchExport(id); }
+      catch(_){ return fetchPaged(id,label); }
+    };
+    /* evenementen, locaties en thema's parallel */
+    const loadSet=async id=>Promise.all([
+      fetchDS(id,'programma laden…'),
+      fetchDS(id.replace('evenementen','locaties'),null).catch(()=>null),
+      fetchDS(id.replace('evenementen','themas'),null).catch(()=>null),
+    ]);
+    let used=ids[0];
+    let [recs,locRecs,thRecs]=await loadSet(used);
+    if(!recs || !recs.length){ used=ids[1]; [recs,locRecs,thRecs]=await loadSet(used); }
+    if(!recs) throw {msg:'dataset niet gevonden op data.stad.gent'};
     if(!recs.length) throw {msg:`dataset ${used} is leeg`};
 
     /* gejoinde datasets: locaties & thema's — evenementen verwijzen ernaar via API-url */
@@ -1109,7 +1366,6 @@ async function loadLive(){
       return null;
     };
     try{
-      const locRecs=await fetchAll(used.replace('evenementen','locaties'),'locaties laden…');
       LOCMAP=buildMap(locRecs);
       if(locRecs) locRecs.forEach(lr=>{
         const g=geoOf(lr); if(!g) return;
@@ -1119,7 +1375,7 @@ async function loadLive(){
         const nm=val(lr[nameK]); if(nm) LOCGEO.set((nm+'').toLowerCase().trim(),g);
       });
     }catch(_){/* optioneel */}
-    try{ THEMEMAP=buildMap(await fetchAll(used.replace('evenementen','themas'),'thema’s laden…')); }catch(_){/* optioneel */}
+    try{ THEMEMAP=buildMap(thRecs); }catch(_){/* optioneel */}
     const resolveVia=(map,raw)=>{
       const s=((raw??'')+'').toLowerCase().trim();
       if(!s) return '';
@@ -1326,6 +1582,12 @@ async function loadLive(){
 }
 $('#liveBtn').onclick=loadLive;
 
+function syncHeadH(){
+  const h=document.getElementById('stickyHead');
+  if(h) document.documentElement.style.setProperty('--headH',h.offsetHeight+'px');
+}
+new ResizeObserver(syncHeadH).observe(document.getElementById('stickyHead'));
+syncHeadH();
 let _rsz=null;
 window.addEventListener('resize',()=>{
   clearTimeout(_rsz);
