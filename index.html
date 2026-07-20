@@ -195,6 +195,39 @@ header{padding:20px 24px 0}
 .stickyhead{position:sticky;top:0;z-index:40;background:var(--gent-gray-ultra)}
 .stickyhead .days{margin-top:0;padding-top:10px}
 
+/* experiment: programma per locatie (desktop) */
+.kview2{padding:6px 24px 34px;max-width:100%;overflow-x:hidden}
+.ksec{margin-top:26px}
+.ksec .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin-bottom:12px;
+  border-bottom:1px solid var(--gent-gray-light)}
+.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray)}
+.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.egrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.etile{display:flex;align-items:stretch;gap:0;text-align:left;background:var(--white);min-width:0;
+  border:1px solid var(--gent-gray-light);border-radius:11px;padding:0;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,24,35,.05);transition:box-shadow .12s,transform .12s;cursor:pointer}
+.etile:hover,.etile:focus-visible{box-shadow:0 4px 14px rgba(0,24,35,.13);transform:translateY(-1px)}
+.etile .eth2{position:relative;flex:0 0 92px;min-height:78px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--c) 16%,var(--white));color:var(--c);font-weight:800;font-size:1.15rem}
+.etile .eth2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.etile .ebody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;justify-content:center;padding:12px 14px}
+.etile .ti2{font-weight:700;font-size:.9rem;line-height:1.25;color:var(--gent-gray);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etile .me2{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--gent-gray-medium);
+  white-space:nowrap;overflow:hidden}
+.etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
+.etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.kview2 .msec{margin:30px 2px 0}
+
+.tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
+.tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
+  font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
+.tinline .tclearx{width:22px;height:22px;border-radius:50%;background:var(--gent-gray-light);
+  color:var(--gent-gray);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center}
+.tinline .tclearx:hover{background:var(--gent-gray-medium);color:var(--white)}
+#tdrop{display:none}
+
 /* view-switch (icon segmented, rechts) */
 .viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
   border-radius:var(--radius-pill);padding:3px;gap:2px;flex:0 0 auto;margin-left:8px}
@@ -283,23 +316,25 @@ header{padding:20px 24px 0}
 /* ---------- mobiel: tijdliniaal + "nu & straks" per plein ---------- */
 .mob{display:flex;flex-direction:column;gap:12px;padding:12px 12px calc(24px + env(safe-area-inset-bottom))}
 .ruler{position:sticky;top:var(--headH,0px);z-index:6;background:var(--white);margin:0;
-  border-bottom:1px solid var(--gent-gray-light);border-top:1px solid var(--gent-gray-light);padding:4px 0 2px}
+  border-bottom:1px solid var(--gent-gray-light);padding:0}
 #stickyHead .ruler{position:relative;top:auto}
-.ruler .nhead{position:absolute;left:50%;top:4px;transform:translateX(-50%);z-index:3;
+.ruler .nhead{position:absolute;left:50%;top:7px;transform:translateX(-50%);z-index:3;
   display:flex;align-items:center;gap:6px;pointer-events:none}
 .ruler .ntime{background:var(--gent-blue);color:var(--white);font-size:.74rem;font-weight:700;
   padding:2px 11px 3px;border-radius:var(--radius-pill);font-variant-numeric:tabular-nums;
   box-shadow:0 2px 6px rgba(0,91,169,.3)}
-.ruler .needle{position:absolute;left:50%;top:26px;bottom:6px;width:2px;margin-left:-1px;
+.ruler .needle{position:absolute;left:50%;top:9px;bottom:6px;width:2px;margin-left:-1px;
   background:var(--gent-blue);border-radius:1px;z-index:2;pointer-events:none}
-.ruler .track{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:22px 0 0;cursor:grab;user-select:none}
+.ruler .track{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0;cursor:grab;user-select:none}
 .ruler .track.grabbing{cursor:grabbing}
 .ruler .track::-webkit-scrollbar{display:none}
-.ruler .strip{position:relative;height:52px}
+.ruler .strip{position:relative;height:58px}
 .ruler .strip::before{content:'';position:absolute;left:-100vw;right:-100vw;bottom:14px;height:1px;
   background:var(--gent-gray-light)}
 .ruler .curve{position:absolute;left:0;top:0;width:100%;height:52px;pointer-events:none}
 .ruler .tick{position:absolute;bottom:9px;width:1px;height:5px;background:var(--gent-gray-light)}
+.ruler .rnow{position:absolute;top:2px;bottom:12px;width:2px;margin-left:-1px;background:var(--gent-red);
+  border-radius:1px;opacity:.8;pointer-events:none}
 .ruler .hlab{position:absolute;bottom:0;transform:translateX(-50%);font-size:.66rem;
   color:var(--gent-gray-medium);font-variant-numeric:tabular-nums}
 .pcard{border:1px solid var(--gent-gray-light);border-radius:var(--radius-3);background:var(--white);
@@ -340,6 +375,39 @@ header{padding:20px 24px 0}
 
 .stickyhead{position:sticky;top:0;z-index:40;background:var(--gent-gray-ultra)}
 .stickyhead .days{margin-top:0;padding-top:10px}
+
+/* experiment: programma per locatie (desktop) */
+.kview2{padding:6px 24px 34px;max-width:100%;overflow-x:hidden}
+.ksec{margin-top:26px}
+.ksec .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin-bottom:12px;
+  border-bottom:1px solid var(--gent-gray-light)}
+.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray)}
+.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.egrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.etile{display:flex;align-items:stretch;gap:0;text-align:left;background:var(--white);min-width:0;
+  border:1px solid var(--gent-gray-light);border-radius:11px;padding:0;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,24,35,.05);transition:box-shadow .12s,transform .12s;cursor:pointer}
+.etile:hover,.etile:focus-visible{box-shadow:0 4px 14px rgba(0,24,35,.13);transform:translateY(-1px)}
+.etile .eth2{position:relative;flex:0 0 92px;min-height:78px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--c) 16%,var(--white));color:var(--c);font-weight:800;font-size:1.15rem}
+.etile .eth2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.etile .ebody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;justify-content:center;padding:12px 14px}
+.etile .ti2{font-weight:700;font-size:.9rem;line-height:1.25;color:var(--gent-gray);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etile .me2{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--gent-gray-medium);
+  white-space:nowrap;overflow:hidden}
+.etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
+.etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.kview2 .msec{margin:30px 2px 0}
+
+.tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
+.tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
+  font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
+.tinline .tclearx{width:22px;height:22px;border-radius:50%;background:var(--gent-gray-light);
+  color:var(--gent-gray);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center}
+.tinline .tclearx:hover{background:var(--gent-gray-medium);color:var(--white)}
+#tdrop{display:none}
 
 /* view-switch (icon segmented, rechts) */
 .viewswitch{display:inline-flex;background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);
@@ -534,6 +602,9 @@ header{padding:20px 24px 0}
   .filters .zoek{flex:1 1 100%;order:9;background:var(--white);margin-left:0}
   .filters .count,.filters .sep{display:none}
   .viewswitch{margin-left:auto}
+  .viewswitch [data-v=kaarten]{display:none}
+  .tinline{display:none}
+  #tdrop{display:block}
   /* raster-schil: full-bleed, geen doos */
   .shell{border:none;border-radius:0;background:none;margin:0 0 20px;overflow:visible}
   .scroller{overflow:visible}
@@ -581,6 +652,10 @@ header{padding:20px 24px 0}
     <button class="chip gbtn" id="gbtn">Filters<span class="gcount" id="gcount"></span><span class="car">▾</span></button>
     <div class="gpanel" id="gpanel"></div>
   </div>
+  <div class="tinline" id="tinline">
+    van <select id="selVan"></select> tot <select id="selTot"></select>
+    <button class="tclearx" id="tclearx" hidden title="Tijdsfilter wissen">×</button>
+  </div>
   <div class="gdrop" id="tdrop">
     <button class="chip gbtn" id="tbtn">Tijd<span class="car">▾</span></button>
     <div class="gpanel" id="tpanel"></div>
@@ -589,6 +664,7 @@ header{padding:20px 24px 0}
   <input class="zoek" id="zoek" type="search" placeholder="Zoek artiest of activiteit…">
   <div class="viewswitch" role="tablist" aria-label="Weergave">
     <button data-v="tijd" class="on" title="Tijdlijn" aria-label="Tijdlijn"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h8M2 8h12M2 12h6"/></svg></button>
+    <button data-v="kaarten" title="Programma per locatie (experimenteel)" aria-label="Programma per locatie"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
     <button data-v="kaart" title="Kaart" aria-label="Kaart"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 14.2S3.5 9.8 3.5 6.8a4.5 4.5 0 1 1 9 0c0 3-4.5 7.4-4.5 7.4z"/><circle cx="8" cy="6.8" r="1.6"/></svg></button>
   </div>
 </div>
@@ -666,7 +742,7 @@ const DESCR = {
 let EVENTS = [];
 let LIVE_ROWS = null;   // vervangt PLEINEN wanneer live data geladen is
 let LIVE_REST = null;   // doorlopende/overige live events voor de strook
-let state = { dag: null, genres:new Set(), gratis:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
+let state = { dag: null, genres:new Set(), paid:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
 const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : {matches:false, addEventListener(){}};
 const isMobile = () => MQ.matches;
 MQ.addEventListener && MQ.addEventListener('change', ()=>render());
@@ -676,6 +752,7 @@ MQ.addEventListener && MQ.addEventListener('change', ()=>render());
   let d=now.getDate(), m=now.getMonth();
   if(now.getHours()<7) d-=1;
   state.dag = (m===6 && DAYS.includes(d)) ? d : 17;
+  if(!isMobile()) state.view='kaarten';
 })();
 
 /* ================= RENDER ================= */
@@ -713,7 +790,7 @@ function renderTabs(){
 function renderChips(){
   document.querySelectorAll('#gpanel [data-g]').forEach(b=>b.classList.toggle('on',state.genres.has(b.dataset.g)));
   document.querySelectorAll('#gpanel [data-toggle2]').forEach(b=>b.classList.toggle('on',state[b.dataset.toggle2]));
-  const n=state.genres.size+(state.gratis?1:0)+(state.kids?1:0);
+  const n=state.genres.size+(state.paid?1:0)+(state.kids?1:0);
   const gc=$('#gcount');
   gc.textContent=n; gc.style.display=n?'inline-block':'none';
   $('#gbtn').classList.toggle('on',n>0);
@@ -721,6 +798,10 @@ function renderChips(){
   const uur=t=>t==null?null:(t%1?fmt(t):(t%24)+'u');
   $('#tbtn').innerHTML=(win?`${uur(state.van)??'…'} – ${uur(state.tot)??'einde'}`:'Tijd')+'<span class="car">▾</span>';
   $('#tbtn').classList.toggle('on',win);
+  const setSel=(id,v)=>{ const el=$(id); if(el) el.value=(v!=null&&Number.isInteger(v))?String(v):''; };
+  setSel('#selVan',state.van); setSel('#selTot',state.tot);
+  setSel('#selVanM',state.van); setSel('#selTotM',state.tot);
+  $('#tclearx').hidden=!win;
   $('#resetBtn').hidden = !(n||win||state.q);
 }
 (function initFilterPanel(){
@@ -732,29 +813,34 @@ function renderChips(){
     +Object.entries(GENRES).map(([k,g])=>
       `<button data-g="${k}"><span class="sw2" style="background:${g.c}"></span>${g.label}<span class="ck">✓</span></button>`).join('')
     +'<p class="gsec">Praktisch</p>'
-    +'<button data-toggle2="gratis"><span class="sw2" style="background:var(--gent-green)"></span>Gratis<span class="ck">✓</span></button>'
+    +'<button data-toggle2="paid"><span class="sw2" style="background:var(--gent-orange)"></span>Ook betalend · €<span class="ck">✓</span></button>'
     +'<button data-toggle2="kids"><span class="sw2" style="background:var(--gent-red-pastel)"></span>Met kinderen<span class="ck">✓</span></button>'
     +'<button class="gclear" id="gclear">Alles wissen</button>';
   const tpanel=$('#tpanel');
   tpanel.innerHTML=
     '<p class="gsec">Toon enkel tussen</p>'
-    +`<div class="gtijd">van <select id="selVan">${uurOpts(state.van,START_H)}</select> tot <select id="selTot">${uurOpts(state.tot,START_H+1)}</select></div>`
+    +`<div class="gtijd">van <select id="selVanM">${uurOpts(state.van,START_H)}</select> tot <select id="selTotM">${uurOpts(state.tot,START_H+1)}</select></div>`
     +'<button class="gclear" id="tclear">Wis tijdsvenster</button>';
+  $('#selVan').innerHTML=uurOpts(state.van,START_H);
+  $('#selTot').innerHTML=uurOpts(state.tot,START_H+1);
   panel.querySelectorAll('[data-g]').forEach(b=>{
     b.onclick=()=>{ const k=b.dataset.g; state.genres.has(k)?state.genres.delete(k):state.genres.add(k); render(); };
   });
   panel.querySelectorAll('[data-toggle2]').forEach(b=>{
     b.onclick=()=>{ state[b.dataset.toggle2]=!state[b.dataset.toggle2]; render(); };
   });
-  const sync=()=>{ state.van=$('#selVan').value?+$('#selVan').value:null;
-    state.tot=$('#selTot').value?+$('#selTot').value:null;
+  const syncFrom=(vEl,tEl)=>()=>{
+    state.van=vEl.value?+vEl.value:null;
+    state.tot=tEl.value?+tEl.value:null;
     if(state.van!=null&&state.tot!=null&&state.tot<=state.van) state.tot=null;
     render(); };
-  $('#selVan').onchange=sync; $('#selTot').onchange=sync;
-  $('#gclear').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false;
-    state.van=null; state.tot=null; $('#selVan').value=''; $('#selTot').value=''; render(); };
-  $('#tclear').onclick=()=>{ state.van=null; state.tot=null;
-    $('#selVan').value=''; $('#selTot').value=''; render(); };
+  $('#selVan').onchange=$('#selTot').onchange=syncFrom($('#selVan'),$('#selTot'));
+  $('#selVanM').onchange=$('#selTotM').onchange=syncFrom($('#selVanM'),$('#selTotM'));
+  $('#gclear').onclick=()=>{ state.genres.clear(); state.paid=false; state.kids=false;
+    state.van=null; state.tot=null; render(); };
+  const wisTijd=()=>{ state.van=null; state.tot=null; render(); };
+  $('#tclear').onclick=wisTijd;
+  $('#tclearx').onclick=wisTijd;
   $('#gbtn').onclick=e=>{ e.stopPropagation(); $('#tdrop').classList.remove('open'); $('#gdrop').classList.toggle('open'); };
   $('#tbtn').onclick=e=>{ e.stopPropagation(); $('#gdrop').classList.remove('open'); $('#tdrop').classList.toggle('open'); };
   panel.onclick=e=>e.stopPropagation();
@@ -769,7 +855,7 @@ function matches(e){
   if(state.van!=null && e.start+e.dur<=state.van) return false;
   if(state.tot!=null && e.start>=state.tot) return false;
   if(state.genres.size && !state.genres.has(e.genre)) return false;
-  if(state.gratis && !e.gratis) return false;
+  if(!state.paid && !e.gratis) return false; /* standaard: enkel gratis */
   if(state.kids && !e.kids) return false;
   if(state.q && !e.titel.toLowerCase().includes(state.q)) return false;
   return true;
@@ -787,6 +873,8 @@ function render(){
   const _sr=document.querySelector('#stickyHead .ruler'); if(_sr) _sr.remove();
   if(state.loading || state.loadError){ renderStatusScreen(); return; }
   if(state.view==='kaart'){ renderKaart(ROWS, dayEvents); return; }
+  if(state.view==='kaarten' && !isMobile()){ renderKaarten(ROWS, dayEvents); return; }
+  if(state.view==='kaarten' && isMobile()) state.view='tijd';
   if(isMobile()){ renderMobile(ROWS, dayEvents); return; }
 
   grid.innerHTML='';
@@ -813,8 +901,7 @@ function render(){
     band.style.left=xPos(state.van)+'px';
     band.style.width=((state.tot-state.van)*HOUR_W())+'px';
     band.innerHTML=`<span class="sellbl">${fmt(state.van)} – ${fmt(state.tot)}</span><button class="selx" title="Venster wissen">×</button>`;
-    band.querySelector('.selx').onclick=()=>{ state.van=null; state.tot=null;
-      const sv=$('#selVan'), st2=$('#selTot'); if(sv)sv.value=''; if(st2)st2.value=''; render(); };
+    band.querySelector('.selx').onclick=()=>{ state.van=null; state.tot=null; render(); };
     grid.appendChild(band);
   }
 
@@ -866,8 +953,6 @@ function render(){
     if(x1!=null && Math.abs(x1-x0)>10){
       state.van=Math.max(START_H,Math.min(toT(x0),toT(x1)));
       state.tot=Math.min(END_H,Math.max(toT(x0),toT(x1)));
-      const sv=$('#selVan'), st2=$('#selTot');
-      if(sv)sv.value=Number.isInteger(state.van)?state.van:''; if(st2)st2.value=Number.isInteger(state.tot)?state.tot:'';
       render();
     }
   };
@@ -1060,6 +1145,11 @@ function buildRuler(dayEvents,onTime){
     l.style.left=x+'px'; l.textContent=(t%24)+'u';
     strip.appendChild(l);
   }
+  if(isToday){
+    const nl=document.createElement('span'); nl.className='rnow';
+    nl.style.left=((nowH-START_H)*PXH)+'px';
+    strip.appendChild(nl);
+  }
   track.appendChild(strip); ruler.appendChild(track);
   const ntime=ruler.querySelector('.ntime');
   let lastStep=null, raf=false;
@@ -1190,11 +1280,93 @@ function renderMobile(ROWS, dayEvents){
     }
   };
 
+  const winActive = state.van!=null || state.tot!=null;
+  if(winActive){
+    /* venster-modus: geen liniaal; volledig programma binnen [van, tot] per locatie */
+    const now=new Date();
+    const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
+    let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
+    listWrap.innerHTML='';
+    const entries=[];
+    ROWS.forEach(p=>{
+      const evs=dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
+      if(evs.length) entries.push({p,evs});
+    });
+    const mainE=entries.filter(x=>x.p.sec!=='elders').sort((a,b)=>a.evs[0].start-b.evs[0].start);
+    const eldE =entries.filter(x=>x.p.sec==='elders')
+      .sort((a,b)=> b.evs.length-a.evs.length || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv)));
+    let msecP=false;
+    [...mainE,...eldE].forEach(({p,evs})=>{
+      if(p.sec==='elders' && !msecP){
+        const ms=document.createElement('p'); ms.className='msec'; ms.textContent='Elders in de stad';
+        listWrap.appendChild(ms); msecP=true;
+      }
+      const card=document.createElement('section'); card.className='pcard';
+      const ph=document.createElement('button'); ph.className='phead';
+      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
+      ph.onclick=()=>openPlein(p);
+      card.appendChild(ph);
+      evs.forEach(e=>card.appendChild(mkRow(e,p, isToday && e.start<=nowH && nowH<e.start+e.dur)));
+      listWrap.appendChild(card);
+    });
+    if(!entries.length){
+      const st2=document.createElement('p'); st2.className='stil';
+      st2.textContent='Niets gevonden binnen dit tijdsvenster.';
+      listWrap.appendChild(st2);
+    }
+    wrapM.appendChild(listWrap);
+    grid.appendChild(wrapM);
+    return;
+  }
   const r=buildRuler(dayEvents,buildList);
   $('#stickyHead').appendChild(r.el);
   wrapM.appendChild(listWrap);
   grid.appendChild(wrapM);
   r.mount();
+}
+
+/* ============ EXPERIMENT: PROGRAMMA PER LOCATIE (DESKTOP) ============ */
+function renderKaarten(ROWS, dayEvents){
+  grid.innerHTML='';
+  grid.style.minWidth='0';
+  grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
+  const wrap=document.createElement('div'); wrap.className='kview2';
+  const now=new Date();
+  const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
+  let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
+  const tile=(e,p)=>{
+    const b=document.createElement('button'); b.className='etile';
+    b.style.setProperty('--c',GENRES[e.genre].c);
+    const live=isToday && e.start<=nowH && nowH<e.start+e.dur;
+    const meta=`<span class="tr${live?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
+      `<span class="gd"></span>${GENRES[e.genre].label}${e.gratis?'':' · <span class="paid">€</span>'}`;
+    b.innerHTML=`<span class="eth2">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
+      <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2">${meta}</span></span>`;
+    b.onclick=()=>openEvent(e,p);
+    return b;
+  };
+  const section=(p,evs)=>{
+    const sec=document.createElement('section'); sec.className='ksec';
+    sec.innerHTML=`<h3 class="kh"><span class="knaam">${p.naam}</span>${p.tag?`<span class="ktag">${p.tag}</span>`:''}</h3>`;
+    const eg=document.createElement('div'); eg.className='egrid';
+    evs.forEach(e=>eg.appendChild(tile(e,p)));
+    sec.appendChild(eg);
+    return sec;
+  };
+  const rowEvsOf=p=>dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
+  const main=ROWS.filter(r=>r.sec!=='elders').map(p=>({p,evs:rowEvsOf(p)})).filter(x=>x.evs.length);
+  const eld =ROWS.filter(r=>r.sec==='elders').map(p=>({p,evs:rowEvsOf(p)})).filter(x=>x.evs.length)
+    .sort((a,b)=> b.evs.length-a.evs.length
+      || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv)));
+  main.forEach(({p,evs})=>wrap.appendChild(section(p,evs)));
+  if(eld.length){
+    const ms=document.createElement('p'); ms.className='msec'; ms.textContent='Elders in de stad';
+    wrap.appendChild(ms);
+    eld.forEach(({p,evs})=>wrap.appendChild(section(p,evs)));
+  }
+  if(!main.length && !eld.length)
+    wrap.innerHTML='<p class="stil" style="margin-top:20px">Niets gevonden voor deze dag binnen je filters.</p>';
+  grid.appendChild(wrap);
 }
 
 /* ================= KAARTWEERGAVE ================= */
@@ -1340,9 +1512,8 @@ document.querySelectorAll('.viewswitch button').forEach(b=>{
 });
 
 $('#zoek').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
-$('#resetBtn').onclick=()=>{ state.genres.clear(); state.gratis=false; state.kids=false; state.q='';
+$('#resetBtn').onclick=()=>{ state.genres.clear(); state.paid=false; state.kids=false; state.q='';
   state.van=null; state.tot=null;
-  const sv=$('#selVan'), st=$('#selTot'); if(sv)sv.value=''; if(st)st.value='';
   $('#zoek').value=''; render(); };
 
 /* ================= LIVE DATA (open data Stad Gent) ================= */
