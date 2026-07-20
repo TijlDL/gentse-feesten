@@ -172,6 +172,12 @@ header{padding:20px 24px 0}
 .sectionhead{display:flex;align-items:center;background:var(--white);border-bottom:1px solid var(--gent-gray-light)}
 .sectionhead .rowlabel{background:var(--white);min-height:30px;padding:5px 12px}
 .sectionhead .rowlabel .naam{font-size:.7rem;color:var(--gent-blue);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.sectionhead.elders{background:var(--gent-blue);border-bottom:none}
+.sectionhead.elders .rowlabel{background:var(--gent-blue)}
+.sectionhead.elders .rowlabel .naam{color:var(--white)}
+.msec{display:flex;align-items:center;gap:10px;margin:14px 2px 2px;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;color:var(--gent-blue)}
+.msec::after{content:'';flex:1;height:1px;background:var(--gent-gray-light)}
 
 /* now line */
 .nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--gent-red);z-index:15;pointer-events:none}
@@ -637,7 +643,8 @@ const PLEINEN = [
   {id:'korenmarkt', naam:'Korenmarkt',          tag:'covers & ambiance'},
   {id:'vrijdagmarkt',naam:'Vrijdagmarkt',       tag:'volks & Nederlandstalig'},
   {id:'sintbaafs',  naam:'Sint-Baafsplein',     tag:'klassiek & Gents'},
-  {id:'veerle',     naam:'Sint-Veerleplein',    tag:'luisterplein'},
+  {id:'veerle',     naam:'Sint-Veerleplein',    tag:'bij het Gravensteen'},
+  {id:'laurent',    naam:'François Laurentplein', tag:'Luisterplein'},
   {id:'miramiro',   naam:'Miramiro',            tag:'straattheater & circus'},
   {id:'braun',      naam:'Emile Braunplein',    tag:'dans & urban'},
   {id:'kouter',     naam:'Kouter',              tag:'bal & harmonie'},
@@ -673,6 +680,8 @@ MQ.addEventListener && MQ.addEventListener('change', ()=>render());
 
 /* ================= RENDER ================= */
 const $=s=>document.querySelector(s);
+const scoreEv=e=>(e.img?3:0)+(e.descr?2:0)
+  +(['dj','rock','pop','world','folk','klassiek'].includes(e.genre)?2:1)+(e.gratis?1:0);
 const isNowTime=t=>{
   const now=new Date();
   const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
@@ -809,6 +818,24 @@ function render(){
     grid.appendChild(band);
   }
 
+  /* elders-rijen: verberg wat buiten het zichtbare tijdsvenster valt */
+  const scr2=$('#scroller');
+  const updateEldersVis=()=>{
+    const t0=START_H + Math.max(0,scr2.scrollLeft)/HOUR_W();
+    const t1=START_H + (scr2.scrollLeft + scr2.clientWidth - LABEL_W())/HOUR_W();
+    let any=false;
+    grid.querySelectorAll('.eldersrow').forEach(r=>{
+      const vis = +r.dataset.tmax > t0 && +r.dataset.tmin < t1;
+      r.style.display=vis?'':'none';
+      if(vis) any=true;
+    });
+    const eh=document.getElementById('eldersHead');
+    if(eh) eh.style.display=any?'':'none';
+  };
+  let _evT=null;
+  scr2.onscroll=()=>{ clearTimeout(_evT); _evT=setTimeout(updateEldersVis,90); };
+  requestAnimationFrame(updateEldersVis); /* na het bouwen van de rijen */
+
   /* brush: sleep over de achtergrond om een tijdsvenster te kiezen */
   let brushing=null, tempBand=null;
   grid.onpointerdown=e=>{
@@ -851,8 +878,32 @@ function render(){
   grid.appendChild(sh2);
 
   const LANE_H=38, LANE_GAP=4, PAD=7;
-  for(const p of ROWS){
+  /* elders: alleen locaties met matchend programma vandaag, gesorteerd op drukte + leukheid */
+  const rowEvsOf=p=>dayEvents.filter(e=>e.plein===p.id && matches(e));
+  const winActive = state.van!=null && state.tot!=null;
+  const mainRows=ROWS.filter(r=>r.sec!=='elders')
+    .filter(p=>!winActive || rowEvsOf(p).length); /* bij actieve selectie: enkel rijen met iets erin */
+  const eldersRows=ROWS.filter(r=>r.sec==='elders')
+    .map(p=>({p,evs:rowEvsOf(p)}))
+    .filter(x=>x.evs.length)
+    .sort((a,b)=> b.evs.length-a.evs.length
+      || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv)))
+    .map(x=>x.p);
+  let eldersHeaderPlaced=false;
+  for(const p of [...mainRows,...eldersRows]){
+    if(p.sec==='elders' && !eldersHeaderPlaced){
+      const sh3=document.createElement('div'); sh3.className='sectionhead elders'; sh3.id='eldersHead';
+      sh3.innerHTML=`<div class="rowlabel"><span class="naam">Elders in de stad</span></div>`;
+      grid.appendChild(sh3);
+      eldersHeaderPlaced=true;
+    }
     const row=document.createElement('div'); row.className='row';
+    if(p.sec==='elders'){
+      const evs2=rowEvsOf(p);
+      row.dataset.tmin=Math.min(...evs2.map(e=>e.start));
+      row.dataset.tmax=Math.max(...evs2.map(e=>e.start+e.dur));
+      row.classList.add('eldersrow');
+    }
     const rl=document.createElement('button'); rl.className='rowlabel rowlabel-btn';
     rl.innerHTML=`<span class="naam">${p.naam}</span><span class="tag">${p.tag}</span>`;
     rl.onclick=()=>openPlein(p);
@@ -1088,12 +1139,20 @@ function renderMobile(ROWS, dayEvents){
       if(!evs.length) return;
       const live=evs.filter(e=>e.start<=t && t<e.start+e.dur);
       const next=evs.find(e=>e.start>t);
-      if(!live.length && !next){ stil.push(p); return; } /* dagprogramma zit erop */
+      if(!live.length && !next){ if(p.sec!=='elders') stil.push(p); return; } /* dagprogramma zit erop */
       entries.push({p,live,next});
     });
-    entries.sort((a,b)=>(a.live.length?0:1)-(b.live.length?0:1)
-      || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99)));
-    entries.forEach(({p,live,next})=>{
+    const relSort=(a,b)=>(a.live.length?0:1)-(b.live.length?0:1)
+      || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99));
+    const funScore=x=>x.live.length*100 + Math.max(0,...x.live.map(scoreEv),...(x.next?[scoreEv(x.next)]:[0]));
+    const mainE=entries.filter(x=>x.p.sec!=='elders').sort(relSort);
+    const eldE =entries.filter(x=>x.p.sec==='elders').sort((a,b)=>funScore(b)-funScore(a) || relSort(a,b));
+    let msecPlaced=false;
+    [...mainE,...eldE].forEach(({p,live,next})=>{
+      if(p.sec==='elders' && !msecPlaced){
+        const ms=document.createElement('p'); ms.className='msec'; ms.textContent='Elders in de stad';
+        listWrap.appendChild(ms); msecPlaced=true;
+      }
       const card=document.createElement('section'); card.className='pcard';
       const ph=document.createElement('button'); ph.className='phead';
       ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
@@ -1298,7 +1357,10 @@ async function loadLive(){
     /* gepagineerd met parallelle batches: snelste pad (API serveert uit cache) */
     const fetchPaged=async (id,label)=>{
       const base=`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/records`;
-      const probe=await fetch(`${base}?limit=1`);
+      /* stabiele volgorde is cruciaal bij parallelle paginering */
+      let ord='&order_by=startdate';
+      let probe=await fetch(`${base}?limit=1${ord}`);
+      if(!probe.ok){ ord=''; probe=await fetch(`${base}?limit=1`); }
       if(!probe.ok) return null;
       const total=Math.min((await probe.json()).total_count||0,9900);
       if(!total) return [];
@@ -1307,7 +1369,7 @@ async function loadLive(){
       const CH=8; /* 8 requests tegelijk */
       for(let i=0;i<offs.length;i+=CH){
         await Promise.all(offs.slice(i,i+CH).map(async(off,ix)=>{
-          const r=await fetch(`${base}?limit=100&offset=${off}`);
+          const r=await fetch(`${base}?limit=100&offset=${off}${ord}`);
           out[i+ix]=r.ok ? ((await r.json()).results||[]) : [];
           done++;
           if(label) setMsg(`${label} ${Math.min(99,Math.round(Math.min(done*100,total)/total*100))}%`);
@@ -1453,6 +1515,7 @@ async function loadLive(){
       baudelo:[51.0587,3.7300], boomtown:[51.0503,3.7250], korenmarkt:[51.0546,3.7215],
       vrijdagmarkt:[51.0570,3.7267], sintbaafs:[51.0533,3.7261], veerle:[51.0576,3.7208],
       miramiro:[51.0596,3.7331], braun:[51.0538,3.7238], kouter:[51.0501,3.7255],
+      laurent:[51.0484,3.7292],
     };
     window._GF_PLEIN_COORDS=PLEIN_COORDS; window._GF_LOCGEO=LOCGEO;
     const PLEIN_MATCH=[
@@ -1461,6 +1524,7 @@ async function loadLive(){
       ['baudelo',['baudelo']], ['boomtown',['boomtown','ha concerts']],
       ['korenmarkt',['korenmarkt']], ['vrijdagmarkt',['vrijdagmarkt']],
       ['sintbaafs',['baafsplein','sint bavo']], ['veerle',['veerleplein']],
+      ['laurent',['laurentplein','luisterplein']],
       ['miramiro',['miramiro']], ['braun',['braunplein']], ['kouter',['kouter']],
     ];
     const all=[], rest=[];
@@ -1519,9 +1583,17 @@ async function loadLive(){
     let rows=PLEINEN.filter(p=>withData.has(p.id));
     const counts={};
     rest.filter(e=>e.cat==='Elders in de stad').forEach(e=>{ if(e.loc) counts[e.loc]=(counts[e.loc]||0)+1; });
-    Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,14-rows.length)).forEach(([loc,n])=>{
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    const topN=Math.max(0,18-rows.length);
+    sorted.slice(0,topN).forEach(([loc,n])=>{
       const rid='loc_'+loc.replace(/\W+/g,'_').toLowerCase();
       rows.push({id:rid,naam:loc,tag:n+' activiteiten'});
+      rest.forEach(e=>{ if(e.loc===loc){ e.plein=rid; all.push(e); } });
+    });
+    /* alle overige locaties met getimede events: eigen rij in de elders-sectie */
+    sorted.slice(topN).forEach(([loc,n])=>{
+      const rid='eld_'+loc.replace(/\W+/g,'_').toLowerCase();
+      rows.push({id:rid,naam:loc,tag:n>1?n+' activiteiten':'',sec:'elders'});
       rest.forEach(e=>{ if(e.loc===loc){ e.plein=rid; all.push(e); } });
     });
     for(let i=rest.length-1;i>=0;i--) if(rest[i].plein) rest.splice(i,1);
@@ -1544,6 +1616,7 @@ async function loadLive(){
     });
     rest.forEach(e=>{ if(e.dur==null) e.dur=e.rawDur??1.25; });
 
+    rows=[...rows.filter(r=>r.sec!=='elders'),...rows.filter(r=>r.sec==='elders')];
     EVENTS=all; LIVE_ROWS=rows; LIVE_REST=rest;
     state.loading=false;
     st.textContent = all.length
