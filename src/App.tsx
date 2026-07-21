@@ -150,7 +150,7 @@ export default function App() {
           <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="var(--gent-gray-medium)" strokeWidth="1.8" strokeLinecap="round"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5 14 14" /></svg>
           <input id="zoekIn" ref={zoekInRef} type="search" placeholder="Zoek artiest of activiteit — alle dagen…" autoComplete="off"
             value={state.q}
-            onChange={e => set({ q: e.target.value.trim().toLowerCase() })}
+            onChange={e => set({ q: e.target.value.toLowerCase() })}
             onKeyDown={e => { if (e.key === 'Escape') sluitZoek(); }} />
           <button className="zclose" id="zoekClose" aria-label="Zoeken sluiten" onClick={sluitZoek}>×</button>
         </div>

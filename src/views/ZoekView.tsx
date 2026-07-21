@@ -7,10 +7,10 @@ import type { GFEvent } from '../types';
 /* ================= ZOEKEN OVER ALLE DAGEN ================= */
 export function ZoekView() {
   const { state, openPanel } = useApp();
-  const q = state.q;
+  const q = state.q.trim();
   const naamVan = (id: string | null) => { const r = (store.LIVE_ROWS || PLEINEN).find(r => r.id === id); return r ? r.naam : ''; };
   if (!q || q.length < 2) {
-    return <div className="zres"><p className="zhint">Typ minstens twee letters — er wordt gezocht in het volledige programma, alle dagen en uren.</p></div>;
+    return <div className="zres" />;
   }
   const pool = [...(store.EVENTS || []), ...(store.LIVE_REST || [])];
   const hits = pool.filter(e => ((e.titel || '') + ' ' + (e.loc || naamVan(e.plein))).toLowerCase().includes(q))
