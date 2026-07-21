@@ -1,5 +1,6 @@
 import { useApp } from '../appContext';
 import { AfstChip } from '../components/AfstChip';
+import { LiveDot } from '../components/LiveDot';
 import { GENRES } from '../config';
 import { afstandTot, sublocNodig } from '../lib/geo';
 import { fmt, initialOf, isPast, nuUur, scoreEv, vandaagFeestdag } from '../lib/tijd';
@@ -20,7 +21,7 @@ function ETile({ e, p }: { e: GFEvent; p: Rij }) {
       <span className="eth2">{initialOf(e)}{e.img && <img src={e.img} alt="" loading="lazy" onError={ev => ev.currentTarget.remove()} />}</span>
       <span className="ebody">
         <span className="ti2">{e.titel}</span>
-        <span className="me2"><span className={'tr' + (live ? ' on' : '')}>{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span className="gd" />{GENRES[e.genre].label}{e.gratis ? '' : <> · <span className="paid">€</span></>}{voorbij ? ' · voorbij' : ''}</span>
+        <span className="me2"><span className={'tr' + (live ? ' on' : '')}>{live && <LiveDot />}{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span className="gd" />{GENRES[e.genre].label}{e.gratis ? '' : <> · <span className="paid">€</span></>}{voorbij ? ' · voorbij' : ''}</span>
         {sub && <span className="subloc">{e.loc}</span>}
       </span>
     </button>

@@ -5,16 +5,18 @@ export const START_H = 9, END_H = 31;              // 09:00 -> 07:00 (+1d)
 export const DAYS = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
 export const DOW: Record<number, string> = { 17: 'vr', 18: 'za', 19: 'zo', 20: 'ma', 21: 'di', 22: 'wo', 23: 'do', 24: 'vr', 25: 'za', 26: 'zo' };
 
-/* Genrekleuren = de 9 secundaire huisstijlkleuren van de Stad Gent */
+/* Genrekleuren uit de Stad-Gent-huisstijl.
+   Let op: GEEN groen — groen is exclusief het "nu bezig"-signaal
+   (live-bolletje, groene tijden, "je bent hier"). */
 export const GENRES: Record<GenreKey, GenreDef> = {
   dj:      { label: 'DJ & electro',     c: 'var(--gent-cyan)' },
   rock:    { label: 'Rock & punk',      c: 'var(--gent-red)' },
   world:   { label: 'World & latin',    c: 'var(--gent-orange)' },
   pop:     { label: 'Pop & covers',     c: 'var(--gent-yellow)' },
-  folk:    { label: 'Folk & Gents',     c: 'var(--gent-green)' },
+  folk:    { label: 'Folk & Gents',     c: 'var(--gf-accent)' },
   klassiek:{ label: 'Klassiek & jazz',  c: 'var(--gent-blue)' },
   kids:    { label: 'Kinderen',         c: 'var(--gent-red-pastel)' },
-  theater: { label: 'Theater & circus', c: 'var(--gent-forest)' },
+  theater: { label: 'Theater & circus', c: 'var(--gent-gray)' },
 };
 
 export const PLEINEN: Rij[] = [

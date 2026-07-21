@@ -93,8 +93,8 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
         </div>
       </div>
       <div className="tinline" id="tinline">
-        van <select id="selVan" value={state.van ?? ''} onChange={e => syncVan(e.target.value, String(state.tot ?? ''))}><UurOpts from={START_H} /></select>
-        {' '}tot <select id="selTot" value={state.tot ?? ''} onChange={e => syncVan(String(state.van ?? ''), e.target.value)}><UurOpts from={START_H + 1} /></select>
+        van <select id="selVan" value={state.van ?? ''} onChange={e => syncVan(e.target.value, String(state.tot ?? ''))}><UurOpts from={START_H - 1} /></select>
+        {' '}tot <select id="selTot" value={state.tot ?? ''} onChange={e => syncVan(String(state.van ?? ''), e.target.value)}><UurOpts from={START_H} /></select>
         <button className="tclearx" id="tclearx" hidden={!win} title="Tijdsfilter wissen" onClick={wisTijd}>×</button>
       </div>
       <div className={'gdrop' + (open === 'T' ? ' open' : '')} id="tdrop">
@@ -103,8 +103,8 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
         <div className="gpanel" id="tpanel" ref={el => { panelRefs.current.T = el; }} onClick={stop}>
           <p className="gsec">Toon enkel tussen</p>
           <div className="gtijd">
-            van <select id="selVanM" value={state.van ?? ''} onChange={e => syncVan(e.target.value, String(state.tot ?? ''))}><UurOpts from={START_H} /></select>
-            {' '}tot <select id="selTotM" value={state.tot ?? ''} onChange={e => syncVan(String(state.van ?? ''), e.target.value)}><UurOpts from={START_H + 1} /></select>
+            van <select id="selVanM" value={state.van ?? ''} onChange={e => syncVan(e.target.value, String(state.tot ?? ''))}><UurOpts from={START_H - 1} /></select>
+            {' '}tot <select id="selTotM" value={state.tot ?? ''} onChange={e => syncVan(String(state.van ?? ''), e.target.value)}><UurOpts from={START_H} /></select>
           </div>
           <button className="gclear" onClick={wisTijd}>Wis tijdsvenster</button>
         </div>

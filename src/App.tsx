@@ -73,16 +73,23 @@ export default function App() {
     return () => window.removeEventListener('resize', onR);
   }, []);
   useEffect(() => {
-    /* de nu-lijn tikt via een 30s-hartslag, zónder her-render */
-    const iv = setInterval(() => {
+    /* de nu-lijn tikt via een 30s-hartslag; de klok-state laat óók de
+       "bezig"-markeringen (groen) meebewegen — React-reconciliatie behoudt
+       scrollposities, de ge-memo'de liniaal wordt niet herbouwd */
+    const tik = () => {
       if (document.hidden || store.loading) return;
       const h = Math.min(Math.max(nuUur(), START_H), 31);
       document.querySelectorAll<HTMLElement>('.ruler .rnow').forEach(el => { el.style.left = ((h - START_H) * 110) + 'px'; });
       if ((window as any)._gfNowFix) (window as any)._gfNowFix(h);
       const tr = document.querySelector('.ruler .track');
       if (tr) tr.dispatchEvent(new Event('scroll'));
-    }, 30000);
-    return () => clearInterval(iv);
+      bump(n => n + 1);
+    };
+    const iv = setInterval(tik, 30000);
+    /* app heropend na sluimeren: meteen naar het echte "nu" springen */
+    const onVis = () => { if (!document.hidden) tik(); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => { clearInterval(iv); document.removeEventListener('visibilitychange', onVis); };
   }, []);
   useEffect(() => {
     /* Leaflet-popups en het pleinpaneel openen events via window._gfOpen */

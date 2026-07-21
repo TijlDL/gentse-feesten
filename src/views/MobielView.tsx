@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../appContext';
 import { AfstChip } from '../components/AfstChip';
+import { LiveDot } from '../components/LiveDot';
 import { Ruler } from '../components/Ruler';
 import { GENRES } from '../config';
 import { afstandTot } from '../lib/geo';
@@ -21,7 +22,7 @@ function LRow({ e, p, running }: { e: GFEvent; p: Rij | null; running: boolean }
       <span className="th">{initialOf(e)}{e.img && <img src={e.img} alt="" loading="lazy" onError={ev => ev.currentTarget.remove()} />}</span>
       <span className="bx">
         <span className="ti">{e.titel}</span>
-        <span className="me"><span className={'tr' + (running ? ' on' : '')}>{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span className="gd" />{GENRES[e.genre].label}{voorbij ? ' · voorbij' : ''}</span>
+        <span className="me"><span className={'tr' + (running ? ' on' : '')}>{running && <LiveDot />}{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span className="gd" />{GENRES[e.genre].label}{voorbij ? ' · voorbij' : ''}</span>
         {sub && <span className="subloc">{e.loc}</span>}
       </span>
     </button>
@@ -108,9 +109,13 @@ export function MobielView({ ROWS, dayEvents, stickyEl }: { ROWS: Rij[]; dayEven
     entries.push({ p, live, next });
   });
   type Entry = typeof entries[number];
+  /* sortering: "waar is nu iets bezig" wint altijd — mét geolocatie komt
+     daarbinnen het dichtstbijzijnde eerst (pleinen waar niets bezig is,
+     zakken dus onder de levende, ook al liggen ze dichterbij); zonder
+     geolocatie beslist de starttijd */
   const relSort = (a: Entry, b: Entry) => state.geo
-    ? (((afstandTot(a.p, state.geo, state.dag) ?? 9e9) - (afstandTot(b.p, state.geo, state.dag) ?? 9e9))
-      || ((a.live.length ? 0 : 1) - (b.live.length ? 0 : 1))
+    ? (((a.live.length ? 0 : 1) - (b.live.length ? 0 : 1))
+      || ((afstandTot(a.p, state.geo, state.dag) ?? 9e9) - (afstandTot(b.p, state.geo, state.dag) ?? 9e9))
       || ((a.live[0]?.start ?? a.next?.start ?? 99) - (b.live[0]?.start ?? b.next?.start ?? 99)))
     : (((a.live.length ? 0 : 1) - (b.live.length ? 0 : 1))
       || ((a.live[0]?.start ?? a.next?.start ?? 99) - (b.live[0]?.start ?? b.next?.start ?? 99)));

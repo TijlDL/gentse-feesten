@@ -185,9 +185,9 @@ export function TijdGrid({ ROWS, dayEvents }: { ROWS: Rij[]; dayEvents: GFEvent[
         </div>
       </div>
 
-      {/* actief tijdsvenster als band in het raster */}
+      {/* actief tijdsvenster als band in het raster (geclampt: 8u valt vóór de as) */}
       {winActive && (
-        <div className="selband" style={{ left: xPos(state.van!) + 'px', width: ((state.tot! - state.van!) * hourW) + 'px' }}>
+        <div className="selband" style={{ left: xPos(Math.max(state.van!, START_H)) + 'px', width: ((state.tot! - Math.max(state.van!, START_H)) * hourW) + 'px' }}>
           <span className="sellbl">{fmt(state.van!)} – {fmt(state.tot!)}</span>
           <button className="selx" title="Venster wissen" onClick={() => set({ van: null, tot: null })}>×</button>
         </div>
