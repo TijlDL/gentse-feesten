@@ -204,10 +204,10 @@ header{padding:20px 70px 0 24px}
 /* experiment: programma per locatie (desktop) */
 .kview2{padding:6px 24px 34px;max-width:100%;overflow-x:hidden}
 .ksec{margin-top:26px}
-.ksec .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin-bottom:12px;
+.ksec .kh{display:flex;align-items:center;gap:12px;padding-bottom:8px;margin-bottom:12px;min-width:0;
   border-bottom:1px solid var(--gent-gray-light)}
-.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray)}
-.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600;flex:0 3 auto;min-width:0;max-width:38%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .egrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .etile{display:flex;align-items:stretch;gap:0;text-align:left;background:var(--white);min-width:0;
   border:1px solid var(--gent-gray-light);border-radius:11px;padding:0;overflow:hidden;
@@ -224,6 +224,15 @@ header{padding:20px 70px 0 24px}
   white-space:nowrap;overflow:hidden}
 .etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
 .etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.afst{margin-left:auto;display:inline-flex;align-items:center;gap:4px;align-self:center;flex:0 0 auto;
+  font-size:.72rem;font-weight:700;color:var(--gent-blue);
+  background:var(--gent-cyan-light);border-radius:var(--radius-pill);padding:2px 9px;white-space:nowrap}
+.kh .afst{margin-left:auto}
+.pcard .phead .afst{margin-left:auto;margin-right:0}
+.pcard .phead .afst+.chev{margin-left:6px}
+.afst.hier{background:var(--gent-green-light);color:var(--gent-green)}
+.geobtn svg{margin-right:5px}
+.geobtn.on{background:var(--gent-blue);border-color:var(--gent-blue);color:var(--white)}
 .subloc{display:inline-block;align-self:flex-start;max-width:100%;font-size:.68rem;color:var(--gent-gray-medium);
   background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);
   padding:1px 8px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -281,6 +290,7 @@ body.zoekmode .searchbtn{display:none}
   background:var(--white);border:1px solid var(--gent-gray-light);border-radius:12px;
   box-shadow:0 10px 30px rgba(0,24,35,.16);padding:6px;display:none}
 .gdrop.open .gpanel{display:block}
+.gpanel.flip{left:auto;right:0}
 .gdrop.open .gbtn{border-color:var(--gent-blue)}
 .gpanel button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:8px;
   font-size:.86rem;color:var(--gent-gray);text-align:left}
@@ -369,17 +379,25 @@ body.zoekmode .searchbtn{display:none}
   background:var(--gent-gray-light)}
 .ruler .curve{position:absolute;left:0;top:0;width:100%;height:52px;pointer-events:none}
 .ruler .tick{position:absolute;bottom:9px;width:1px;height:5px;background:var(--gent-gray-light)}
+.rnowbtn{position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:4;
+  border:1px solid var(--gent-gray-light);color:var(--gent-blue);background:var(--white);
+  border-radius:var(--radius-pill);padding:3px 11px;font-size:.74rem;font-weight:700;
+  box-shadow:0 1px 3px rgba(0,0,0,.1);
+  opacity:0;pointer-events:none;transition:opacity .15s}
+.rnowbtn.links{right:auto;left:10px}
+.rnowbtn.zicht{opacity:1;pointer-events:auto}
+.rnowbtn:active{background:var(--gent-gray-ultra)}
 .ruler .rnow{position:absolute;top:2px;bottom:12px;width:2px;margin-left:-1px;background:var(--gent-red);
   border-radius:1px;opacity:.8;pointer-events:none}
 .ruler .hlab{position:absolute;bottom:0;transform:translateX(-50%);font-size:.66rem;
   color:var(--gent-gray-medium);font-variant-numeric:tabular-nums}
 .pcard{border:1px solid var(--gent-gray-light);border-radius:var(--radius-3);background:var(--white);
   padding:10px 12px 6px;display:flex;flex-direction:column;gap:2px}
-.pcard .phead{display:flex;align-items:baseline;gap:8px;padding:0 2px 4px;width:100%;text-align:left}
+.pcard .phead{display:flex;align-items:center;gap:8px;padding:0 2px 4px;width:100%;text-align:left;min-width:0}
 .pcard .phead .chev{margin-left:auto;color:var(--gent-gray-medium);font-size:1.2rem;line-height:1;align-self:center}
 .pcard .phead:active h3{color:var(--gent-blue)}
-.pcard h3{font-size:.98rem;font-weight:700;color:var(--gent-gray)}
-.pcard .tag2{font-size:.64rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px}
+.pcard h3{font-size:.98rem;font-weight:700;color:var(--gent-gray);white-space:nowrap;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pcard .tag2{font-size:.64rem;color:var(--gent-gray-medium);text-transform:uppercase;letter-spacing:.5px;flex:0 3 auto;min-width:0;max-width:42%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lrow{display:flex;gap:11px;align-items:center;padding:6px 2px;text-align:left;width:100%;border-radius:var(--radius-2)}
 .lrow:active{background:var(--gent-gray-ultra)}
 .lrow .th{position:relative;flex:0 0 40px;width:40px;height:40px;border-radius:8px;overflow:hidden;
@@ -415,10 +433,10 @@ body.zoekmode .searchbtn{display:none}
 /* experiment: programma per locatie (desktop) */
 .kview2{padding:6px 24px 34px;max-width:100%;overflow-x:hidden}
 .ksec{margin-top:26px}
-.ksec .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin-bottom:12px;
+.ksec .kh{display:flex;align-items:center;gap:12px;padding-bottom:8px;margin-bottom:12px;min-width:0;
   border-bottom:1px solid var(--gent-gray-light)}
-.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray)}
-.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600}
+.ksec .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.15rem;color:var(--gent-gray);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ksec .ktag{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--gent-gray-medium);font-weight:600;flex:0 3 auto;min-width:0;max-width:38%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .egrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .etile{display:flex;align-items:stretch;gap:0;text-align:left;background:var(--white);min-width:0;
   border:1px solid var(--gent-gray-light);border-radius:11px;padding:0;overflow:hidden;
@@ -492,6 +510,7 @@ body.zoekmode .searchbtn{display:none}
   background:var(--white);border:1px solid var(--gent-gray-light);border-radius:12px;
   box-shadow:0 10px 30px rgba(0,24,35,.16);padding:6px;display:none}
 .gdrop.open .gpanel{display:block}
+.gpanel.flip{left:auto;right:0}
 .gdrop.open .gbtn{border-color:var(--gent-blue)}
 .gpanel button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:8px;
   font-size:.86rem;color:var(--gent-gray);text-align:left}
@@ -684,8 +703,8 @@ body.zoekmode .searchbtn{display:none}
   /* kaarten: zweven op schaduw i.p.v. rand */
   .pcard{border:none;box-shadow:0 1px 3px rgba(0,24,35,.08);padding:10px 12px 6px}
   .mobcats .pill2{font-size:.74rem;padding:5px 11px}
-  .kwrap{padding:8px 12px 12px}
-  #kmap{height:62vh;min-height:340px;border-radius:var(--radius-3)}
+  .kwrap{padding:0;gap:0}
+  #kmap{height:calc(100dvh - var(--headH,150px) - 66px);min-height:340px;border-radius:0;border-left:none;border-right:none;border-bottom:none}
   /* detailpaneel wordt bottom sheet */
   .detail{top:auto;bottom:0;left:0;right:0;width:100%;height:min(82vh,640px);
     border-left:none;border-top:1px solid var(--gent-gray-light);
@@ -745,6 +764,7 @@ body.zoekmode .searchbtn{display:none}
     <div class="gpanel" id="gpanelM"></div>
   </div>
   <button class="reset" id="resetBtn" hidden>wis filters</button>
+  <button class="chip geobtn" id="geoBtn" title="Sorteer op wat dichtbij is — je locatie blijft op je toestel"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="4.5"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><path d="M8 1v2.2M8 12.8V15M1 8h2.2M12.8 8H15" stroke-linecap="round"/></svg><span id="geoLbl">In de buurt</span></button>
   <div class="viewswitch" role="tablist" aria-label="Weergave">
     <button data-v="tijd" class="on" title="Tijdlijn" aria-label="Tijdlijn"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h8M2 8h12M2 12h6"/></svg></button>
     <button data-v="kaarten" title="Programma per locatie (experimenteel)" aria-label="Programma per locatie"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
@@ -821,7 +841,7 @@ let LIVE_ROWS = null;   // vervangt PLEINEN wanneer live data geladen is
 let LIVE_REST = null;   // doorlopende/overige live events voor de strook
 let GF_LOADED = new Set();   // feestdagen waarvan het programma al binnen is
 let GF_ALL = false;          // volledige dataset geladen?
-let state = { zoekOpen:false, dag: null, genres:new Set(), pleinen:new Set(), paid:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
+let state = { zoekOpen:false, geo:null, geoBusy:false, dag: null, genres:new Set(), pleinen:new Set(), paid:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
 const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : {matches:false, addEventListener(){}};
 const isMobile = () => MQ.matches;
 MQ.addEventListener && MQ.addEventListener('change', ()=>render());
@@ -845,6 +865,31 @@ const isNowTime=t=>{
   let nh=now.getHours()+now.getMinutes()/60; if(nh<7) nh+=24;
   return Math.abs(t-nh)<=0.09; /* ± ~5 min */
 };
+/* wandelafstand: vogelvlucht × 1,3 (omwegfactor binnenstad), 78 m/min staptempo */
+function afstandTot(row){
+  if(!state.geo||!row) return null;
+  const d1=c=>{ const R=111320, dy=(state.geo[0]-c[0])*R, dx=(state.geo[1]-c[1])*R*Math.cos(c[0]*Math.PI/180);
+    return Math.round(Math.hypot(dx,dy)); };
+  const pts=row.dagPts&&row.dagPts[state.dag];
+  if(pts&&pts.length) return Math.min(...pts.map(d1));   /* dichtstbijzijnde plek van vandaag */
+  const c=(row.dagCoord&&row.dagCoord[state.dag])
+       || (window._GF_LOCGEO&&row.naam?window._GF_LOCGEO.get((row.naam+'').toLowerCase().trim()):null)
+       || (window._GF_KAL_COORDS&&window._GF_KAL_COORDS[row.id]);
+  return c?d1(c):null;
+}
+function loopLabel(m){
+  if(m==null) return '';
+  const min=Math.max(1,Math.round(m*1.3/78));
+  return '± '+min+' min';
+}
+const LOOP_ICO='<svg viewBox="0 0 12 14" width="10" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.8" cy="1.9" r="1.5" fill="currentColor" stroke="none"/><path d="M6.6 4.2 5.2 7.4 3.2 12.4M6.6 4.2l2 1.9 2.1.7M5.2 7.4l2.2 1.8.5 3.2M5 6.2 2.6 7.6"/></svg>';
+const HIER_ICO='<svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="6" r="5.4" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/></svg>';
+function afstChip(row){
+  const m=afstandTot(row);
+  if(m==null) return '';
+  if(m<=100) return `<span class="afst hier" title="${m} m in vogelvlucht">${HIER_ICO}je bent hier</span>`;
+  return `<span class="afst" title="${m} m in vogelvlucht">${LOOP_ICO}${loopLabel(m)}</span>`;
+}
 function sublocNodig(loc,naam){
   if(!loc||!naam) return false;
   const norm=x=>(x+'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
@@ -882,7 +927,7 @@ function renderTabs(){
     const b=document.createElement('button');
     b.className='day'+(d===state.dag?' active':'')+(d===todayFest?' today':'');
     b.innerHTML=`<span class="dow">${DOW[d]}</span><span class="dnum">${d}</span>`;
-    b.onclick=()=>{state.dag=d; render();};
+    b.onclick=()=>{state.dag=d; state.tijd='nu'; render();};
     tabs.appendChild(b);
   }
 }
@@ -905,6 +950,8 @@ function renderChips(){
   setSel('#selVan',state.van); setSel('#selTot',state.tot);
   setSel('#selVanM',state.van); setSel('#selTotM',state.tot);
   $('#tclearx').hidden=!win;
+  $('#geoBtn').classList.toggle('on',!!state.geo);
+  if(!state.geoBusy) $('#geoLbl').textContent='In de buurt';
   $('#resetBtn').hidden = !(n||win||state.q);
 }
 (function initFilterPanel(){
@@ -956,7 +1003,13 @@ function renderChips(){
     const btn=dd.querySelector('.gbtn');
     btn.onclick=e=>{ e.stopPropagation();
       document.querySelectorAll('.gdrop').forEach(o=>{ if(o!==dd) o.classList.remove('open'); });
-      dd.classList.toggle('open'); };
+      dd.classList.toggle('open');
+      /* paneel binnen het scherm houden: rechts uitlijnen als het rechts uitsteekt */
+      const pn=dd.querySelector('.gpanel');
+      if(dd.classList.contains('open') && pn){
+        pn.classList.remove('flip');
+        if(pn.getBoundingClientRect().right > window.innerWidth-8) pn.classList.add('flip');
+      } };
     dd.querySelector('.gpanel').onclick=e=>e.stopPropagation();
   });
   document.addEventListener('click',()=>{
@@ -1189,6 +1242,7 @@ function render(){
     if(h>=START_H && h<=END_H){
       const nl=document.createElement('div'); nl.className='nowline';
       nl.style.left=xPos(h)+'px'; grid.appendChild(nl);
+      window._gfNowFix=hh=>{ if(nl.isConnected) nl.style.left=xPos(Math.min(Math.max(hh,START_H),END_H))+'px'; };
       requestAnimationFrame(()=>{ $('#scroller').scrollLeft = xPos(h)-LABEL_W()-160; });
     }
   }
@@ -1272,13 +1326,22 @@ function stripCatsFor(dag){
       })()
     : [];
 }
+/* de rode nu-lijnen bewegen mee met de klok (raster + liniaal) */
+function nuUur(){ const n=new Date(); let h=n.getHours()+n.getMinutes()/60; if(h<7)h+=24; return h; }
+setInterval(()=>{
+  const h=nuUur();
+  document.querySelectorAll('.ruler .rnow').forEach(nl=>{ nl.style.left=((h-START_H)*110)+'px'; });
+  const gl=document.querySelector('#grid .nowline');
+  if(gl && typeof xPos==='function'){ try{ gl.style.left=xPos(h)+'px'; }catch(_){} }
+},30000);
+
 function buildRuler(dayEvents,onTime){
   const now=new Date();
   const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
   let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
   nowH=Math.min(Math.max(nowH,START_H),END_H);
   const T = (state.tijd==='nu' || typeof state.tijd!=='number')
-        ? (isToday ? nowH : 20)
+        ? (isToday ? nowH : 12)
         : Math.min(Math.max(state.tijd,START_H),END_H);
   const PXH=110;
   const ruler=document.createElement('div'); ruler.className='ruler';
@@ -1323,6 +1386,14 @@ function buildRuler(dayEvents,onTime){
     strip.appendChild(nl);
   }
   track.appendChild(strip); ruler.appendChild(track);
+  let nuBtn=null;
+  if(isToday){
+    nuBtn=document.createElement('button');
+    nuBtn.className='rnowbtn'; nuBtn.type='button'; nuBtn.textContent='nu ›';
+    nuBtn.onclick=e=>{ e.stopPropagation();
+      track.scrollTo({left:(Math.min(Math.max(nuUur(),START_H),END_H)-START_H)*PXH, behavior:'smooth'}); };
+    ruler.appendChild(nuBtn);
+  }
   const ntime=ruler.querySelector('.ntime');
   let lastStep=null, raf=false;
   const applyScroll=()=>{
@@ -1333,7 +1404,13 @@ function buildRuler(dayEvents,onTime){
     ntime.textContent=fmt(t5)+' u';
     if(t5!==lastStep){ lastStep=t5; onTime(t5); }
   };
-  track.addEventListener('scroll',()=>{ if(!raf){ raf=true; requestAnimationFrame(applyScroll); } },{passive:true});
+  track.addEventListener('scroll',()=>{
+    if(nuBtn){ const tNu=Math.min(Math.max(nuUur(),START_H),END_H);
+      const tZicht=START_H + track.scrollLeft/PXH;
+      const diff=tNu-tZicht;                        /* >0: nu ligt rechts (je kijkt naar het verleden) */
+      nuBtn.classList.toggle('zicht', Math.abs(diff)>0.5);
+      nuBtn.classList.toggle('links', diff<0);      /* nu ligt links → chip springt naar links */
+      nuBtn.textContent = diff<0 ? '‹ nu' : 'nu ›'; } if(!raf){ raf=true; requestAnimationFrame(applyScroll); } },{passive:true});
   /* desktop: slepen met de muis, scrollwiel, en klikken om te springen */
   let dragging=false, moved=0, startX=0, startSL=0;
   track.addEventListener('pointerdown',e=>{
@@ -1410,8 +1487,12 @@ function renderMobile(ROWS, dayEvents){
       if(!live.length && !next){ if(p.sec!=='elders') stil.push(p); return; } /* dagprogramma zit erop */
       entries.push({p,live,next});
     });
-    const relSort=(a,b)=>(a.live.length?0:1)-(b.live.length?0:1)
-      || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99));
+    const relSort=(a,b)=> state.geo
+      ? ( ((afstandTot(a.p)??9e9)-(afstandTot(b.p)??9e9))
+          || ((a.live.length?0:1)-(b.live.length?0:1))
+          || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99)) )
+      : ( ((a.live.length?0:1)-(b.live.length?0:1))
+          || ((a.live[0]?.start ?? a.next?.start ?? 99)-(b.live[0]?.start ?? b.next?.start ?? 99)) );
     const funScore=x=>x.live.length*100 + Math.max(0,...x.live.map(scoreEv),...(x.next?[scoreEv(x.next)]:[0]));
     const mainE=entries.filter(x=>x.p.sec!=='elders').sort(relSort);
     const eldE =entries.filter(x=>x.p.sec==='elders').sort((a,b)=>funScore(b)-funScore(a) || relSort(a,b));
@@ -1423,7 +1504,7 @@ function renderMobile(ROWS, dayEvents){
       }
       const card=document.createElement('section'); card.className='pcard';
       const ph=document.createElement('button'); ph.className='phead';
-      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
+      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span>${afstChip(p)}<span class="chev">›</span>`;
       ph.onclick=()=>openPlein(p);
       card.appendChild(ph);
       live.forEach(e=>card.appendChild(mkRow(e,p,reallyLive(e))));
@@ -1470,7 +1551,8 @@ function renderMobile(ROWS, dayEvents){
       const evs=dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
       if(evs.length) entries.push({p,evs});
     });
-    const mainE=entries.filter(x=>x.p.sec!=='elders').sort((a,b)=>a.evs[0].start-b.evs[0].start);
+    const mainE=entries.filter(x=>x.p.sec!=='elders').sort((a,b)=>
+      state.geo ? ((afstandTot(a.p)??9e9)-(afstandTot(b.p)??9e9)) : (a.evs[0].start-b.evs[0].start));
     const eldE =entries.filter(x=>x.p.sec==='elders')
       .sort((a,b)=> b.evs.length-a.evs.length || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv)));
     let msecP=false;
@@ -1481,7 +1563,7 @@ function renderMobile(ROWS, dayEvents){
       }
       const card=document.createElement('section'); card.className='pcard';
       const ph=document.createElement('button'); ph.className='phead';
-      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
+      ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span>${afstChip(p)}<span class="chev">›</span>`;
       ph.onclick=()=>openPlein(p);
       card.appendChild(ph);
       evs.forEach(e=>card.appendChild(mkRow(e,p, isToday && e.start<=nowH && nowH<e.start+e.dur)));
@@ -1527,17 +1609,21 @@ function renderKaarten(ROWS, dayEvents){
   };
   const section=(p,evs)=>{
     const sec=document.createElement('section'); sec.className='ksec';
-    sec.innerHTML=`<h3 class="kh"><span class="knaam">${p.naam}</span>${p.tag?`<span class="ktag">${p.tag}</span>`:''}</h3>`;
+    sec.innerHTML=`<h3 class="kh"><span class="knaam">${p.naam}</span>${p.tag?`<span class="ktag">${p.tag}</span>`:''}${afstChip(p)}</h3>`;
     const eg=document.createElement('div'); eg.className='egrid';
     evs.forEach(e=>eg.appendChild(tile(e,p)));
     sec.appendChild(eg);
     return sec;
   };
   const rowEvsOf=p=>dayEvents.filter(e=>e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
-  const main=ROWS.filter(r=>r.sec!=='elders').map(p=>({p,evs:rowEvsOf(p)})).filter(x=>x.evs.length);
+  const byAfst=(a,b)=>{ const da=afstandTot(a.p), db=afstandTot(b.p);
+    if(da==null&&db==null) return 0; if(da==null) return 1; if(db==null) return -1; return da-db; };
+  let main=ROWS.filter(r=>r.sec!=='elders').map(p=>({p,evs:rowEvsOf(p)})).filter(x=>x.evs.length);
+  if(state.geo) main=main.slice().sort(byAfst);
   const eld =ROWS.filter(r=>r.sec==='elders').map(p=>({p,evs:rowEvsOf(p)})).filter(x=>x.evs.length)
-    .sort((a,b)=> b.evs.length-a.evs.length
-      || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv)));
+    .sort((a,b)=> state.geo ? byAfst(a,b)
+      : (b.evs.length-a.evs.length
+         || Math.max(...b.evs.map(scoreEv))-Math.max(...a.evs.map(scoreEv))));
   main.forEach(({p,evs})=>wrap.appendChild(section(p,evs)));
   if(eld.length){
     const ms=document.createElement('p'); ms.className='msec'; ms.textContent='Elders in de stad';
@@ -1567,8 +1653,11 @@ function ensureLeaflet(){
   return leafP;
 }
 function rowCoords(p){
-  const geo=window._GF_LOCGEO, fixed=window._GF_PLEIN_COORDS;
-  return (geo&&geo.get((p.naam||'').toLowerCase().trim())) || (fixed&&fixed[p.id]) || null;
+  const geo=window._GF_LOCGEO, kal=window._GF_KAL_COORDS;
+  /* enkel dataset-posities: dag-anker -> locatie-record -> gekalibreerd anker; anders geen marker */
+  return (p.dagCoord&&p.dagCoord[state.dag])
+      || (geo&&geo.get((p.naam||'').toLowerCase().trim()))
+      || (kal&&kal[p.id]) || null;
 }
 let MAP=null, MARKLAYER=null;
 function renderKaart(ROWS, dayEvents){
@@ -1582,7 +1671,12 @@ function renderKaart(ROWS, dayEvents){
   const mapDiv=document.createElement('div'); mapDiv.id='kmap'; wrapK.appendChild(mapDiv);
   grid.appendChild(wrapK);
   ensureLeaflet().then(()=>{
-    MAP=L.map(mapDiv).setView([51.0555,3.7255],15);
+    MAP=L.map(mapDiv).setView(state.geo||[51.0555,3.7255],15);
+    if(state.geo){
+      L.circleMarker(state.geo,{radius:8,color:'#fff',weight:2.5,fillColor:'#005ba9',fillOpacity:1})
+        .bindPopup('Jij bent hier').addTo(MAP);
+      L.circle(state.geo,{radius:45,color:'#005ba9',weight:1,fillOpacity:.08,opacity:.4}).addTo(MAP);
+    }
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
       {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(MAP);
     MARKLAYER=L.layerGroup().addTo(MAP);
@@ -1652,7 +1746,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
 function openEvent(e,p){
   const g=GENRES[e.genre];
   const _geo=(window._GF_LOCGEO&&e.loc)?window._GF_LOCGEO.get((e.loc+'').toLowerCase().trim()):null;
-  const _coord=_geo||(window._GF_PLEIN_COORDS?window._GF_PLEIN_COORDS[p.id]:null);
+  const _coord=_geo||(window._GF_KAL_COORDS?window._GF_KAL_COORDS[p.id]:null);
   const _gmu='https://www.google.com/maps/search/?api=1&query='+
     (_coord?`${_coord[0]},${_coord[1]}`:encodeURIComponent((e.loc||p.naam||'Gentse Feesten')+', Gent, België'));
   const descr = e.descr || DESCR[e.genre](e.titel, p.naam);
@@ -1697,6 +1791,16 @@ document.querySelectorAll('.viewswitch button').forEach(b=>{
   b.onclick=()=>{ state.view=b.dataset.v; render(); };
 });
 
+$('#geoBtn').onclick=()=>{
+  if(state.geo){ state.geo=null; render(); return; }
+  if(state.geoBusy||!navigator.geolocation) return;
+  state.geoBusy=true; $('#geoLbl').textContent='zoeken…';
+  navigator.geolocation.getCurrentPosition(
+    pos=>{ state.geoBusy=false; state.geo=[pos.coords.latitude,pos.coords.longitude]; render(); },
+    ()=>{ state.geoBusy=false; $('#geoLbl').textContent='geen toegang';
+      setTimeout(()=>{ if(!state.geo) $('#geoLbl').textContent='In de buurt'; },2500); },
+    {timeout:8000, maximumAge:60000});
+};
 $('#searchBtn').onclick=()=>{ state.zoekOpen=true; render(); setTimeout(()=>$('#zoekIn').focus(),30); };
 $('#zoekIn').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
 $('#zoekIn').addEventListener('keydown',e=>{ if(e.key==='Escape') sluitZoek(); });
@@ -1937,17 +2041,13 @@ async function loadLive(){
     const DEFAULT_R=75;
     const zoneVan=id=>{
       const z=PLEIN_ZONES[id]||{};
-      return { pts: z.pts || (PLEIN_COORDS[id]?[PLEIN_COORDS[id]]:[]), r: z.r || DEFAULT_R, poly: z.poly||null };
+      const hand=z.pts || (PLEIN_COORDS[id]?[PLEIN_COORDS[id]]:[]);
+      const kal=(KAL[id]&&KAL[id].pts)||[];
+      return { pts:[...hand,...kal], r: z.r || DEFAULT_R, poly: z.poly||null };
     };
     const distZ=(a,b)=>{ const R=111320;
       const dy=(a[0]-b[0])*R, dx=(a[1]-b[1])*R*Math.cos(a[0]*Math.PI/180);
       return Math.hypot(dx,dy); };
-    /* 'nabij X' is geen 'op X': verzwakkende woorden maken een naam-match voorwaardelijk */
-    const ZWAK=/(nabij|vlak ?bij|dicht ?bij|tegenover|omgeving|in de buurt|richting|aan de rand)/i;
-    const binnenZone=(g,id)=>{ if(!g) return false; const z=zoneVan(id);
-      if(z.poly && inPoly(g,z.poly)) return true;
-      return z.pts.length ? Math.min(...z.pts.map(pt=>distZ(g,pt)))<=z.r : false; };
-    window._GF_PLEIN_COORDS=PLEIN_COORDS; window._GF_LOCGEO=LOCGEO;
     const PLEIN_MATCH=[
       ['sintjacobs',['walter de buck','sint-jacobs','sint jacobs','bij sint','feestzone']],
       ['vlasmarkt',['vlasmarkt']], ['beesten',['beestenmarkt']],
@@ -1968,6 +2068,52 @@ async function loadLive(){
       ['braun',['braunplein','goudenleeuwplein','stadshal','belfort','belfry']],
       ['kouter',['kouter']],
     ];
+    /* 'nabij X' is geen 'op X': verzwakkende woorden maken een naam-match voorwaardelijk */
+    const ZWAK=/(nabij|vlak ?bij|dicht ?bij|tegenover|omgeving|in de buurt|richting|aan de rand)/i;
+    const _norm=x=>(x+'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+    const _stam=t=>t.replace(/(markt|plein|park|hof|straat|kaai|lei)$/,'')||t;
+    const _tok=x=>_norm(x).split(' ').filter(w=>w&&!['de','het','t','den','van','der'].includes(w)).map(_stam);
+    const eigenWoorden=pid=>{ const pl=PLEINEN.find(x=>x.id===pid);
+      const m=PLEIN_MATCH.find(([id])=>id===pid);
+      return new Set([..._tok(pl?pl.naam:''), ...(m?m[1].flatMap(w=>_tok(w)):[])]); };
+    const isIdentiteit=(loc,pid)=>{ const ew=eigenWoorden(pid);
+      return !ZWAK.test(loc) && _tok(loc).every(w=>ew.has(w)); };
+    /* ===== ZELFKALIBRATIE: pleinankers uit de dataset zelf =====
+       identiteitslocaties (naam = puur het plein) met geloofwaardige coords
+       -> mediaan wordt het anker, alle punten versterken de zone.
+       De hardgecodeerde ankers zijn enkel nog vertrekpunt/vangnet. */
+    const KAL={};
+    {
+      const centrum=[51.0545,3.7250];
+      const perPlein={};
+      LOCGEO.forEach((g,naam)=>{
+        const R=111320, dy=(g[0]-centrum[0])*R, dx=(g[1]-centrum[1])*R*Math.cos(51.05*Math.PI/180);
+        if(Math.hypot(dx,dy)>3000) return; /* ongeloofwaardig ver */
+        const hit=PLEIN_MATCH.find(([,ws])=>ws.some(w=>naam.includes(w)));
+        if(!hit || !isIdentiteit(naam,hit[0])) return;
+        (perPlein[hit[0]] ||= []).push(g);
+      });
+      const med=a=>{ const x=a.slice().sort((p,q)=>p-q); return x[Math.floor(x.length/2)]; };
+      Object.entries(perPlein).forEach(([pid,punten])=>{
+        let m=[med(punten.map(p=>p[0])), med(punten.map(p=>p[1]))];
+        const R=111320;
+        const houd=punten.filter(p=>Math.hypot((p[0]-m[0])*R,(p[1]-m[1])*R*.63)<=400);
+        if(!houd.length) return;
+        m=[med(houd.map(p=>p[0])), med(houd.map(p=>p[1]))];
+        KAL[pid]={anker:m, pts:houd};
+      });
+      window.GF_KALIBRATIE=KAL;
+    }
+    const binnenZone=(g,id)=>{ if(!g) return false; const z=zoneVan(id);
+      if(z.poly && inPoly(g,z.poly)) return true;
+      return z.pts.length ? Math.min(...z.pts.map(pt=>distZ(g,pt)))<=z.r : false; };
+    const COORDS_EFF={...PLEIN_COORDS};
+    Object.entries(KAL).forEach(([pid,k])=>{ COORDS_EFF[pid]=k.anker; });
+    /* invariant: getoonde posities komen ALTIJD uit de dataset.
+       Hand-coords (PLEIN_COORDS) doen enkel nog classificatie (zones). */
+    const KAL_COORDS={};
+    Object.entries(KAL).forEach(([pid,k])=>{ KAL_COORDS[pid]=k.anker; });
+    window._GF_PLEIN_COORDS=COORDS_EFF; window._GF_KAL_COORDS=KAL_COORDS; window._GF_LOCGEO=LOCGEO;
     const all=[], rest=[];
     let audZonderDatum=0, audBuitenDagen=0;
     recs.forEach((r,i)=>{
@@ -2017,7 +2163,8 @@ async function loadLive(){
       const gLoc=LOCGEO.get(lowLoc.trim())||null;
       let pleinId=null;
       if(naamHit){
-        /* zwak taalgebruik ('nabij X'): alleen koppelen als de geometrie het bevestigt */
+        /* 'nabij X' + buiten de zone: niet koppelen; anders blijft de (organisator)groepering
+           gelden — het rij-anker volgt per dag toch waar de events echt staan */
         if(!ZWAK.test(loc) || !gLoc || binnenZone(gLoc,naamHit[0])) pleinId=naamHit[0];
       }
       if(!pleinId && gLoc){
@@ -2078,6 +2225,31 @@ async function loadLive(){
     rest.forEach(e=>{ if(e.dur==null) e.dur=e.rawDur??1.25; });
 
     rows=[...rows.filter(r=>r.sec!=='elders'),...rows.filter(r=>r.sec==='elders')];
+    /* rij-ankers per dag: alle plekken waar de events die dag staan,
+       geclusterd; het "anker" is de dominante cluster (meeste events),
+       maar afstanden rekenen altijd tegen ALLE clusters (dichtstbijzijnde wint) */
+    {
+      const byRD={};
+      all.forEach(e=>{ const g=LOCGEO.get((e.loc||'').toLowerCase().trim()); if(!g) return;
+        ((byRD[e.plein] ||= {})[e.dag] ||= []).push(g); });
+      const clusterPts=pts=>{
+        const R=111320, cl=[];
+        pts.forEach(p=>{
+          const c=cl.find(c=>Math.hypot((c.m[0]-p[0])*R,(c.m[1]-p[1])*R*.63)<150);
+          if(c){ c.pts.push(p); c.m=[c.pts.reduce((a,q)=>a+q[0],0)/c.pts.length, c.pts.reduce((a,q)=>a+q[1],0)/c.pts.length]; }
+          else cl.push({m:[p[0],p[1]], pts:[p]});
+        });
+        return cl.sort((a,b)=>b.pts.length-a.pts.length);
+      };
+      rows.forEach(rw=>{ rw.dagCoord={}; rw.dagPts={};
+        const per=byRD[rw.id]; if(!per) return;
+        Object.entries(per).forEach(([dg,pts])=>{
+          const cl=clusterPts(pts);
+          rw.dagCoord[dg]=cl[0].m;              /* dominante cluster: voor de kaartmarker */
+          rw.dagPts[dg]=cl.map(c=>c.m);         /* alle clusters: voor afstand & sortering */
+        });
+      });
+    }
     EVENTS=all; LIVE_ROWS=rows; LIVE_REST=rest;
     state.loading=false;
     if(dagen) dagen.forEach(d=>GF_LOADED.add(d));
@@ -2208,6 +2380,14 @@ function syncHeadH(){
 }
 new ResizeObserver(syncHeadH).observe(document.getElementById('stickyHead'));
 syncHeadH();
+setInterval(()=>{
+  if(document.hidden || state.loading) return;
+  const h=Math.min(Math.max(nuUur(),START_H),END_H);
+  document.querySelectorAll('.ruler .rnow').forEach(el=>{ el.style.left=((h-START_H)*110)+'px'; });
+  if(window._gfNowFix) window._gfNowFix(h);
+  const tr=document.querySelector('.ruler .track');
+  if(tr) tr.dispatchEvent(new Event('scroll'));
+},30000);
 let _rsz=null, _lastW=window.innerWidth;
 window.addEventListener('resize',()=>{
   /* mobiel: het tonen/verbergen van de adresbalk is een hoogte-resize — negeren,
