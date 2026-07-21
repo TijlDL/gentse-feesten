@@ -1358,6 +1358,10 @@ function renderMobile(ROWS, dayEvents){
   grid.innerHTML='';
   grid.style.minWidth='0';
   grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
+  const nowR=new Date();
+  const isTodayR = nowR.getMonth()===6 && (nowR.getHours()<7?nowR.getDate()-1:nowR.getDate())===state.dag;
+  let nowRH=nowR.getHours()+nowR.getMinutes()/60; if(nowRH<7) nowRH+=24;
+  const reallyLive=e=> isTodayR && e.start<=nowRH && nowRH<e.start+e.dur;
   const wrapM=document.createElement('div'); wrapM.className='mob';
   const listWrap=document.createElement('div');
   listWrap.style.cssText='display:flex;flex-direction:column;gap:10px';
@@ -1400,8 +1404,8 @@ function renderMobile(ROWS, dayEvents){
       ph.innerHTML=`<h3>${p.naam}</h3><span class="tag2">${p.tag||''}</span><span class="chev">›</span>`;
       ph.onclick=()=>openPlein(p);
       card.appendChild(ph);
-      live.forEach(e=>card.appendChild(mkRow(e,p,true)));
-      if(next) card.appendChild(mkRow(next,p,false));
+      live.forEach(e=>card.appendChild(mkRow(e,p,reallyLive(e))));
+      if(next) card.appendChild(mkRow(next,p,reallyLive(next)));
       const more=document.createElement('button'); more.className='pmore';
       more.textContent='Volledig programma ›';
       more.onclick=()=>openPlein(p);
@@ -1591,10 +1595,11 @@ function updateMarkers(ROWS,dayEvents,t){
 }
 function openPlein(p){
   const evs=EVENTS.filter(e=>e.dag===state.dag && e.plein===p.id && matches(e)).sort((a,b)=>a.start-b.start);
-  let t; if(typeof state.tijd==='number') t=state.tijd;
-  else { const n=new Date(); let h=n.getHours()+n.getMinutes()/60; if(h<7)h+=24; t=h; }
+  const nS=new Date();
+  const isTodayS = nS.getMonth()===6 && (nS.getHours()<7?nS.getDate()-1:nS.getDate())===state.dag;
+  let hReal=nS.getHours()+nS.getMinutes()/60; if(hReal<7) hReal+=24;
   const rows=evs.map(e=>{
-    const bezig=e.start<=t && t<e.start+e.dur;
+    const bezig=isTodayS && e.start<=hReal && hReal<e.start+e.dur;
     const voorbij=!bezig && isPast(e);
     return `<button onclick="window._gfOpen('${e.id}')" style="${bezig?'background:var(--gent-green-light)':''}${voorbij?'opacity:.5':''}">`+
       `<span class="tt">${fmt(e.start)}</span>`+
