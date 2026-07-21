@@ -116,6 +116,9 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
       </div>
       <button className="reset" id="resetBtn" hidden={!(nActief || win || state.q)}
         onClick={() => set({ genres: new Set(), pleinen: new Set(), paid: false, kids: false, q: '', van: null, tot: null })}>wis filters</button>
+      {/* op mobiel één volle rij: geo-knop links, weergave-toggle rechts (space-between);
+          op desktop is deze wrapper onzichtbaar (display:contents) */}
+      <div className="georij">
       <button className={'chip geobtn' + (state.geo ? ' on' : '')} id="geoBtn"
         title="Sorteer op wat dichtbij is — je locatie blijft op je toestel" onClick={geoKlik}>
         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="8" cy="8" r="4.5" /><circle cx="8" cy="8" r="1.2" fill="currentColor" /><path d="M8 1v2.2M8 12.8V15M1 8h2.2M12.8 8H15" strokeLinecap="round" /></svg>
@@ -130,6 +133,7 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
             {v === 'kaart' && <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"><path d="M8 14.2S3.5 9.8 3.5 6.8a4.5 4.5 0 1 1 9 0c0 3-4.5 7.4-4.5 7.4z" /><circle cx="8" cy="6.8" r="1.6" /></svg>}
           </button>
         ))}
+      </div>
       </div>
     </div>
   );
