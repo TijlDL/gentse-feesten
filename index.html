@@ -2058,8 +2058,12 @@ function syncHeadH(){
 }
 new ResizeObserver(syncHeadH).observe(document.getElementById('stickyHead'));
 syncHeadH();
-let _rsz=null;
+let _rsz=null, _lastW=window.innerWidth;
 window.addEventListener('resize',()=>{
+  /* mobiel: het tonen/verbergen van de adresbalk is een hoogte-resize — negeren,
+     anders wist de re-render het grid en springt de scrollpositie naar boven */
+  if(window.innerWidth===_lastW) return;
+  _lastW=window.innerWidth;
   clearTimeout(_rsz);
   _rsz=setTimeout(()=>{ if(!state.loading) render(); },200);
 });
