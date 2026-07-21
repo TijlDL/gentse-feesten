@@ -16,7 +16,7 @@ export const GENRES: Record<GenreKey, GenreDef> = {
   folk:    { label: 'Folk & Gents',     c: 'var(--gf-accent)' },
   klassiek:{ label: 'Klassiek & jazz',  c: 'var(--gent-blue)' },
   kids:    { label: 'Kinderen',         c: 'var(--gent-red-pastel)' },
-  theater: { label: 'Theater & circus', c: 'var(--gent-gray)' },
+  theater: { label: 'Theater & circus', c: 'var(--gf-accent-dark)' },
 };
 
 export const PLEINEN: Rij[] = [

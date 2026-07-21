@@ -48,17 +48,24 @@ function buildRulerDom(
     acts.push(n); if (n > maxAct) maxAct = n;
   }
   const stripW = (END_H - START_H) * PXH, base = 38, topY = 6;
-  const pts = acts.map((n, i) => ({ x: (i + .5) * .5 * PXH, y: n ? base - (3 + (base - topY - 3) * (n / maxAct)) : base }));
-  let dp = `M0 ${base} L${pts[0].x} ${pts[0].y}`;
+  /* uitloop voorbij 9u/7u op de hoogte van het randpunt (mét vulling):
+     anders oogt de marge naast het venster als een wit gat / een sprong
+     wanneer je helemaal naar het begin of einde scrubt */
+  const EXT = 1200;
+  const pts = acts.map((n, i) => ({ x: EXT + (i + .5) * .5 * PXH, y: n ? base - (3 + (base - topY - 3) * (n / maxAct)) : base }));
+  const yEind = pts[pts.length - 1].y;
+  let dp = `M0 ${pts[0].y} L${pts[0].x} ${pts[0].y}`;
   for (let i = 1; i < pts.length; i++) {
     const mx = (pts[i - 1].x + pts[i].x) / 2, my = (pts[i - 1].y + pts[i].y) / 2;
     dp += ` Q${pts[i - 1].x} ${pts[i - 1].y} ${mx} ${my}`;
   }
-  dp += ` L${pts[pts.length - 1].x} ${pts[pts.length - 1].y} L${stripW} ${base} Z`;
+  dp += ` L${pts[pts.length - 1].x} ${yEind} L${stripW + 2 * EXT} ${yEind} L${stripW + 2 * EXT} ${base} L0 ${base} Z`;
   const curve = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   curve.setAttribute('class', 'curve');
-  curve.setAttribute('viewBox', `0 0 ${stripW} 52`);
+  curve.setAttribute('viewBox', `0 0 ${stripW + 2 * EXT} 52`);
   curve.setAttribute('preserveAspectRatio', 'none');
+  curve.style.left = (-EXT) + 'px';
+  curve.style.width = (stripW + 2 * EXT) + 'px';
   curve.innerHTML = `<defs><linearGradient id="gfcurve" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#009de0" stop-opacity=".26"/>
       <stop offset="1" stop-color="#009de0" stop-opacity=".03"/></linearGradient></defs>

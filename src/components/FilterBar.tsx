@@ -5,7 +5,7 @@ import { store } from '../data/store';
 import { fmt } from '../lib/tijd';
 import type { GFEvent, View } from '../types';
 
-type DropId = 'G' | 'P' | 'T' | 'M';
+type DropId = 'P' | 'T' | 'M';
 
 /** Uur-opties voor de tijd-selects (— = geen grens). */
 function UurOpts({ from }: { from: number }) {
@@ -70,17 +70,6 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
     <div className="filters" id="filterBar">
       <span className="count" id="countLabel"><b>{visible.length}</b> op de pleinen · <b>{restCount}</b> doorlopend &amp; elders</span>
       <span className="sep" />
-      <div className={'gdrop' + (open === 'G' ? ' open' : '')}>
-        <button className={'chip gbtn' + (state.genres.size ? ' on' : '')} id="gbtnG" onClick={toggleDrop('G')}>
-          Genres{cnt(state.genres.size)}<span className="car">▾</span></button>
-        <div className="gpanel" id="gpanelG" ref={el => { panelRefs.current.G = el; }} onClick={stop}>
-          {Object.entries(GENRES).map(([k, g]) => (
-            <button key={k} className={state.genres.has(k) ? 'on' : ''} onClick={() => toggleIn('genres', k)}>
-              <span className="sw2" style={{ background: g.c }} />{g.label}<span className="ck">✓</span></button>
-          ))}
-          <button className="gclear" onClick={() => set({ genres: new Set() })}>Wis genres</button>
-        </div>
-      </div>
       <div className={'gdrop' + (open === 'P' ? ' open' : '')}>
         <button className={'chip gbtn' + (state.pleinen.size ? ' on' : '')} id="gbtnP" onClick={toggleDrop('P')}>
           Pleinen{cnt(state.pleinen.size)}<span className="car">▾</span></button>
@@ -110,13 +99,18 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
         </div>
       </div>
       <div className={'gdrop' + (open === 'M' ? ' open' : '')}>
-        <button className={'chip gbtn' + ((state.paid || state.kids) ? ' on' : '')} id="gbtnM" onClick={toggleDrop('M')}>
-          Meer{cnt((state.paid ? 1 : 0) + (state.kids ? 1 : 0))}<span className="car">▾</span></button>
+        <button className={'chip gbtn' + ((state.paid || state.kids || state.genres.size) ? ' on' : '')} id="gbtnM" onClick={toggleDrop('M')}>
+          Meer{cnt((state.paid ? 1 : 0) + (state.kids ? 1 : 0) + state.genres.size)}<span className="car">▾</span></button>
         <div className="gpanel" id="gpanelM" ref={el => { panelRefs.current.M = el; }} onClick={stop}>
           <button className={state.paid ? 'on' : ''} onClick={() => set({ paid: !state.paid })}>
             <span className="sw2" style={{ background: 'var(--gent-orange)' }} />Ook betalend · €<span className="ck">✓</span></button>
           <button className={state.kids ? 'on' : ''} onClick={() => set({ kids: !state.kids })}>
             <span className="sw2" style={{ background: 'var(--gent-red-pastel)' }} />Met kinderen<span className="ck">✓</span></button>
+          <p className="gsec">Genres</p>
+          {Object.entries(GENRES).map(([k, g]) => (
+            <button key={k} className={state.genres.has(k) ? 'on' : ''} onClick={() => toggleIn('genres', k)}>
+              <span className="sw2" style={{ background: g.c }} />{g.label}<span className="ck">✓</span></button>
+          ))}
           <button className="gclear" onClick={() => set({ genres: new Set(), pleinen: new Set(), paid: false, kids: false, van: null, tot: null })}>Alles wissen</button>
         </div>
       </div>

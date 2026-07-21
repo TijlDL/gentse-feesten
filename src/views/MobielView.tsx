@@ -22,7 +22,8 @@ function LRow({ e, p, running }: { e: GFEvent; p: Rij | null; running: boolean }
       <span className="th">{initialOf(e)}{e.img && <img src={e.img} alt="" loading="lazy" onError={ev => ev.currentTarget.remove()} />}</span>
       <span className="bx">
         <span className="ti">{e.titel}</span>
-        <span className="me"><span className={'tr' + (running ? ' on' : '')}>{running && <LiveDot />}{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span className="gd" />{GENRES[e.genre].label}{voorbij ? ' · voorbij' : ''}</span>
+        {/* geen genre-kleurblokje in de mobiele kaarten: het genre in tekst volstaat */}
+        <span className="me"><span className={'tr' + (running ? ' on' : '')}>{running && <LiveDot />}{fmt(e.start)} – {fmt(e.start + e.dur)}</span><span aria-hidden="true">·</span>{GENRES[e.genre].label}{voorbij ? ' · voorbij' : ''}</span>
         {sub && <span className="subloc">{e.loc}</span>}
       </span>
     </button>
