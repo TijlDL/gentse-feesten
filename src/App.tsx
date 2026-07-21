@@ -5,6 +5,7 @@ import { loadLive } from './data/loadLive';
 import { getVersion, store, subscribe } from './data/store';
 import { matches } from './lib/filters';
 import { initieleDag, nuUur } from './lib/tijd';
+import { startVersieWacht } from './lib/versie';
 import { DayTabs } from './components/DayTabs';
 import { DetailPanel } from './components/DetailPanel';
 import { FilterBar } from './components/FilterBar';
@@ -44,7 +45,7 @@ export default function App() {
     state.paid, state.kids, state.q, state.van, state.tot, state.geo?.join(';'), dataVersion].join('|');
 
   /* ---- systeem-effects ---- */
-  useEffect(() => { loadLive(); }, []);
+  useEffect(() => { loadLive(); startVersieWacht(); }, []);
   useEffect(() => { MQ?.addEventListener('change', () => setMobiel(MQ.matches)); }, []);
   useEffect(() => { document.body.classList.toggle('zoekmode', state.zoekOpen); }, [state.zoekOpen]);
   useEffect(() => {

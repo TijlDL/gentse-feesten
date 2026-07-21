@@ -129,7 +129,7 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
       </button>
       <div className="viewswitch" role="tablist" aria-label="Weergave">
         {([['tijd', 'Tijdlijn'], ['kaarten', 'Programma per locatie (experimenteel)'], ['kaart', 'Kaart']] as [View, string][]).map(([v, titel]) => (
-          <button key={v} className={(state.view || 'tijd') === v ? 'on' : ''} title={titel} aria-label={titel}
+          <button key={v} data-v={v} className={(state.view || 'tijd') === v ? 'on' : ''} title={titel} aria-label={titel}
             onClick={() => set({ view: v })}>
             {v === 'tijd' && <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M2 4h8M2 8h12M2 12h6" /></svg>}
             {v === 'kaarten' && <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="2" y="2" width="5" height="5" rx="1" /><rect x="9" y="2" width="5" height="5" rx="1" /><rect x="2" y="9" width="5" height="5" rx="1" /><rect x="9" y="9" width="5" height="5" rx="1" /></svg>}

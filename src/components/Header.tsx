@@ -17,7 +17,7 @@ export function Header() {
         <span className="sub">17 – 26 juli · zie in één blik wat er leeft, waar en wanneer</span>
         <div className="demo-pill">
           <span className="dot" /><span id="dataStatus">{status}</span>
-          <button id="liveBtn" title="Haalt het programma opnieuw op via data.stad.gent" onClick={() => loadLive()}>Vernieuwen</button>
+          <button id="liveBtn" title="Haalt het programma opnieuw op via data.stad.gent" onClick={() => loadLive(true)}>Vernieuwen</button>
         </div>
       </div>
     </header>

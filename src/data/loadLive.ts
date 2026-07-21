@@ -6,9 +6,11 @@
    de heuristiek scant per definitie onbekende schema's. */
 import { DAYS, GENRES, PLEINEN } from '../config';
 import { fmt } from '../lib/tijd';
+import { BUILD_ID, cacheGeldig, cacheLees, cacheZet, dagKeyNu } from './cache';
 import { store, notify, setStatus } from './store';
 
-export async function loadLive(): Promise<void> {
+/** @param force true (Vernieuwen-knop): cache overslaan en écht opnieuw ophalen */
+export async function loadLive(force = false): Promise<void> {
   store.loading = true; store.loadError = null; notify();
   const ids = ['gentse-feesten-evenementen-2026', 'gentse-feesten-evenementen-2025'];
   const parseTime = (v: any) => { if (v == null) return null; const m = String(v).match(/(\d{1,2})\s*[:.uh]\s*(\d{2})/); return m ? (+m[1]) + (+m[2]) / 60 : null; };
@@ -46,15 +48,24 @@ export async function loadLive(): Promise<void> {
     const nu = new Date();
     const feestVandaag = (nu.getMonth() === 6 && DAYS.includes(nu.getHours() < 7 ? nu.getDate() - 1 : nu.getDate()))
       ? (nu.getHours() < 7 ? nu.getDate() - 1 : nu.getDate()) : DAYS[0];
-    /* fase A: vandaag + de (kleine) join-datasets parallel */
+    /* dagcache: dezelfde build + dezelfde feestdag → geen netwerk nodig */
     let used = ids[0];
-    let [recs, locRecs, thRecs] = await Promise.all([
+    let recs: any[] | null = null, locRecs: any[] | null = null, thRecs: any[] | null = null;
+    let progressief = true, uitCache = false;
+    if (!force) {
+      const c = await cacheLees();
+      if (cacheGeldig(c)) {
+        ({ recs, locRecs, thRecs, used } = c);
+        uitCache = true; progressief = false; /* cache = volledige dataset → meteen finaal */
+      }
+    }
+    /* fase A: vandaag + de (kleine) join-datasets parallel */
+    if (!uitCache) [recs, locRecs, thRecs] = await Promise.all([
       fetchDS(used, 'vandaag laden', whereDag(feestVandaag)),
       fetchDS(used.replace('evenementen', 'locaties'), null).catch(() => null),
       fetchDS(used.replace('evenementen', 'themas'), null).catch(() => null),
     ]);
-    let progressief = true;
-    if (!recs || !recs.length) {
+    if (!uitCache && (!recs || !recs.length)) {
       /* dagfilter niet ondersteund of leeg: terugvallen op volledige lading (oude pad) */
       progressief = false;
       [recs, locRecs, thRecs] = await Promise.all([
@@ -576,10 +587,14 @@ export async function loadLive(): Promise<void> {
       notify();
     };
 
+    /* volledige dataset in de dagcache (alleen na een echte netwerklading) */
+    const bewaar = (r: any[]) => { void cacheZet({ buildId: BUILD_ID, dagKey: dagKeyNu(), fetchedAt: Date.now(), used, recs: r, locRecs, thRecs }); };
+
     /* fase A verwerken: de app is meteen bruikbaar met het programma van vandaag */
-    verwerk(recs, !progressief, progressief ? [feestVandaag] : null);
+    verwerk(recs!, !progressief, progressief ? [feestVandaag] : null);
+    if (!progressief && !uitCache) bewaar(recs!); /* volledige-lading-fallback */
     if (progressief) {
-      let alleRecs = recs;
+      let alleRecs = recs!;
       /* fase B: morgen erbij */
       const morgen = DAYS[DAYS.indexOf(feestVandaag) + 1];
       if (morgen) {
@@ -591,7 +606,7 @@ export async function loadLive(): Promise<void> {
       /* fase C: volledige dataset (vervangt alles — garandeert identiek eindresultaat) */
       try {
         const recsC = await fetchPaged(used, null, null);
-        if (recsC && recsC.length) verwerk(recsC, true, null);
+        if (recsC && recsC.length) { verwerk(recsC, true, null); bewaar(recsC); }
       } catch (_) { store.GF_ALL = true; DAYS.forEach(d => store.GF_LOADED.add(d)); notify(); }
     }
   } catch (err: any) {
