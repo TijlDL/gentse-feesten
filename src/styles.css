@@ -690,6 +690,9 @@ body.zoekmode .searchbtn{display:none}
   .viewswitch button{padding:6px 13px}
   .viewswitch button svg{width:17px;height:17px}
   .geobtn svg{width:15px;height:15px}
+  /* wandelafstand-chip: ietsje groter, incl. het wandelaartje */
+  .afst{font-size:.78rem;padding:3px 11px;gap:5px}
+  .afst svg{width:12px;height:14px}
   /* mobiel: geo-knop en weergave-toggle altijd samen op één volle rij, space-between */
   .georij{display:flex;width:100%;align-items:center;justify-content:space-between}
   .viewswitch{margin-left:0}
