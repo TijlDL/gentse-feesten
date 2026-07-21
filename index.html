@@ -42,7 +42,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
 /* ---------- header ---------- */
 .topband{height:6px;background:var(--gent-cyan)}
-header{padding:20px 24px 0}
+header{padding:20px 70px 0 24px}
 .brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .brand h1{
   font-weight:800;font-size:clamp(24px,3vw,34px);letter-spacing:-.3px;line-height:1.05;color:var(--gent-blue);
@@ -224,8 +224,34 @@ header{padding:20px 24px 0}
   white-space:nowrap;overflow:hidden}
 .etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
 .etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.etile.past,.lrow.past{opacity:.55}
+.etile.past .eth2 img,.lrow.past .th img{filter:grayscale(.8)}
 .kview2 .msec{margin:30px 2px 0}
 
+.searchbtn{position:absolute;top:14px;right:16px;z-index:5;width:38px;height:38px;border-radius:50%;
+  background:var(--white);border:1px solid var(--gent-gray-light);color:var(--gent-blue);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,24,35,.08)}
+.searchbtn:hover{background:var(--gent-blue);color:var(--white);border-color:var(--gent-blue)}
+header{position:relative}
+.zoekbar{display:none;align-items:center;gap:10px;background:var(--white);
+  border-bottom:1px solid var(--gent-gray-light);padding:12px 16px}
+.zoekbar input{flex:1;min-width:0;border:1.5px solid var(--gent-gray-light);border-radius:var(--radius-pill);
+  padding:9px 16px;font-family:inherit;font-size:.95rem;color:var(--gent-gray)}
+.zoekbar input:focus{outline:none;border-color:var(--gent-cyan)}
+.zoekbar .zclose{width:34px;height:34px;border-radius:50%;background:var(--gent-gray-light);
+  color:var(--gent-gray);font-size:1.15rem;font-weight:700;line-height:1;flex:0 0 auto}
+.zoekbar .zclose:hover{background:var(--gent-gray-medium);color:var(--white)}
+body.zoekmode .days,body.zoekmode #filterBar{display:none}
+body.zoekmode .zoekbar{display:flex}
+body.zoekmode .searchbtn{display:none}
+.zres{max-width:860px;margin:0 auto;padding:14px 18px 44px}
+.zres .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin:24px 0 12px;
+  border-bottom:1px solid var(--gent-gray-light)}
+.zres .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.05rem;color:var(--gent-blue)}
+.zgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.zhint{color:var(--gent-gray-medium);font-size:.92rem;margin-top:18px}
+.zhint.klein{font-size:.78rem;margin:0}
+@media (max-width:720px){ .zgrid{grid-template-columns:1fr} .searchbtn{top:10px;right:12px;width:34px;height:34px} }
 .tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
 .tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
   font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
@@ -405,8 +431,34 @@ header{padding:20px 24px 0}
   white-space:nowrap;overflow:hidden}
 .etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
 .etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.etile.past,.lrow.past{opacity:.55}
+.etile.past .eth2 img,.lrow.past .th img{filter:grayscale(.8)}
 .kview2 .msec{margin:30px 2px 0}
 
+.searchbtn{position:absolute;top:14px;right:16px;z-index:5;width:38px;height:38px;border-radius:50%;
+  background:var(--white);border:1px solid var(--gent-gray-light);color:var(--gent-blue);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,24,35,.08)}
+.searchbtn:hover{background:var(--gent-blue);color:var(--white);border-color:var(--gent-blue)}
+header{position:relative}
+.zoekbar{display:none;align-items:center;gap:10px;background:var(--white);
+  border-bottom:1px solid var(--gent-gray-light);padding:12px 16px}
+.zoekbar input{flex:1;min-width:0;border:1.5px solid var(--gent-gray-light);border-radius:var(--radius-pill);
+  padding:9px 16px;font-family:inherit;font-size:.95rem;color:var(--gent-gray)}
+.zoekbar input:focus{outline:none;border-color:var(--gent-cyan)}
+.zoekbar .zclose{width:34px;height:34px;border-radius:50%;background:var(--gent-gray-light);
+  color:var(--gent-gray);font-size:1.15rem;font-weight:700;line-height:1;flex:0 0 auto}
+.zoekbar .zclose:hover{background:var(--gent-gray-medium);color:var(--white)}
+body.zoekmode .days,body.zoekmode #filterBar{display:none}
+body.zoekmode .zoekbar{display:flex}
+body.zoekmode .searchbtn{display:none}
+.zres{max-width:860px;margin:0 auto;padding:14px 18px 44px}
+.zres .kh{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;margin:24px 0 12px;
+  border-bottom:1px solid var(--gent-gray-light)}
+.zres .knaam{font-family:'Fira Sans',sans-serif;font-weight:700;font-size:1.05rem;color:var(--gent-blue)}
+.zgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.zhint{color:var(--gent-gray-medium);font-size:.92rem;margin-top:18px}
+.zhint.klein{font-size:.78rem;margin:0}
+@media (max-width:720px){ .zgrid{grid-template-columns:1fr} .searchbtn{top:10px;right:12px;width:34px;height:34px} }
 .tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
 .tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
   font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
@@ -590,7 +642,7 @@ header{padding:20px 24px 0}
 @media (max-width:720px){
   :root{--hourW:52px;--labelW:120px;--rowH:50px}
   /* header: compact, zonder dev-status */
-  header{padding:14px 14px 0}
+  header{padding:14px 52px 0 14px}
   .brand h1{font-size:22px}
   .brand .sub{display:none}
   .demo-pill{display:none}
@@ -639,6 +691,9 @@ header{padding:20px 24px 0}
 
 <div class="topband"></div>
 <header>
+<button class="searchbtn" id="searchBtn" title="Zoek in alle dagen" aria-label="Zoeken">
+  <svg viewBox="0 0 16 16" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+</button>
   <div class="brand">
     <h1>Gentse Feesten<span class="dp">:</span> <span class="jaar">op goe geluk ’26</span></h1>
     <span class="sub">17 – 26 juli · zie in één blik wat er leeft, waar en wanneer</span>
@@ -650,13 +705,22 @@ header{padding:20px 24px 0}
 </header>
 
 <div class="stickyhead" id="stickyHead">
+<div class="zoekbar" id="zoekbar">
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="var(--gent-gray-medium)" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+  <input id="zoekIn" type="search" placeholder="Zoek artiest of activiteit — alle dagen…" autocomplete="off">
+  <button class="zclose" id="zoekClose" aria-label="Zoeken sluiten">×</button>
+</div>
 <nav class="days" id="dayTabs" aria-label="Kies een feestdag"></nav>
 <div class="filters" id="filterBar">
   <span class="count" id="countLabel"></span>
   <span class="sep"></span>
-  <div class="gdrop" id="gdrop">
-    <button class="chip gbtn" id="gbtn">Filters<span class="gcount" id="gcount"></span><span class="car">▾</span></button>
-    <div class="gpanel" id="gpanel"></div>
+  <div class="gdrop">
+    <button class="chip gbtn" id="gbtnG">Genres<span class="gcount" id="gcountG"></span><span class="car">▾</span></button>
+    <div class="gpanel" id="gpanelG"></div>
+  </div>
+  <div class="gdrop">
+    <button class="chip gbtn" id="gbtnP">Pleinen<span class="gcount" id="gcountP"></span><span class="car">▾</span></button>
+    <div class="gpanel" id="gpanelP"></div>
   </div>
   <div class="tinline" id="tinline">
     van <select id="selVan"></select> tot <select id="selTot"></select>
@@ -666,8 +730,11 @@ header{padding:20px 24px 0}
     <button class="chip gbtn" id="tbtn">Tijd<span class="car">▾</span></button>
     <div class="gpanel" id="tpanel"></div>
   </div>
+  <div class="gdrop">
+    <button class="chip gbtn" id="gbtnM">Meer<span class="gcount" id="gcountM"></span><span class="car">▾</span></button>
+    <div class="gpanel" id="gpanelM"></div>
+  </div>
   <button class="reset" id="resetBtn" hidden>wis filters</button>
-  <input class="zoek" id="zoek" type="search" placeholder="Zoek artiest of activiteit…">
   <div class="viewswitch" role="tablist" aria-label="Weergave">
     <button data-v="tijd" class="on" title="Tijdlijn" aria-label="Tijdlijn"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h8M2 8h12M2 12h6"/></svg></button>
     <button data-v="kaarten" title="Programma per locatie (experimenteel)" aria-label="Programma per locatie"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
@@ -682,14 +749,6 @@ header{padding:20px 24px 0}
   </div>
 </div>
 
-<p class="foot">
-  <b>Prototype in de huisstijl van de Stad Gent</b> — kleuren, typografie (Fira Sans) en componentstijl volgen de publieke
-  stijlgids (stijlgids.stad.gent); het stadslogo is bewust weggelaten omdat het gebruik ervan toestemming vereist.
-  Het programma wordt live opgehaald via het open-dataportaal van Stad Gent (data.stad.gent, datasets
-  <i>gentse-feesten-evenementen</i>, <i>-locaties</i> en <i>-themas</i>). Duurtijden zonder betrouwbare eindtijd worden
-  afgeleid van de start van het volgende optreden op dezelfde plek. Een feestdag loopt hier tot 07.00 u ’s ochtends:
-  wat na middernacht speelt, hoort bij de avond ervoor. Kaartweergave: &copy; OpenStreetMap-bijdragers.
-</p>
 
 <div class="panelwrap" id="panelWrap">
   <div class="scrim" id="scrim"></div>
@@ -748,7 +807,9 @@ const DESCR = {
 let EVENTS = [];
 let LIVE_ROWS = null;   // vervangt PLEINEN wanneer live data geladen is
 let LIVE_REST = null;   // doorlopende/overige live events voor de strook
-let state = { dag: null, genres:new Set(), paid:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
+let GF_LOADED = new Set();   // feestdagen waarvan het programma al binnen is
+let GF_ALL = false;          // volledige dataset geladen?
+let state = { zoekOpen:false, dag: null, genres:new Set(), pleinen:new Set(), paid:false, kids:false, q:'', tijd:'nu', van:null, tot:null, view:'tijd', loading:true, loadError:null };
 const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : {matches:false, addEventListener(){}};
 const isMobile = () => MQ.matches;
 MQ.addEventListener && MQ.addEventListener('change', ()=>render());
@@ -772,13 +833,23 @@ const isNowTime=t=>{
   let nh=now.getHours()+now.getMinutes()/60; if(nh<7) nh+=24;
   return Math.abs(t-nh)<=0.09; /* ± ~5 min */
 };
+function isPast(e){
+  const now=new Date(); const m=now.getMonth();
+  if(m<6) return false; if(m>6) return true;
+  let d=now.getDate(), h=now.getHours()+now.getMinutes()/60;
+  if(now.getHours()<7){ d-=1; h+=24; }
+  if(!DAYS.includes(d)) return d>DAYS[DAYS.length-1];
+  if(e.dag<d) return true;
+  if(e.dag>d) return false;
+  return (e.start+(e.dur??1))<=h;
+}
 const initialOf=e=>{
   const w=(e.titel||'').trim().split(/\s+/);
   return ((w[0]?.[0]||'')+(w[1]?.[0]||'')).toUpperCase()||'•';
 };
 const grid=$('#grid'), tabs=$('#dayTabs');
 
-function fmt(h){ const hh=Math.floor(h)%24, mm=Math.round((h%1)*60); return String(hh).padStart(2,'0')+'.'+String(mm).padStart(2,'0'); }
+function fmt(h){ let hh=Math.floor(h), mm=Math.round((h%1)*60); if(mm===60){hh+=1;mm=0;} return String(hh%24).padStart(2,'0')+'.'+String(mm).padStart(2,'0'); }
 function xPos(h){ return LABEL_W() + (h-START_H)*HOUR_W(); }
 
 function renderTabs(){
@@ -794,12 +865,15 @@ function renderTabs(){
 }
 
 function renderChips(){
-  document.querySelectorAll('#gpanel [data-g]').forEach(b=>b.classList.toggle('on',state.genres.has(b.dataset.g)));
-  document.querySelectorAll('#gpanel [data-toggle2]').forEach(b=>b.classList.toggle('on',state[b.dataset.toggle2]));
-  const n=state.genres.size+(state.paid?1:0)+(state.kids?1:0);
-  const gc=$('#gcount');
-  gc.textContent=n; gc.style.display=n?'inline-block':'none';
-  $('#gbtn').classList.toggle('on',n>0);
+  document.querySelectorAll('.gpanel [data-g]').forEach(b=>b.classList.toggle('on',state.genres.has(b.dataset.g)));
+  document.querySelectorAll('.gpanel [data-toggle2]').forEach(b=>b.classList.toggle('on',state[b.dataset.toggle2]));
+  document.querySelectorAll('.gpanel [data-p]').forEach(b=>b.classList.toggle('on',state.pleinen.has(b.dataset.p)));
+  const setCnt=(cid,bid,n2)=>{ const el=$(cid); el.textContent=n2; el.style.display=n2?'inline-block':'none';
+    $(bid).classList.toggle('on',n2>0); };
+  setCnt('#gcountG','#gbtnG',state.genres.size);
+  setCnt('#gcountP','#gbtnP',state.pleinen.size);
+  setCnt('#gcountM','#gbtnM',(state.paid?1:0)+(state.kids?1:0));
+  const n=state.genres.size+state.pleinen.size+(state.paid?1:0)+(state.kids?1:0);
   const win=state.van!=null||state.tot!=null;
   const uur=t=>t==null?null:(t%1?fmt(t):(t%24)+'u');
   $('#tbtn').innerHTML=(win?`${uur(state.van)??'…'} – ${uur(state.tot)??'einde'}`:'Tijd')+'<span class="car">▾</span>';
@@ -811,15 +885,18 @@ function renderChips(){
   $('#resetBtn').hidden = !(n||win||state.q);
 }
 (function initFilterPanel(){
-  const panel=$('#gpanel');
   const uurOpts=(sel,from)=>{ let o='<option value="">—</option>';
     for(let h=from;h<=END_H;h++) o+=`<option value="${h}"${sel===h?' selected':''}>${h%24}u</option>`; return o; };
-  panel.innerHTML=
-    '<p class="gsec">Genres</p>'
-    +Object.entries(GENRES).map(([k,g])=>
+  $('#gpanelG').innerHTML=
+    Object.entries(GENRES).map(([k,g])=>
       `<button data-g="${k}"><span class="sw2" style="background:${g.c}"></span>${g.label}<span class="ck">✓</span></button>`).join('')
-    +'<p class="gsec">Praktisch</p>'
-    +'<button data-toggle2="paid"><span class="sw2" style="background:var(--gent-orange)"></span>Ook betalend · €<span class="ck">✓</span></button>'
+    +'<button class="gclear" id="gclearG">Wis genres</button>';
+  $('#gpanelP').innerHTML=
+    [...PLEINEN].sort((a,b)=>a.naam.localeCompare(b.naam,'nl')).map(pl=>
+      `<button data-p="${pl.id}"><span class="sw2" style="background:var(--gent-blue)"></span>${pl.naam}<span class="ck">✓</span></button>`).join('')
+    +'<button class="gclear" id="gclearP">Wis pleinen</button>';
+  $('#gpanelM').innerHTML=
+    '<button data-toggle2="paid"><span class="sw2" style="background:var(--gent-orange)"></span>Ook betalend · €<span class="ck">✓</span></button>'
     +'<button data-toggle2="kids"><span class="sw2" style="background:var(--gent-red-pastel)"></span>Met kinderen<span class="ck">✓</span></button>'
     +'<button class="gclear" id="gclear">Alles wissen</button>';
   const tpanel=$('#tpanel');
@@ -829,10 +906,13 @@ function renderChips(){
     +'<button class="gclear" id="tclear">Wis tijdsvenster</button>';
   $('#selVan').innerHTML=uurOpts(state.van,START_H);
   $('#selTot').innerHTML=uurOpts(state.tot,START_H+1);
-  panel.querySelectorAll('[data-g]').forEach(b=>{
+  document.querySelectorAll('.gpanel [data-g]').forEach(b=>{
     b.onclick=()=>{ const k=b.dataset.g; state.genres.has(k)?state.genres.delete(k):state.genres.add(k); render(); };
   });
-  panel.querySelectorAll('[data-toggle2]').forEach(b=>{
+  document.querySelectorAll('.gpanel [data-p]').forEach(b=>{
+    b.onclick=()=>{ const k=b.dataset.p; state.pleinen.has(k)?state.pleinen.delete(k):state.pleinen.add(k); render(); };
+  });
+  document.querySelectorAll('.gpanel [data-toggle2]').forEach(b=>{
     b.onclick=()=>{ state[b.dataset.toggle2]=!state[b.dataset.toggle2]; render(); };
   });
   const syncFrom=(vEl,tEl)=>()=>{
@@ -842,18 +922,22 @@ function renderChips(){
     render(); };
   $('#selVan').onchange=$('#selTot').onchange=syncFrom($('#selVan'),$('#selTot'));
   $('#selVanM').onchange=$('#selTotM').onchange=syncFrom($('#selVanM'),$('#selTotM'));
-  $('#gclear').onclick=()=>{ state.genres.clear(); state.paid=false; state.kids=false;
+  $('#gclear').onclick=()=>{ state.genres.clear(); state.pleinen.clear(); state.paid=false; state.kids=false;
     state.van=null; state.tot=null; render(); };
+  $('#gclearG').onclick=()=>{ state.genres.clear(); render(); };
+  $('#gclearP').onclick=()=>{ state.pleinen.clear(); render(); };
   const wisTijd=()=>{ state.van=null; state.tot=null; render(); };
   $('#tclear').onclick=wisTijd;
   $('#tclearx').onclick=wisTijd;
-  $('#gbtn').onclick=e=>{ e.stopPropagation(); $('#tdrop').classList.remove('open'); $('#gdrop').classList.toggle('open'); };
-  $('#tbtn').onclick=e=>{ e.stopPropagation(); $('#gdrop').classList.remove('open'); $('#tdrop').classList.toggle('open'); };
-  panel.onclick=e=>e.stopPropagation();
-  tpanel.onclick=e=>e.stopPropagation();
-  document.addEventListener('click',e=>{
-    if(!$('#gdrop').contains(e.target)) $('#gdrop').classList.remove('open');
-    if(!$('#tdrop').contains(e.target)) $('#tdrop').classList.remove('open');
+  document.querySelectorAll('.gdrop').forEach(dd=>{
+    const btn=dd.querySelector('.gbtn');
+    btn.onclick=e=>{ e.stopPropagation();
+      document.querySelectorAll('.gdrop').forEach(o=>{ if(o!==dd) o.classList.remove('open'); });
+      dd.classList.toggle('open'); };
+    dd.querySelector('.gpanel').onclick=e=>e.stopPropagation();
+  });
+  document.addEventListener('click',()=>{
+    document.querySelectorAll('.gdrop').forEach(o=>o.classList.remove('open'));
   });
 })();
 
@@ -861,6 +945,7 @@ function matches(e){
   if(state.van!=null && e.start+e.dur<=state.van) return false;
   if(state.tot!=null && e.start>=state.tot) return false;
   if(state.genres.size && !state.genres.has(e.genre)) return false;
+  if(state.pleinen.size && !state.pleinen.has(e.plein)) return false;
   if(!state.paid && !e.gratis) return false; /* standaard: enkel gratis */
   if(state.kids && !e.kids) return false;
   if(state.q && !e.titel.toLowerCase().includes(state.q)) return false;
@@ -868,7 +953,17 @@ function matches(e){
 }
 
 function render(){
+  document.body.classList.toggle('zoekmode',state.zoekOpen);
+  if(state.zoekOpen){
+    const _sr=document.querySelector('#stickyHead .ruler'); if(_sr) _sr.remove();
+    renderZoek(); return;
+  }
   renderTabs(); renderChips();
+  if(!state.loading && GF_LOADED.size && !GF_ALL && !GF_LOADED.has(state.dag)){
+    grid.innerHTML='<div class="zres"><p class="zhint">Deze dag wordt op de achtergrond geladen… een ogenblik.</p></div>';
+    grid.style.minWidth='0';
+    return;
+  }
   const ROWS = LIVE_ROWS || PLEINEN;
   const dayEvents = EVENTS.filter(e=>e.dag===state.dag);
   const visible = dayEvents.filter(matches);
@@ -1094,6 +1189,54 @@ function renderStatusScreen(){
   const rb=document.getElementById('retryBtn'); if(rb) rb.onclick=loadLive;
 }
 
+/* ================= ZOEKEN OVER ALLE DAGEN ================= */
+const DAGNAAM={17:'vr',18:'za',19:'zo',20:'ma',21:'di',22:'wo',23:'do',24:'vr',25:'za',26:'zo'};
+function renderZoek(){
+  grid.innerHTML='';
+  grid.style.minWidth='0';
+  grid.onpointerdown=grid.onpointermove=grid.onpointerup=null;
+  const wrap=document.createElement('div'); wrap.className='zres';
+  const q=state.q;
+  const naamVan=id=>{ const r=(LIVE_ROWS||PLEINEN).find(r=>r.id===id); return r?r.naam:''; };
+  if(!q || q.length<2){
+    wrap.innerHTML='<p class="zhint">Typ minstens twee letters — er wordt gezocht in het volledige programma, alle dagen en uren.</p>';
+    grid.appendChild(wrap); return;
+  }
+  const pool=[...(EVENTS||[]),...(LIVE_REST||[])];
+  const hits=pool.filter(e=>((e.titel||'')+' '+(e.loc||naamVan(e.plein))).toLowerCase().includes(q))
+    .sort((a,b)=>a.dag-b.dag || (a.start??99)-(b.start??99));
+  if(!hits.length){
+    wrap.innerHTML=`<p class="zhint">Niets gevonden voor “${q}”.</p>`;
+    grid.appendChild(wrap); return;
+  }
+  let curDag=null, eg=null;
+  hits.forEach(e=>{
+    if(e.dag!==curDag){
+      curDag=e.dag;
+      const dagVoorbij=isPast({dag:e.dag,start:END_H,dur:0});
+      const kh=document.createElement('h3'); kh.className='kh';
+      kh.innerHTML=`<span class="knaam">${DAGNAAM[e.dag]} ${e.dag} juli</span>${dagVoorbij?'<span class="ktag">voorbij</span>':''}`;
+      wrap.appendChild(kh);
+      eg=document.createElement('div'); eg.className='egrid zgrid';
+      wrap.appendChild(eg);
+    }
+    const g=GENRES[e.genre]||{c:'var(--gent-gray-medium)',label:e.cat||'Doorlopend'};
+    const voorbij=isPast(e);
+    const b=document.createElement('button'); b.className='etile'+(voorbij?' past':'');
+    b.style.setProperty('--c',g.c);
+    const plek=e.loc||naamVan(e.plein);
+    const tijd=((e.start!=null&&e.dur!=null)?`${fmt(e.start)} – ${fmt(e.start+e.dur)}`:(e.start!=null?fmt(e.start)+' u':'doorlopend'))+(voorbij?' · voorbij':'');
+    b.innerHTML=`<span class="eth2">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
+      <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2"><span class="tr">${tijd}</span>${plek?`<span class="gd"></span>${plek}`:''}${e.gratis===false||e.gratis===0?' · <span class="paid">€</span>':''}</span></span>`;
+    b.onclick=()=>openEvent(e,{naam:plek,tag:''});
+    eg.appendChild(b);
+  });
+  const tel=document.createElement('p'); tel.className='zhint klein';
+  tel.textContent=hits.length+' resultaten'+(GF_ALL?'':' · rest van de week wordt nog geladen');
+  wrap.insertBefore(tel,wrap.firstChild);
+  grid.appendChild(wrap);
+}
+
 /* ================= MOBIELE WEERGAVE: nu & straks ================= */
 function stripCatsFor(dag){
   return LIVE_REST
@@ -1218,10 +1361,11 @@ function renderMobile(ROWS, dayEvents){
   listWrap.style.cssText='display:flex;flex-direction:column;gap:10px';
 
   const mkRow=(e,p,running)=>{
-    const b=document.createElement('button'); b.className='lrow';
+    const voorbij=!running && isPast(e);
+    const b=document.createElement('button'); b.className='lrow'+(voorbij?' past':'');
     b.style.setProperty('--c',GENRES[e.genre].c);
     const meta = `<span class="tr${running?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
-      `<span class="gd"></span>${GENRES[e.genre].label}`;
+      `<span class="gd"></span>${GENRES[e.genre].label}${voorbij?' · voorbij':''}`;
     b.innerHTML=`<span class="th">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
       <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span></span>`;
     b.onclick=()=>openEvent(e,p);
@@ -1286,9 +1430,9 @@ function renderMobile(ROWS, dayEvents){
     }
   };
 
-  const winActive = state.van!=null || state.tot!=null;
+  const winActive = state.van!=null || state.tot!=null || state.pleinen.size>0;
   if(winActive){
-    /* venster-modus: geen liniaal; volledig programma binnen [van, tot] per locatie */
+    /* venster/plein-modus: geen liniaal; volledig dagprogramma per locatie */
     const now=new Date();
     const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
     let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
@@ -1341,11 +1485,12 @@ function renderKaarten(ROWS, dayEvents){
   const isToday = now.getMonth()===6 && (now.getHours()<7?now.getDate()-1:now.getDate())===state.dag;
   let nowH=now.getHours()+now.getMinutes()/60; if(nowH<7) nowH+=24;
   const tile=(e,p)=>{
-    const b=document.createElement('button'); b.className='etile';
-    b.style.setProperty('--c',GENRES[e.genre].c);
     const live=isToday && e.start<=nowH && nowH<e.start+e.dur;
+    const voorbij=!live && isPast(e);
+    const b=document.createElement('button'); b.className='etile'+(voorbij?' past':'');
+    b.style.setProperty('--c',GENRES[e.genre].c);
     const meta=`<span class="tr${live?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
-      `<span class="gd"></span>${GENRES[e.genre].label}${e.gratis?'':' · <span class="paid">€</span>'}`;
+      `<span class="gd"></span>${GENRES[e.genre].label}${e.gratis?'':' · <span class="paid">€</span>'}${voorbij?' · voorbij':''}`;
     b.innerHTML=`<span class="eth2">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
       <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2">${meta}</span></span>`;
     b.onclick=()=>openEvent(e,p);
@@ -1448,7 +1593,8 @@ function openPlein(p){
   else { const n=new Date(); let h=n.getHours()+n.getMinutes()/60; if(h<7)h+=24; t=h; }
   const rows=evs.map(e=>{
     const bezig=e.start<=t && t<e.start+e.dur;
-    return `<button onclick="window._gfOpen('${e.id}')"${bezig?' style="background:var(--gent-green-light)"':''}>`+
+    const voorbij=!bezig && isPast(e);
+    return `<button onclick="window._gfOpen('${e.id}')" style="${bezig?'background:var(--gent-green-light)':''}${voorbij?'opacity:.5':''}">`+
       `<span class="tt">${fmt(e.start)}</span>`+
       `<span style="width:8px;height:8px;border-radius:2px;background:${GENRES[e.genre].c};align-self:center;flex:0 0 auto"></span>`+
       `<span class="nm">${e.titel}</span></button>`;
@@ -1517,10 +1663,14 @@ document.querySelectorAll('.viewswitch button').forEach(b=>{
   b.onclick=()=>{ state.view=b.dataset.v; render(); };
 });
 
-$('#zoek').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
-$('#resetBtn').onclick=()=>{ state.genres.clear(); state.paid=false; state.kids=false; state.q='';
+$('#searchBtn').onclick=()=>{ state.zoekOpen=true; render(); setTimeout(()=>$('#zoekIn').focus(),30); };
+$('#zoekIn').addEventListener('input',e=>{ state.q=e.target.value.trim().toLowerCase(); render(); });
+$('#zoekIn').addEventListener('keydown',e=>{ if(e.key==='Escape') sluitZoek(); });
+$('#zoekClose').onclick=()=>sluitZoek();
+function sluitZoek(){ state.zoekOpen=false; state.q=''; $('#zoekIn').value=''; render(); }
+$('#resetBtn').onclick=()=>{ state.genres.clear(); state.pleinen.clear(); state.paid=false; state.kids=false; state.q='';
   state.van=null; state.tot=null;
-  $('#zoek').value=''; render(); };
+  render(); };
 
 /* ================= LIVE DATA (open data Stad Gent) ================= */
 async function loadLive(){
@@ -1532,12 +1682,13 @@ async function loadLive(){
     /* ---- 1. ophalen ---- */
     const setMsg=t=>{ st.textContent=t; const lm=document.getElementById('loadMsg'); if(lm) lm.textContent=t; };
     /* gepagineerd met parallelle batches: snelste pad (API serveert uit cache) */
-    const fetchPaged=async (id,label)=>{
+    const fetchPaged=async (id,label,where)=>{
       const base=`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${id}/records`;
+      const wh=where?`&where=${encodeURIComponent(where)}`:'';
       /* stabiele volgorde is cruciaal bij parallelle paginering */
       let ord='&order_by=startdate';
-      let probe=await fetch(`${base}?limit=1${ord}`);
-      if(!probe.ok){ ord=''; probe=await fetch(`${base}?limit=1`); }
+      let probe=await fetch(`${base}?limit=1${ord}${wh}`);
+      if(!probe.ok){ ord=''; probe=await fetch(`${base}?limit=1${wh}`); }
       if(!probe.ok) return null;
       const total=Math.min((await probe.json()).total_count||0,9900);
       if(!total) return [];
@@ -1546,7 +1697,7 @@ async function loadLive(){
       const CH=8; /* 8 requests tegelijk */
       for(let i=0;i<offs.length;i+=CH){
         await Promise.all(offs.slice(i,i+CH).map(async(off,ix)=>{
-          const r=await fetch(`${base}?limit=100&offset=${off}${ord}`);
+          const r=await fetch(`${base}?limit=100&offset=${off}${ord}${wh}`);
           out[i+ix]=r.ok ? ((await r.json()).results||[]) : [];
           done++;
           if(label) setMsg(`${label} ${Math.min(99,Math.round(Math.min(done*100,total)/total*100))}%`);
@@ -1554,19 +1705,46 @@ async function loadLive(){
       }
       return out.flat();
     };
-    const fetchDS=(id,label)=>{ if(label) setMsg(label+'…'); return fetchPaged(id,label); };
-    /* evenementen, locaties en thema's parallel */
-    const loadSet=async id=>Promise.all([
-      fetchDS(id,'programma laden'),
-      fetchDS(id.replace('evenementen','locaties'),null).catch(()=>null),
-      fetchDS(id.replace('evenementen','themas'),null).catch(()=>null),
-    ]);
+    const fetchDS=(id,label,where)=>{ if(label) setMsg(label+'…'); return fetchPaged(id,label,where); };
+    /* feestdag-venster: 07u lokaal t/m 07u volgende dag = 05:00Z t/m 05:00Z (juli, UTC+2) */
+    const pad2=n=>String(n).padStart(2,'0');
+    const whereDag=d=>`startdate>=date'2026-07-${pad2(d)}T05:00:00Z' and startdate<date'2026-07-${pad2(d+1)}T05:00:00Z'`;
+    const nu=new Date();
+    const feestVandaag=(nu.getMonth()===6 && DAYS.includes(nu.getHours()<7?nu.getDate()-1:nu.getDate()))
+      ? (nu.getHours()<7?nu.getDate()-1:nu.getDate()) : DAYS[0];
+    /* fase A: vandaag + de (kleine) join-datasets parallel */
     let used=ids[0];
-    let [recs,locRecs,thRecs]=await loadSet(used);
-    if(!recs || !recs.length){ used=ids[1]; [recs,locRecs,thRecs]=await loadSet(used); }
+    let [recs,locRecs,thRecs]=await Promise.all([
+      fetchDS(used,'programma van vandaag laden',whereDag(feestVandaag)),
+      fetchDS(used.replace('evenementen','locaties'),null).catch(()=>null),
+      fetchDS(used.replace('evenementen','themas'),null).catch(()=>null),
+    ]);
+    let progressief=true;
+    if(!recs || !recs.length){
+      /* dagfilter niet ondersteund of leeg: terugvallen op volledige lading (oude pad) */
+      progressief=false;
+      [recs,locRecs,thRecs]=await Promise.all([
+        fetchDS(used,'programma laden'),
+        fetchDS(used.replace('evenementen','locaties'),null).catch(()=>null),
+        fetchDS(used.replace('evenementen','themas'),null).catch(()=>null),
+      ]);
+      if(!recs || !recs.length){
+        used=ids[1];
+        [recs,locRecs,thRecs]=await Promise.all([
+          fetchDS(used,'programma laden'),
+          fetchDS(used.replace('evenementen','locaties'),null).catch(()=>null),
+          fetchDS(used.replace('evenementen','themas'),null).catch(()=>null),
+        ]);
+      }
+    }
     if(!recs) throw {msg:'dataset niet gevonden op data.stad.gent'};
     if(!recs.length) throw {msg:`dataset ${used} is leeg`};
 
+    const verwerk=(recsIn,finaal,dagen)=>{
+    /* dedupe: parallelle paginering op een niet-uniek sorteerveld kan records dupliceren */
+    let audDuplicaten=0;
+    const _seen=new Set();
+    const recs=recsIn.filter(r=>{ const k=JSON.stringify(r); if(_seen.has(k)){audDuplicaten++; return false;} _seen.add(k); return true; });
     /* gejoinde datasets: locaties & thema's — evenementen verwijzen ernaar via API-url */
     const val=v=>{
       if(v==null) return null;
@@ -1705,13 +1883,14 @@ async function loadLive(){
       ['miramiro',['miramiro']], ['braun',['braunplein']], ['kouter',['kouter']],
     ];
     const all=[], rest=[];
+    let audZonderDatum=0, audBuitenDagen=0;
     recs.forEach((r,i)=>{
       const titel=(val(r[titleKey])||'Zonder titel')+'';
       const d=parseStart(r);
-      if(!d||isNaN(d)) return;
+      if(!d||isNaN(d)){ audZonderDatum++; return; }
       let dag=d.getDate(), h=d.getHours()+d.getMinutes()/60;
       if(h<7){dag-=1; h+=24;}
-      if(!DAYS.includes(dag)) return;
+      if(!DAYS.includes(dag)){ audBuitenDagen++; return; }
       /* rawDur = alleen als een vertrouwd eindveld iets zinnigs oplevert, anders null */
       let rawDur=null;
       if(endMode==='iso' && r[isoEndKey]){
@@ -1747,8 +1926,9 @@ async function loadLive(){
         : /wandel|zoektocht|fiets|route/.test(kw)?'Wandelingen & zoektochten'
         : /boot|water|sup|kajak|kano/.test(kw)?'Op het water'
         : (rawDur!=null&&rawDur>6)?'Doorlopend (hele dag)':'Elders in de stad';
-      if(rawDur!=null && rawDur>6){ rest.push(Object.assign(ev,{cat:catFor()})); return; }
       const hit=PLEIN_MATCH.find(([,words])=>words.some(w=>loc.toLowerCase().includes(w)));
+      const echtDoorlopend=/tentoonstell|expo|museum|wandel|zoektocht|fiets|route|boot|water|sup|kajak|kano/.test(kw);
+      if(rawDur!=null && rawDur>6 && (!hit || echtDoorlopend)){ rest.push(Object.assign(ev,{cat:catFor()})); return; }
       if(hit){ ev.plein=hit[0]; all.push(ev); }
       else rest.push(Object.assign(ev,{cat:catFor()}));
     });
@@ -1796,10 +1976,30 @@ async function loadLive(){
     rows=[...rows.filter(r=>r.sec!=='elders'),...rows.filter(r=>r.sec==='elders')];
     EVENTS=all; LIVE_ROWS=rows; LIVE_REST=rest;
     state.loading=false;
-    st.textContent = all.length
-      ? `live · ${used} · ${all.length} in het raster, ${rest.length} doorlopend/elders`
-      : `live · ${used} · locaties niet gekoppeld — diagnose geopend`;
-    if(!all.length){
+    if(dagen) dagen.forEach(d=>GF_LOADED.add(d));
+    if(finaal){
+      GF_ALL=true; DAYS.forEach(d=>GF_LOADED.add(d));
+      /* dekkingsaudit: elk opgehaald record verantwoord? */
+      const geplaatst=all.length+rest.length;
+      window.GF_AUDIT={records:recsIn.length, uniek:recs.length, duplicaten:audDuplicaten,
+        geplaatst, zonderDatum:audZonderDatum, buitenFeestdagen:audBuitenDagen,
+        onverklaard:recs.length-geplaatst-audZonderDatum-audBuitenDagen};
+      console.info('%cGF dekkingsaudit','font-weight:bold', window.GF_AUDIT);
+      if(window.GF_AUDIT.onverklaard>0) console.warn('GF audit: '+window.GF_AUDIT.onverklaard+' records onverklaard kwijt!');
+      /* elders-analyse: drukste locaties die geen vast plein zijn */
+      const perLoc={};
+      all.forEach(e=>{ if(!PLEINEN.some(p=>p.id===e.plein)){ const r2=rows.find(r=>r.id===e.plein); const nm=r2?r2.naam:e.loc; if(nm) perLoc[nm]=(perLoc[nm]||0)+1; } });
+      window.GF_ELDERS=Object.entries(perLoc).sort((a,b)=>b[1]-a[1]).slice(0,25)
+        .map(([loc,n])=>({locatie:loc, events:n}));
+      console.info('%cGF drukste niet-plein locaties (kandidaat vast plein?)','font-weight:bold');
+      console.table(window.GF_ELDERS);
+    }
+    st.textContent = finaal
+      ? (all.length
+          ? `live · ${used} · ${all.length} in het raster, ${rest.length} doorlopend/elders`
+          : `live · ${used} · locaties niet gekoppeld — diagnose geopend`)
+      : `vandaag geladen · rest van de week laden…`;
+    if(finaal && !all.length){
       const locSamples=[...new Set(rest.slice(0,40).map(e=>e.loc).filter(Boolean))].slice(0,10);
       det.innerHTML=`
         <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
@@ -1814,6 +2014,26 @@ async function loadLive(){
       openPanel();
     }
     render();
+    };
+
+    /* fase A verwerken: de app is meteen bruikbaar met het programma van vandaag */
+    verwerk(recs, !progressief, progressief?[feestVandaag]:null);
+    if(progressief){
+      let alleRecs=recs;
+      /* fase B: morgen erbij */
+      const morgen=DAYS[DAYS.indexOf(feestVandaag)+1];
+      if(morgen){
+        try{
+          const recsB=await fetchPaged(used,null,whereDag(morgen));
+          if(recsB && recsB.length){ alleRecs=[...alleRecs,...recsB]; verwerk(alleRecs,false,[feestVandaag,morgen]); }
+        }catch(_){/* achtergrond */}
+      }
+      /* fase C: volledige dataset (vervangt alles — garandeert identiek eindresultaat) */
+      try{
+        const recsC=await fetchPaged(used,null,null);
+        if(recsC && recsC.length) verwerk(recsC,true,null);
+      }catch(_){ GF_ALL=true; DAYS.forEach(d=>GF_LOADED.add(d)); render(); }
+    }
   }catch(err){
     if(err&&err.dump) console.warn('Voorbeeldrecord open data:', err.dump);
     state.loading=false;
