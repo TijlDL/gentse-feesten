@@ -224,6 +224,9 @@ header{padding:20px 70px 0 24px}
   white-space:nowrap;overflow:hidden}
 .etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
 .etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.subloc{display:inline-block;align-self:flex-start;max-width:100%;font-size:.68rem;color:var(--gent-gray-medium);
+  background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);
+  padding:1px 8px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .etile.past,.lrow.past{opacity:.55}
 .etile.past .eth2 img,.lrow.past .th img{filter:grayscale(.8)}
 .kview2 .msec{margin:30px 2px 0}
@@ -432,6 +435,9 @@ body.zoekmode .searchbtn{display:none}
   white-space:nowrap;overflow:hidden}
 .etile .me2 .tr{font-variant-numeric:tabular-nums;font-weight:600}
 .etile .me2 .tr.on{color:var(--gent-green);font-weight:700}
+.subloc{display:inline-block;align-self:flex-start;max-width:100%;font-size:.68rem;color:var(--gent-gray-medium);
+  background:var(--gent-gray-ultra);border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);
+  padding:1px 8px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .etile.past,.lrow.past{opacity:.55}
 .etile.past .eth2 img,.lrow.past .th img{filter:grayscale(.8)}
 .kview2 .msec{margin:30px 2px 0}
@@ -597,9 +603,11 @@ body.zoekmode .searchbtn{display:none}
   animation:slidein .18s ease-out;
 }
 @keyframes slidein{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+.detail .maplink{color:var(--gent-blue);text-decoration:none}
+.detail .maplink:hover{text-decoration:underline}
 .detail .close{align-self:flex-end;color:var(--gent-gray-medium);font-size:1.5rem;line-height:1;margin:-10px -8px 0 0}
 .detail .photo{
-  position:relative;width:calc(100% + 48px);margin:-6px -24px 2px;aspect-ratio:16/8;overflow:hidden;
+  position:relative;flex:0 0 auto;width:calc(100% + 48px);margin:-6px -24px 2px;aspect-ratio:16/8;overflow:hidden;
   background:linear-gradient(125deg,color-mix(in srgb,var(--c) 80%, var(--gent-gray)) 0%,var(--c) 55%,color-mix(in srgb,var(--c) 45%, var(--white)) 100%);
 }
 .detail .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -780,10 +788,12 @@ const GENRES = {
 const PLEINEN = [
   {id:'sintjacobs', naam:'Walter De Buckplein', tag:'Trefpunt · tot 02u'},
   {id:'vlasmarkt',  naam:'Camping Vlasmarkt',   tag:'nachtpodium · tot 06u'},
+  {id:'beesten',    naam:'Oude Beestenmarkt',    tag:'dj & electro'},
   {id:'polepole',   naam:'Polé Polé',           tag:'Graslei · world'},
   {id:'baudelo',    naam:'Baudelopark',         tag:'familie & singer-songwriter'},
   {id:'boomtown',   naam:'Boomtown',            tag:'Ha Concerts · nieuwe Belgische pop'},
   {id:'korenmarkt', naam:'Korenmarkt',          tag:'covers & ambiance'},
+  {id:'groenten',   naam:'Groentenmarkt',       tag:'bij het Groot Vleeshuis'},
   {id:'vrijdagmarkt',naam:'Vrijdagmarkt',       tag:'volks & Nederlandstalig'},
   {id:'sintbaafs',  naam:'Sint-Baafsplein',     tag:'klassiek & Gents'},
   {id:'veerle',     naam:'Sint-Veerleplein',    tag:'bij het Gravensteen'},
@@ -1372,8 +1382,9 @@ function renderMobile(ROWS, dayEvents){
     b.style.setProperty('--c',GENRES[e.genre].c);
     const meta = `<span class="tr${running?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
       `<span class="gd"></span>${GENRES[e.genre].label}${voorbij?' · voorbij':''}`;
+    const sub=(e.loc&&p&&p.naam&&e.loc.toLowerCase().trim()!==p.naam.toLowerCase().trim())?`<span class="subloc">${e.loc}</span>`:'';
     b.innerHTML=`<span class="th">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
-      <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span></span>`;
+      <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span>${sub}</span>`;
     b.onclick=()=>openEvent(e,p);
     return b;
   };
@@ -1497,8 +1508,9 @@ function renderKaarten(ROWS, dayEvents){
     b.style.setProperty('--c',GENRES[e.genre].c);
     const meta=`<span class="tr${live?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
       `<span class="gd"></span>${GENRES[e.genre].label}${e.gratis?'':' · <span class="paid">€</span>'}${voorbij?' · voorbij':''}`;
+    const sub=(e.loc&&e.loc.toLowerCase().trim()!==p.naam.toLowerCase().trim())?`<span class="subloc">${e.loc}</span>`:'';
     b.innerHTML=`<span class="eth2">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
-      <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2">${meta}</span></span>`;
+      <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2">${meta}</span>${sub}</span>`;
     b.onclick=()=>openEvent(e,p);
     return b;
   };
@@ -1628,6 +1640,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
 
 function openEvent(e,p){
   const g=GENRES[e.genre];
+  const _geo=(window._GF_LOCGEO&&e.loc)?window._GF_LOCGEO.get((e.loc+'').toLowerCase().trim()):null;
+  const _coord=_geo||(window._GF_PLEIN_COORDS?window._GF_PLEIN_COORDS[p.id]:null);
+  const _gmu='https://www.google.com/maps/search/?api=1&query='+
+    (_coord?`${_coord[0]},${_coord[1]}`:encodeURIComponent((e.loc||p.naam||'Gentse Feesten')+', Gent, België'));
   const descr = e.descr || DESCR[e.genre](e.titel, p.naam);
   det.innerHTML=`
     <button class="close" aria-label="Sluiten" onclick="document.getElementById('panelWrap').classList.remove('open')">×</button>
@@ -1638,7 +1654,7 @@ function openEvent(e,p){
     <span class="genrebadge" style="--c:${g.c}"><span class="sw"></span>${g.label}</span>
     <h2>${e.titel}</h2>
     <div class="meta">
-      <span>📍 <b>${p.naam}</b></span>
+      <span><a class="maplink" href="${_gmu}" target="_blank" rel="noopener" title="Open in Google Maps">📍 <b>${p.naam}</b>${(e.loc&&e.loc.toLowerCase().trim()!==(p.naam||'').toLowerCase().trim())?` · ${e.loc}`:''} ↗</a></span>
       <span>🕘 ${DOW[e.dag]} ${e.dag} juli · <b>${fmt(e.start)} – ${fmt(e.start+e.dur)} u</b></span>
     </div>
     <div class="badges">
@@ -1851,8 +1867,6 @@ async function loadLive(){
         let dd=t1-t0; if(dd<=0)dd+=24; return dd;}).filter(v=>v!=null);
       if(ds.length>=5 && median(ds)<=6) endMode='time';
     }
-    console.info('GF velddetectie:',{titleKey,isoStartKey,isoEndKey,exactIso,dateKey,dagKey,startKey,endKey,locKey,genreKey,kwKey,themeKey,imgKey,descrKey,gratisKey,endMode});
-    console.log('GF voorbeeldrecord:',scan[0]);
 
     const parseStart=(()=>{
       let useIso = !!isoStartKey;
@@ -1876,18 +1890,72 @@ async function loadLive(){
       sintjacobs:[51.0561,3.7290], vlasmarkt:[51.0553,3.7286], polepole:[51.0551,3.7205],
       baudelo:[51.0587,3.7300], boomtown:[51.0503,3.7250], korenmarkt:[51.0546,3.7215],
       vrijdagmarkt:[51.0570,3.7267], sintbaafs:[51.0533,3.7261], veerle:[51.0576,3.7208],
+      groenten:[51.0556,3.7228], beesten:[51.0532,3.7320],
       miramiro:[51.0596,3.7331], braun:[51.0538,3.7238], kouter:[51.0501,3.7255],
       laurent:[51.0484,3.7292],
     };
+    /* zones voor de groeperingsanalyse: grote/langgerekte plekken krijgen
+       meerdere ankerpunten en een eigen straal; afstand = tot het dichtstbijzijnde punt */
+    /* punt-in-polygoon (ray casting) voor plekken waar een cirkel tekortschiet */
+    const inPoly=(pt,poly)=>{ let c=false;
+      for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+        const [yi,xi]=poly[i],[yj,xj]=poly[j];
+        if(((xi>pt[1])!==(xj>pt[1])) && (pt[0] < (yj-yi)*(pt[1]-xi)/(xj-xi)+yi)) c=!c;
+      } return c; };
+    const PLEIN_ZONES={
+      /* vlak: heel het Baudelohof, polygoon getraceerd op de parkcontour */
+      baudelo:{poly:[[51.0598,3.7288],[51.0592,3.7306],[51.0584,3.7312],[51.0577,3.7307],
+                     [51.0576,3.7295],[51.0580,3.7281],[51.0589,3.7273]],
+               pts:[[51.0592,3.7281],[51.0587,3.7292],[51.0582,3.7300],[51.0589,3.7305]], r:95},
+      /* blok rondom de Sint-Jacobskerk: locaties liggen aan alle zijden van de kerk */
+      sintjacobs:{pts:[[51.0566,3.7285],[51.0561,3.7292],[51.0557,3.7287],[51.0562,3.7280]], r:80},
+      /* lijn: beide oevers van het water — Graslei én Korenlei */
+      polepole:{pts:[[51.0556,3.7196],[51.0551,3.7205],[51.0549,3.7208],[51.0549,3.7197],[51.0554,3.7190]], r:70},
+      /* lijn: gedempte gracht, 150m lang */
+      laurent:{pts:[[51.0489,3.7289],[51.0484,3.7292],[51.0479,3.7295]], r:70},
+      /* verspreid festivalterrein rond de Sint-Baafsabdij */
+      miramiro:{pts:[[51.0600,3.7325],[51.0592,3.7338]], r:110},
+      /* langgerekt plein, lengteas oost-west; Boomtown deelt het plein en blijft compact */
+      kouter:{pts:[[51.0500,3.7246],[51.0501,3.7255],[51.0502,3.7263]], r:85},
+      boomtown:{r:70},
+      /* groot vierkant plein */
+      vrijdagmarkt:{r:90},
+      /* kleine pleintjes met vaste buren vlakbij: strakke straal zodat ze niet naar elkaar lekken */
+      vlasmarkt:{r:60}, beesten:{r:60}, groenten:{r:60},
+    };
+    const DEFAULT_R=75;
+    const zoneVan=id=>{
+      const z=PLEIN_ZONES[id]||{};
+      return { pts: z.pts || (PLEIN_COORDS[id]?[PLEIN_COORDS[id]]:[]), r: z.r || DEFAULT_R, poly: z.poly||null };
+    };
+    const distZ=(a,b)=>{ const R=111320;
+      const dy=(a[0]-b[0])*R, dx=(a[1]-b[1])*R*Math.cos(a[0]*Math.PI/180);
+      return Math.hypot(dx,dy); };
+    /* 'nabij X' is geen 'op X': verzwakkende woorden maken een naam-match voorwaardelijk */
+    const ZWAK=/(nabij|vlak ?bij|dicht ?bij|tegenover|omgeving|in de buurt|richting|aan de rand)/i;
+    const binnenZone=(g,id)=>{ if(!g) return false; const z=zoneVan(id);
+      if(z.poly && inPoly(g,z.poly)) return true;
+      return z.pts.length ? Math.min(...z.pts.map(pt=>distZ(g,pt)))<=z.r : false; };
     window._GF_PLEIN_COORDS=PLEIN_COORDS; window._GF_LOCGEO=LOCGEO;
     const PLEIN_MATCH=[
-      ['sintjacobs',['walter de buck','sint-jacobs','sint jacobs','bij sint']],
-      ['vlasmarkt',['vlasmarkt']], ['polepole',['polé','pole pole','pole-pole','graslei']],
-      ['baudelo',['baudelo']], ['boomtown',['boomtown','ha concerts']],
-      ['korenmarkt',['korenmarkt']], ['vrijdagmarkt',['vrijdagmarkt']],
-      ['sintbaafs',['baafsplein','sint bavo']], ['veerle',['veerleplein']],
+      ['sintjacobs',['walter de buck','sint-jacobs','sint jacobs','bij sint','feestzone']],
+      ['vlasmarkt',['vlasmarkt']], ['beesten',['beestenmarkt']],
+      ['polepole',['polé','pole pole','pole-pole','graslei']],
+      /* Baudelohof-podia: Het Bal, Salsabar en De Karavaan staan in het park (geverifieerd op coords) */
+      ['baudelo',['baudelo','bord de l','het bal','salsabar','karavaan']],
+      /* Boomtown speelt op de Kouter én binnen in de Handelsbeurs (Ha Concerts / 'Concertzaal') */
+      ['boomtown',['boomtown','ha concerts','handelsbeurs','concertzaal']],
+      ['korenmarkt',['korenmarkt','oud postgebouw']],
+      ['groenten',['groentenmarkt','galgenhuis']],
+      ['vrijdagmarkt',['vrijdagmarkt','lakenmetershuis','lakenmeestershuis','ons huis']],
+      ['sintbaafs',['baafsplein','sint bavo','baafskathedraal']],
+      /* het Gravensteen en de Oude Vismijn flankeren het Sint-Veerleplein */
+      ['veerle',['veerleplein','gravensteen','oude vismijn']],
       ['laurent',['laurentplein','luisterplein']],
-      ['miramiro',['miramiro']], ['braun',['braunplein']], ['kouter',['kouter']],
+      ['miramiro',['miramiro','zonder naampark','zonder-naampark']],
+      /* de Stadshal, het Goudenleeuwplein en de Belfort-trappen vormen één zone rond het Braunplein */
+      ['braun',['braunplein','goudenleeuwplein','stadshal','belfort','belfry']],
+      ['kouter',['kouter']],
     ];
     const all=[], rest=[];
     let audZonderDatum=0, audBuitenDagen=0;
@@ -1933,10 +2001,28 @@ async function loadLive(){
         : /wandel|zoektocht|fiets|route/.test(kw)?'Wandelingen & zoektochten'
         : /boot|water|sup|kajak|kano/.test(kw)?'Op het water'
         : (rawDur!=null&&rawDur>6)?'Doorlopend (hele dag)':'Elders in de stad';
-      const hit=PLEIN_MATCH.find(([,words])=>words.some(w=>loc.toLowerCase().includes(w)));
+      const lowLoc=loc.toLowerCase();
+      const naamHit=PLEIN_MATCH.find(([,words])=>words.some(w=>lowLoc.includes(w)));
+      const gLoc=LOCGEO.get(lowLoc.trim())||null;
+      let pleinId=null;
+      if(naamHit){
+        /* zwak taalgebruik ('nabij X'): alleen koppelen als de geometrie het bevestigt */
+        if(!ZWAK.test(loc) || !gLoc || binnenZone(gLoc,naamHit[0])) pleinId=naamHit[0];
+      }
+      if(!pleinId && gLoc){
+        /* binnen getekende pleinpolygonen = van dat plein; bij meerdere wint de dichtstbijzijnde */
+        const polyHits=PLEINEN.filter(pl=>{ const z=PLEIN_ZONES[pl.id];
+          return z && z.poly && inPoly(gLoc,z.poly); });
+        if(polyHits.length===1) pleinId=polyHits[0].id;
+        else if(polyHits.length>1){
+          pleinId=polyHits.map(pl=>{ const z=zoneVan(pl.id);
+              return {id:pl.id, d:Math.min(...z.pts.map(pt=>distZ(gLoc,pt)))}; })
+            .sort((a,b)=>a.d-b.d)[0].id;
+        }
+      }
       const echtDoorlopend=/tentoonstell|expo|museum|wandel|zoektocht|fiets|route|boot|water|sup|kajak|kano/.test(kw);
-      if(rawDur!=null && rawDur>6 && (!hit || echtDoorlopend)){ rest.push(Object.assign(ev,{cat:catFor()})); return; }
-      if(hit){ ev.plein=hit[0]; all.push(ev); }
+      if(rawDur!=null && rawDur>6 && (!pleinId || echtDoorlopend)){ rest.push(Object.assign(ev,{cat:catFor()})); return; }
+      if(pleinId){ ev.plein=pleinId; all.push(ev); }
       else rest.push(Object.assign(ev,{cat:catFor()}));
     });
     if(!all.length && !rest.length)
@@ -1991,15 +2077,68 @@ async function loadLive(){
       window.GF_AUDIT={records:recsIn.length, uniek:recs.length, duplicaten:audDuplicaten,
         geplaatst, zonderDatum:audZonderDatum, buitenFeestdagen:audBuitenDagen,
         onverklaard:recs.length-geplaatst-audZonderDatum-audBuitenDagen};
-      console.info('%cGF dekkingsaudit','font-weight:bold', window.GF_AUDIT);
       if(window.GF_AUDIT.onverklaard>0) console.warn('GF audit: '+window.GF_AUDIT.onverklaard+' records onverklaard kwijt!');
       /* elders-analyse: drukste locaties die geen vast plein zijn */
       const perLoc={};
       all.forEach(e=>{ if(!PLEINEN.some(p=>p.id===e.plein)){ const r2=rows.find(r=>r.id===e.plein); const nm=r2?r2.naam:e.loc; if(nm) perLoc[nm]=(perLoc[nm]||0)+1; } });
       window.GF_ELDERS=Object.entries(perLoc).sort((a,b)=>b[1]-a[1]).slice(0,25)
         .map(([loc,n])=>({locatie:loc, events:n}));
-      console.info('%cGF drukste niet-plein locaties (kandidaat vast plein?)','font-weight:bold');
-      console.table(window.GF_ELDERS);
+      /* Baudelo-analyse: is Bord de l'Eau een eigen podium of dezelfde zone? */
+      const bau=all.filter(e=>e.plein==='baudelo').sort((a,b)=>a.dag-b.dag||a.start-b.start);
+      if(bau.length){
+        const isBDE=e=>/bord de l/.test((e.loc||'').toLowerCase());
+        let overlaps=0;
+        for(const a of bau) for(const b of bau){
+          if(a===b || a.dag!==b.dag) continue;
+          if(isBDE(a) && !isBDE(b) && a.start<b.start+b.dur && b.start<a.start+a.dur) overlaps++;
+        }
+        window.GF_BAUDELO={overlaps, events:bau.map(e=>({dag:e.dag, tijd:fmt(e.start)+'–'+fmt(e.start+e.dur),
+          locatie:e.loc, titel:e.titel}))};
+      }
+      /* algemene groeperingsanalyse: welke locaties horen (geografisch) bij een plein? */
+      try{
+        const distM=(a,b)=>{ const R=111320;
+          const dy=(a[0]-b[0])*R, dx=(a[1]-b[1])*R*Math.cos(a[0]*Math.PI/180);
+          return Math.round(Math.hypot(dx,dy)); };
+        const naamVanRij=id=>{ const r=rows.find(r=>r.id===id); return r?r.naam:(id?id:'doorlopend-strook'); };
+        const perLoc=new Map();
+        [...all,...rest].forEach(e=>{
+          const key=(e.loc||'').trim(); if(!key) return;
+          const o=perLoc.get(key)||{n:0,plein:e.plein};
+          o.n++; if(e.plein) o.plein=e.plein;
+          perLoc.set(key,o);
+        });
+        window.GF_GROEPEN=[...perLoc.entries()].map(([loc,o])=>{
+          const g=LOCGEO.get(loc.toLowerCase().trim());
+          let best=null, binnen=null; const inZones=[];
+          if(g){ PLEINEN.forEach(pl=>{ const z=PLEIN_ZONES[pl.id]||{};
+            const zn=zoneVan(pl.id); if(!zn.pts.length) return;
+            const d=Math.min(...zn.pts.map(pt=>distM(g,pt)));
+            const erIn = (z.poly && inPoly(g,z.poly)) || d<=zn.r;
+            if(z.poly && inPoly(g,z.poly) && (!binnen || d<binnen.d)) binnen={naam:pl.naam,id:pl.id,d};
+            if(erIn) inZones.push(pl.naam+' ('+d+'m)');
+            if(!best||d-zn.r<best.d-best.r) best={naam:pl.naam,id:pl.id,d,r:zn.r}; }); }
+          const nuRij=naamVanRij(o.plein);
+          let voorstel;
+          if(!g) voorstel='(geen coördinaten)';
+          else if(binnen && o.plein===binnen.id) voorstel='✓ al gekoppeld';
+          else if(binnen && !PLEINEN.some(pl=>pl.id===o.plein)) voorstel='→ SAMENVOEGEN met '+binnen.naam+'? (BINNEN het plein)';
+          else if(best && o.plein===best.id) voorstel='✓ al gekoppeld';
+          else if(best && PLEINEN.some(pl=>pl.id===o.plein)) voorstel='⚠ twee vaste pleinen dicht bijeen ('+best.naam+' op '+best.d+'m)';
+          else if(best && best.d<=best.r) voorstel='→ SAMENVOEGEN met '+best.naam+'?';
+          else if(best && best.d<=best.r+90) voorstel='? te checken — dicht bij '+best.naam;
+          else voorstel='eigen locatie ok';
+          if(inZones.length>1) voorstel+=' · ⚠ in '+inZones.length+' zones: '+inZones.join(' / ');
+          return {locatie:loc, events:o.n, nu:nuRij,
+            dichtstbij:binnen?binnen.naam:(best?best.naam:'—'), afstand_m:binnen?0:(best?best.d:null),
+            straal_m:best?best.r:null, coord:g?g[0].toFixed(5)+', '+g[1].toFixed(5):null, voorstel};
+        }).sort((a,b)=>{
+          const rang=v=>v.voorstel.startsWith('→')?0:(v.voorstel.startsWith('?')?1:(v.voorstel.startsWith('(')?3:2));
+          return rang(a)-rang(b) || b.events-a.events;
+        });
+        console.info('%cGF groeperingsanalyse — kandidaten voor samenvoegen bovenaan (→), daarna twijfelgevallen (?)','font-weight:bold');
+        console.table(window.GF_GROEPEN);
+      }catch(err){ console.warn('GF groeperingsanalyse mislukt:',err); }
     }
     st.textContent = finaal
       ? (all.length
