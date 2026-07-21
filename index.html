@@ -845,6 +845,17 @@ const isNowTime=t=>{
   let nh=now.getHours()+now.getMinutes()/60; if(nh<7) nh+=24;
   return Math.abs(t-nh)<=0.09; /* ± ~5 min */
 };
+function sublocNodig(loc,naam){
+  if(!loc||!naam) return false;
+  const norm=x=>(x+'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,' ').trim();
+  const stam=t=>t.replace(/(markt|plein|park|hof|straat|kaai|lei)$/,'')||t;
+  const ART=new Set(['de','het','t','den','van','der']);
+  const tok=x=>norm(x).split(' ').filter(w=>w&&!ART.has(w)).map(stam);
+  const pt=new Set(tok(naam));
+  const rest=tok(loc).filter(w=>!pt.has(w));
+  return rest.length>0;   /* alleen tonen als er iets échts overblijft */
+}
 function isPast(e){
   const now=new Date(); const m=now.getMonth();
   if(m<6) return false; if(m>6) return true;
@@ -1382,7 +1393,7 @@ function renderMobile(ROWS, dayEvents){
     b.style.setProperty('--c',GENRES[e.genre].c);
     const meta = `<span class="tr${running?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
       `<span class="gd"></span>${GENRES[e.genre].label}${voorbij?' · voorbij':''}`;
-    const sub=(e.loc&&p&&p.naam&&e.loc.toLowerCase().trim()!==p.naam.toLowerCase().trim())?`<span class="subloc">${e.loc}</span>`:'';
+    const sub=(p&&sublocNodig(e.loc,p.naam))?`<span class="subloc">${e.loc}</span>`:'';
     b.innerHTML=`<span class="th">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
       <span class="bx"><span class="ti">${e.titel}</span><span class="me">${meta}</span>${sub}</span>`;
     b.onclick=()=>openEvent(e,p);
@@ -1508,7 +1519,7 @@ function renderKaarten(ROWS, dayEvents){
     b.style.setProperty('--c',GENRES[e.genre].c);
     const meta=`<span class="tr${live?' on':''}">${fmt(e.start)} – ${fmt(e.start+e.dur)}</span>`+
       `<span class="gd"></span>${GENRES[e.genre].label}${e.gratis?'':' · <span class="paid">€</span>'}${voorbij?' · voorbij':''}`;
-    const sub=(e.loc&&e.loc.toLowerCase().trim()!==p.naam.toLowerCase().trim())?`<span class="subloc">${e.loc}</span>`:'';
+    const sub=sublocNodig(e.loc,p.naam)?`<span class="subloc">${e.loc}</span>`:'';
     b.innerHTML=`<span class="eth2">${initialOf(e)}${e.img?`<img src="${e.img}" alt="" loading="lazy" onerror="this.remove()">`:''}</span>
       <span class="ebody"><span class="ti2">${e.titel}</span><span class="me2">${meta}</span>${sub}</span>`;
     b.onclick=()=>openEvent(e,p);
@@ -1654,7 +1665,7 @@ function openEvent(e,p){
     <span class="genrebadge" style="--c:${g.c}"><span class="sw"></span>${g.label}</span>
     <h2>${e.titel}</h2>
     <div class="meta">
-      <span><a class="maplink" href="${_gmu}" target="_blank" rel="noopener" title="Open in Google Maps">📍 <b>${p.naam}</b>${(e.loc&&e.loc.toLowerCase().trim()!==(p.naam||'').toLowerCase().trim())?` · ${e.loc}`:''} ↗</a></span>
+      <span><a class="maplink" href="${_gmu}" target="_blank" rel="noopener" title="Open in Google Maps">📍 <b>${p.naam}</b>${sublocNodig(e.loc,p.naam)?` · ${e.loc}`:''} ↗</a></span>
       <span>🕘 ${DOW[e.dag]} ${e.dag} juli · <b>${fmt(e.start)} – ${fmt(e.start+e.dur)} u</b></span>
     </div>
     <div class="badges">
