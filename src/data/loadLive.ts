@@ -348,7 +348,9 @@ export async function loadLive(force = false): Promise<void> {
         if (!DAYS.includes(dag)) { audBuitenDagen++; return; }
         /* rawDur = alleen als een vertrouwd eindveld iets zinnigs oplevert, anders null */
         let rawDur: number | null = null;
-        if (endMode === 'iso' && r[isoEndKey!]) {
+        if (endMode === 'iso' && r[isoEndKey!] && !/:59:59/.test(String(r[isoEndKey!]))) {
+          /* :59:59-eindes zijn placeholders ("tot einde feestnacht"), geen echte
+             eindtijd — negeren, zodat de duur-heuristiek het overneemt */
           const de = new Date(r[isoEndKey!]);
           if (!isNaN(+de)) { rawDur = (+de - +d) / 3.6e6; if (rawDur <= 0) rawDur += 24; }
         } else if (endMode === 'time') {
@@ -412,6 +414,25 @@ export async function loadLive(force = false): Promise<void> {
         if (pleinId) { ev.plein = pleinId; all.push(ev); }
         else rest.push(Object.assign(ev, { cat: catFor() }));
       });
+      /* bron-duplicaten: hetzelfde event staat soms meermaals in de export met
+         net verschillende velden (ontsnapt aan de record-dedupe hierboven).
+         Zelfde titel+dag+start+locatie = duplicaat; hou het rijkste record
+         (echte eindtijd weegt het zwaarst, dan foto, beschrijving, url). */
+      let audDubbeleEvents = 0;
+      const rijkdom = (e: any) => (e.rawDur != null ? 4 : 0) + (e.img ? 2 : 0) + (e.descr ? 1 : 0) + (e.url ? 1 : 0);
+      const dedupEvents = (lijst: any[]) => {
+        const byKey = new Map<string, any>();
+        lijst.forEach(e => {
+          const k = (e.titel + '|' + e.dag + '|' + e.start + '|' + (e.loc || '')).toLowerCase();
+          const b = byKey.get(k);
+          if (!b) byKey.set(k, e);
+          else { audDubbeleEvents++; if (rijkdom(e) > rijkdom(b)) byKey.set(k, e); }
+        });
+        return [...byKey.values()];
+      };
+      const allD = dedupEvents(all); all.length = 0; all.push(...allD);
+      const restD = dedupEvents(rest); rest.length = 0; rest.push(...restD);
+
       if (!all.length && !rest.length)
         throw { msg: `${recs.length} records geladen, maar geen enkel event viel binnen 17–26 juli`, dump: recs[0] };
 
@@ -491,8 +512,8 @@ export async function loadLive(force = false): Promise<void> {
         const geplaatst = all.length + rest.length;
         const AUDIT = {
           records: recsIn.length, uniek: recs.length, duplicaten: audDuplicaten,
-          geplaatst, zonderDatum: audZonderDatum, buitenFeestdagen: audBuitenDagen,
-          onverklaard: recs.length - geplaatst - audZonderDatum - audBuitenDagen
+          geplaatst, zonderDatum: audZonderDatum, buitenFeestdagen: audBuitenDagen, dubbeleEvents: audDubbeleEvents,
+          onverklaard: recs.length - geplaatst - audZonderDatum - audBuitenDagen - audDubbeleEvents
         };
         window.GF_AUDIT = AUDIT;
         if (AUDIT.onverklaard > 0) console.warn('GF audit: ' + AUDIT.onverklaard + ' records onverklaard kwijt!');

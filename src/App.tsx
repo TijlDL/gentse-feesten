@@ -18,15 +18,15 @@ import { TijdGrid } from './views/TijdGrid';
 import { ZoekView } from './views/ZoekView';
 import type { State } from './types';
 
-const MQ = window.matchMedia ? window.matchMedia('(max-width:720px)') : null;
-
+/* De app is bewust altijd de mobiele beleving; op bredere schermen toont de
+   CSS ze als een gecentreerde smalle kolom (zie @media min-width:451px). */
 export default function App() {
   const dataVersion = useSyncExternalStore(subscribe, getVersion);
-  const [mobiel, setMobiel] = useState(() => !!MQ?.matches);
+  const mobiel = true;
   const [state, setState] = useState<State>(() => ({
     zoekOpen: false, geo: null, geoBusy: false, dag: initieleDag(),
     genres: new Set<string>(), pleinen: new Set<string>(), paid: false, kids: false,
-    q: '', van: null, tot: null, view: MQ?.matches ? 'tijd' : 'kaarten',
+    q: '', van: null, tot: null, view: 'tijd',
   }));
   const [panel, setPanel] = useState<PanelInhoud | null>(null);
   /* liniaal-tijd: ref, geen state — scrubben mag nooit een re-render triggeren */
@@ -46,7 +46,6 @@ export default function App() {
 
   /* ---- systeem-effects ---- */
   useEffect(() => { loadLive(); startVersieWacht(); }, []);
-  useEffect(() => { MQ?.addEventListener('change', () => setMobiel(MQ.matches)); }, []);
   useEffect(() => { document.body.classList.toggle('zoekmode', state.zoekOpen); }, [state.zoekOpen]);
   useEffect(() => {
     /* sticky-kop-hoogte als CSS-var (mobiele kaart rekent ermee) */

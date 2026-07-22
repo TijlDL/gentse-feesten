@@ -257,7 +257,7 @@ body.zoekmode .searchbtn{display:none}
 .zgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .zhint{color:var(--gent-gray-medium);font-size:.92rem;margin-top:18px}
 .zhint.klein{font-size:.78rem;margin:0}
-@media (max-width:720px){ .zgrid{grid-template-columns:1fr} .searchbtn{right:12px;width:42px;height:42px} }
+@media (min-width:0px){ .zgrid{grid-template-columns:1fr} .searchbtn{right:12px;width:42px;height:42px} }
 .tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
 .tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
   font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
@@ -480,7 +480,7 @@ body.zoekmode .searchbtn{display:none}
 .zgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .zhint{color:var(--gent-gray-medium);font-size:.92rem;margin-top:18px}
 .zhint.klein{font-size:.78rem;margin:0}
-@media (max-width:720px){ .zgrid{grid-template-columns:1fr} .searchbtn{right:12px;width:42px;height:42px} }
+@media (min-width:0px){ .zgrid{grid-template-columns:1fr} .searchbtn{right:12px;width:42px;height:42px} }
 .tinline{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--gent-gray-medium)}
 .tinline select{border:1px solid var(--gent-gray-light);border-radius:var(--radius-pill);padding:5px 9px;
   font-family:inherit;font-size:.82rem;color:var(--gent-gray);background:var(--white)}
@@ -664,7 +664,7 @@ body.zoekmode .searchbtn{display:none}
 .foot{margin:0 0 60px;padding:0 24px;color:var(--gent-gray-medium);font-size:.8rem;line-height:1.65}
 .foot b{color:var(--gent-gray)}
 
-@media (max-width:720px){
+@media (min-width:0px){
   :root{--hourW:52px;--labelW:120px;--rowH:50px}
   /* header: compact, zonder dev-status */
   header{padding:14px 62px 14px 14px}
@@ -727,6 +727,19 @@ body.zoekmode .searchbtn{display:none}
     border-left:none;border-top:1px solid var(--gent-gray-light);
     border-radius:var(--radius-3) var(--radius-3) 0 0;animation:slideup .2s ease-out}
   @keyframes slideup{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+}
+/* De app is bedoeld voor mobiel. Op bredere schermen tonen we ze als een
+   gecentreerde smalle kolom (max 450px) op een neutrale achtergrond, zodat
+   de mobiele UI intact blijft i.p.v. uit te rekken. */
+@media (min-width:451px){
+  html{background:#c9ced3}
+  body{background:transparent}
+  #root{max-width:450px;margin:0 auto;min-height:100dvh;background:var(--gent-gray-ultra);
+    box-shadow:0 0 0 1px rgba(0,24,35,.06),0 12px 48px rgba(0,24,35,.18)}
+  /* sticky-kop + detailsheet + kaarthoogte t.o.v. de kolom, niet de viewport */
+  .stickyhead{max-width:450px}
+  .panelwrap{left:50%;right:auto;transform:translateX(-50%);width:100%;max-width:450px}
+  #kmap{height:calc(100vh - var(--headH,150px) - 66px)}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
