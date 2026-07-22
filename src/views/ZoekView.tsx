@@ -38,7 +38,7 @@ export function ZoekView() {
                 const g = GENRES[e.genre] || { c: 'var(--gent-gray-medium)', label: e.cat || 'Doorlopend' };
                 const voorbij = isPast(e);
                 const plek = e.loc || naamVan(e.plein);
-                const tijd = ((e.start != null && e.dur != null) ? `${fmt(e.start)} – ${fmt(e.start + e.dur)}` : (e.start != null ? fmt(e.start) + ' u' : 'doorlopend')) + (voorbij ? ' · voorbij' : '');
+                const tijd = ((e.start != null && e.dur != null) ? `${fmt(e.start)} – ${e.eindeGeschat ? '±' : ''}${fmt(e.start + e.dur)}` : (e.start != null ? fmt(e.start) + ' u' : 'doorlopend')) + (voorbij ? ' · voorbij' : '');
                 return (
                   <button key={e.id} className={'etile' + (voorbij ? ' past' : '')} style={{ '--c': g.c } as React.CSSProperties}
                     onClick={() => openPanel({ type: 'event', e, p: { naam: plek, tag: '' } })}>

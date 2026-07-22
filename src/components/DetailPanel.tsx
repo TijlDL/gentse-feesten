@@ -58,7 +58,7 @@ function EventInhoud({ e, p }: { e: GFEvent; p: { id?: string; naam: string; tag
       <h2>{e.titel}</h2>
       <div className="meta">
         <span><a className="maplink" href={_gmu} target="_blank" rel="noopener" title="Open in Google Maps">📍 <b>{p.naam}</b>{sublocNodig(e.loc, p.naam) ? ` · ${e.loc}` : ''} ↗</a></span>
-        <span>🕘 {DOW[e.dag]} {e.dag} juli · <b>{fmt(e.start)} – {fmt(e.start + e.dur)} u</b></span>
+        <span>🕘 {DOW[e.dag]} {e.dag} juli · <b>{fmt(e.start)} – {e.eindeGeschat ? '±' : ''}{fmt(e.start + e.dur)} u</b>{e.eindeGeschat ? <span style={{ color: 'var(--gent-gray-medium)', fontSize: '.78rem' }}> · einduur geschat</span> : null}</span>
       </div>
       <div className="badges">
         {e.gratis && <span className="badge gratis">gratis</span>}

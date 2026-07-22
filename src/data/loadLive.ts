@@ -4,7 +4,7 @@
    de endMode-sanity-check en de 3-signalen-pleinkoppeling zijn
    ontwerpkeuzes (zie CLAUDE.md). TS is hier pragmatisch (veel `any`):
    de heuristiek scant per definitie onbekende schema's. */
-import { DAYS, GENRES, PLEINEN } from '../config';
+import { DAYS, END_H, GENRES, PLEINEN } from '../config';
 import { fmt } from '../lib/tijd';
 import { BUILD_ID, cacheGeldig, cacheLees, cacheZet, dagKeyNu } from './cache';
 import { store, notify, setStatus } from './store';
@@ -456,23 +456,27 @@ export async function loadLive(force = false): Promise<void> {
       });
       for (let i = rest.length - 1; i >= 0; i--) if (rest[i].plein) rest.splice(i, 1);
 
-      /* ---- 5. duur bepalen: einde = start van het volgende event op dezelfde rij ---- */
+      /* ---- 5. duur bepalen ----
+         Een vertrouwd einduur uit de dataset is heilig: niet afkappen op 6u,
+         niet overschrijven met de start van het volgende event (overlap op
+         één plein is legitiem — meerdere podia). De heuristieken hieronder
+         zijn enkel het vangnet voor events ZONDER betrouwbaar einde. */
       const byRow: Record<string, any[]> = {};
       all.forEach(e => { (byRow[e.plein + '|' + e.dag] ||= []).push(e); });
       Object.values(byRow).forEach(list => {
         list.sort((a, b) => a.start - b.start);
         list.forEach((e, i) => {
+          if (e.rawDur != null) { e.dur = Math.max(.5, Math.min(e.rawDur, END_H - e.start)); return; }
+          /* geen eindtijd: einde = start van het volgende event op dezelfde rij */
           const next = list[i + 1];
-          let dur = e.rawDur;
-          if (next && next.start > e.start) {
-            const gap = next.start - e.start;
-            dur = (dur != null && dur <= gap + .01) ? dur : Math.min(Math.max(gap, .5), 4);
-          }
+          let dur: number | null = null;
+          if (next && next.start > e.start) dur = Math.min(Math.max(next.start - e.start, .5), 4);
           if (dur == null) dur = 1.25;              // laatste van de avond zonder eindtijd
           e.dur = Math.max(.5, Math.min(dur, 6));
+          e.eindeGeschat = true;                    // schatting → UI toont "±"
         });
       });
-      rest.forEach(e => { if (e.dur == null) e.dur = e.rawDur ?? 1.25; });
+      rest.forEach(e => { if (e.dur == null) { e.dur = e.rawDur ?? 1.25; if (e.rawDur == null) e.eindeGeschat = true; } });
 
       rows = [...rows.filter(r => r.sec !== 'elders'), ...rows.filter(r => r.sec === 'elders')];
       /* rij-ankers per dag: alle plekken waar de events die dag staan,

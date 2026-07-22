@@ -12,6 +12,7 @@ export interface GFEvent {
   start: number;          // uur in feestdag-venster (9..31); 02:00 → 26
   dur: number;            // duur in uren (na duurbepaling)
   rawDur?: number | null; // duur uit een vertrouwd eindveld, anders null
+  eindeGeschat?: boolean; // einde is een schatting (geen betrouwbaar eindveld) → toon "±"
   titel: string;
   plein: string | null;   // plein-id, of null → "doorlopend & elders"
   genre: GenreKey;
