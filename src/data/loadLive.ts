@@ -105,7 +105,13 @@ export async function loadLive(force = false): Promise<void> {
           || lk.find(k => /naam|name|titel|title/.test(k.toLowerCase()) && typeof val(recsIn[0][k]) === 'string') || lk[0];
         recsIn.forEach(lr => {
           const nm = val(lr[nameK]); if (!nm) return;
-          lk.forEach(k => { const v = lr[k]; if (v != null && typeof v !== 'object' && (v + '').length < 200) map.set((v + '').toLowerCase().trim(), nm); });
+          /* kruisverwijzingen (containedinplace/containsplace) NIET indexeren:
+             dat zijn URL's van ándere records — anders kaapt bv. een café-record
+             de URL van het plein waarin het ligt en resolven events verkeerd */
+          lk.forEach(k => {
+            if (/contain|parent|child/i.test(k)) return;
+            const v = lr[k]; if (v != null && typeof v !== 'object' && (v + '').length < 200) map.set((v + '').toLowerCase().trim(), nm);
+          });
         });
         return map;
       };
@@ -275,8 +281,12 @@ export async function loadLive(force = false): Promise<void> {
         ['boomtown', ['boomtown', 'ha concerts', 'handelsbeurs', 'concertzaal']],
         ['korenmarkt', ['korenmarkt', 'oud postgebouw']],
         ['groenten', ['groentenmarkt', 'galgenhuis']],
-        ['vrijdagmarkt', ['vrijdagmarkt', 'lakenmetershuis', 'lakenmeestershuis', 'ons huis']],
-        ['sintbaafs', ['baafsplein', 'sint bavo', 'baafskathedraal']],
+        /* het Arteveldestandbeeld is het vaste podium middenop de Vrijdagmarkt (0m van het anker) */
+        ['vrijdagmarkt', ['vrijdagmarkt', 'lakenmetershuis', 'lakenmeestershuis', 'ons huis', 'arteveldestandbeeld']],
+        /* let op: 'sint bavo' is hier bewust GEEN alias — dat is de
+           Sint-Bavohumaniora aan de Reep (CirQ-feestzone, ±330m verderop),
+           niet het plein. Die krijgt zijn eigen rij uit de live data. */
+        ['sintbaafs', ['baafsplein', 'baafskathedraal']],
         /* het Gravensteen en de Oude Vismijn flankeren het Sint-Veerleplein */
         ['veerle', ['veerleplein', 'gravensteen', 'oude vismijn']],
         ['laurent', ['laurentplein', 'luisterplein']],
