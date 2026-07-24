@@ -148,7 +148,7 @@ header{padding:20px 70px 0 24px}
 .ev .t{font-weight:600;font-size:.8rem;line-height:1.15;color:var(--gent-gray);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev .m{font-size:.68rem;color:var(--gent-gray-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev .m .paid{color:var(--gent-orange);font-weight:700}
+.paid{color:var(--gent-orange);font-weight:700} /* €-markering bij betalende events (overal) */
 
 /* doorlopend strip (alleen de rasterrij — .ruler .strip moet wit blijven) */
 .row.strip{background:var(--gent-gray-ultra)}

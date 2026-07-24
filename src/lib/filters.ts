@@ -6,7 +6,7 @@ export function matches(e: GFEvent, state: State): boolean {
   if (state.tot != null && e.start >= state.tot) return false;
   if (state.genres.size && !state.genres.has(e.genre)) return false;
   if (state.pleinen.size && !state.pleinen.has(e.plein as string)) return false;
-  if (!state.paid && !e.gratis) return false; /* standaard: enkel gratis */
+  if (state.gratisOnly && !e.gratis) return false; /* standaard tonen we alles; betalend is met € gemarkeerd */
   if (state.kids && !e.kids) return false;
   const q = state.q.trim();
   if (q && !e.titel.toLowerCase().includes(q)) return false;

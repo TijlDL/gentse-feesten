@@ -53,7 +53,7 @@ export interface State {
   dag: number;
   genres: Set<string>;
   pleinen: Set<string>;
-  paid: boolean;
+  gratisOnly: boolean;    // filter: enkel gratis tonen (standaard uit → alles tonen)
   kids: boolean;
   q: string;
   van: number | null;     // tijdsvenster-filter

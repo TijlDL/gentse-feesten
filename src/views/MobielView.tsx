@@ -23,7 +23,7 @@ function LRow({ e, p, running }: { e: GFEvent; p: Rij | null; running: boolean }
       <span className="bx">
         <span className="ti">{e.titel}</span>
         {/* geen genre-kleurblokje in de mobiele kaarten: het genre in tekst volstaat */}
-        <span className="me"><span className={'tr' + (running ? ' on' : '')} title={e.eindeGeschat ? 'einduur geschat' : undefined}>{running && <LiveDot />}{fmt(e.start)} – {e.eindeGeschat ? '±' : ''}{fmt(e.start + e.dur)}</span><span aria-hidden="true">·</span>{GENRES[e.genre].label}{voorbij ? ' · voorbij' : ''}</span>
+        <span className="me"><span className={'tr' + (running ? ' on' : '')} title={e.eindeGeschat ? 'einduur geschat' : undefined}>{running && <LiveDot />}{fmt(e.start)} – {e.eindeGeschat ? '±' : ''}{fmt(e.start + e.dur)}</span><span aria-hidden="true">·</span>{GENRES[e.genre].label}{e.gratis ? '' : <> · <span className="paid">€</span></>}{voorbij ? ' · voorbij' : ''}</span>
         {sub && <span className="subloc">{e.loc}</span>}
       </span>
     </button>

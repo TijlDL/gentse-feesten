@@ -25,7 +25,7 @@ export default function App() {
   const mobiel = true;
   const [state, setState] = useState<State>(() => ({
     zoekOpen: false, geo: null, geoBusy: false, dag: initieleDag(),
-    genres: new Set<string>(), pleinen: new Set<string>(), paid: false, kids: false,
+    genres: new Set<string>(), pleinen: new Set<string>(), gratisOnly: false, kids: false,
     q: '', van: null, tot: null, view: 'tijd',
   }));
   const [panel, setPanel] = useState<PanelInhoud | null>(null);
@@ -42,7 +42,7 @@ export default function App() {
   }), []);
   const matchesE = useCallback((e: any) => matches(e, state), [state]);
   const filterSig = [state.dag, [...state.genres].join(','), [...state.pleinen].join(','),
-    state.paid, state.kids, state.q, state.van, state.tot, state.geo?.join(';'), dataVersion].join('|');
+    state.gratisOnly, state.kids, state.q, state.van, state.tot, state.geo?.join(';'), dataVersion].join('|');
 
   /* ---- systeem-effects ---- */
   useEffect(() => { loadLive(); startVersieWacht(); }, []);

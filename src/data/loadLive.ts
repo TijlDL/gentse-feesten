@@ -126,15 +126,38 @@ export async function loadLive(force = false): Promise<void> {
         }
         return null;
       };
+      /* rommelcoördinaten weren: sommige locatierecords dragen een geocode
+         kilometers buiten het feesthart (bv. "Kiosk" op 51.105,3.829 ≈ 7 km).
+         Die mogen de plein-ankers en wandelafstanden niet vervuilen. */
+      const FEESTHART: [number, number] = [51.0536, 3.7253];
+      const kmVanHart = (g: [number, number]) => {
+        const R = 111320, dy = (g[0] - FEESTHART[0]) * R, dx = (g[1] - FEESTHART[1]) * R * Math.cos(g[0] * Math.PI / 180);
+        return Math.hypot(dx, dy) / 1000;
+      };
+      /* ouder-kind: sublocaties verwijzen via containedinplace naar hun plein
+         ("Kiosk" → "Kouter"). Dat gebruiken we als extra KOPPELsignaal — niet
+         voor naam-resolutie (zie buildMap-commentaar). */
+      const parentNaam = new Map<string, string>();
       try {
         LOCMAP = buildMap(locRecs);
-        if (locRecs) locRecs.forEach((lr: any) => {
-          const g = geoOf(lr); if (!g) return;
-          const lk = Object.keys(lr);
+        if (locRecs) {
+          const lk = Object.keys(locRecs[0]);
           const nameK = lk.find(k => /(^|_)name_nl$|(^|_)naam/.test(k.toLowerCase()))
             || lk.find(k => /naam|name|titel|title/.test(k.toLowerCase()));
-          const nm = nameK ? val(lr[nameK]) : null; if (nm) LOCGEO.set((nm + '').toLowerCase().trim(), g);
-        });
+          const idK = lk.find(k => k.toLowerCase() === 'id') || 'id';
+          const parentK = lk.find(k => /containedinplace/i.test(k));
+          const idNaam = new Map<string, string>();
+          locRecs.forEach((lr: any) => {
+            const g = geoOf(lr); if (g && kmVanHart(g) <= 4) { const nm = nameK ? val(lr[nameK]) : null; if (nm) LOCGEO.set((nm + '').toLowerCase().trim(), g); }
+            const id = ((lr[idK] ?? '') + '').toLowerCase().trim(); const nm = nameK ? val(lr[nameK]) : null;
+            if (id && nm) idNaam.set(id, nm + '');
+          });
+          if (parentK) locRecs.forEach((lr: any) => {
+            const id = ((lr[idK] ?? '') + '').toLowerCase().trim();
+            const par = ((lr[parentK] ?? '') + '').toLowerCase().trim();
+            if (id && par && idNaam.has(par)) parentNaam.set(id, idNaam.get(par)!);
+          });
+        }
       } catch (_) {/* optioneel */ }
       try { THEMEMAP = buildMap(thRecs); } catch (_) {/* optioneel */ }
       const resolveVia = (map: Map<string, any>, raw: any) => {
@@ -277,8 +300,11 @@ export async function loadLive(force = false): Promise<void> {
         ['polepole', ['polé', 'pole pole', 'pole-pole', 'graslei']],
         /* Baudelohof-podia: Het Bal, Salsabar en De Karavaan staan in het park (geverifieerd op coords) */
         ['baudelo', ['baudelo', 'bord de l', 'het bal', 'salsabar', 'karavaan']],
-        /* Boomtown speelt op de Kouter én binnen in de Handelsbeurs (Ha Concerts / 'Concertzaal') */
-        ['boomtown', ['boomtown', 'ha concerts', 'handelsbeurs', 'concertzaal']],
+        /* Boomtown = de Ha Concerts-zaal in de Handelsbeurs. NIET de bare alias
+           'concertzaal': dat is óók de MIRY-Concertzaal en Vooruit (andere zalen,
+           ~600m verderop). De échte Boomtown-zaal heet "Handelsbeurs Concertzaal"
+           of "Boomtown (Ha Concerts)" en blijft via 'handelsbeurs'/'boomtown' gekoppeld. */
+        ['boomtown', ['boomtown', 'ha concerts', 'handelsbeurs']],
         ['korenmarkt', ['korenmarkt', 'oud postgebouw']],
         ['groenten', ['groentenmarkt', 'galgenhuis']],
         /* het Arteveldestandbeeld is het vaste podium middenop de Vrijdagmarkt (0m van het anker) */
@@ -368,7 +394,8 @@ export async function loadLive(force = false): Promise<void> {
           if (te != null) { rawDur = te - (h % 24); if (rawDur <= 0) rawDur += 24; }
         }
         if (rawDur != null && !(rawDur > 0 && rawDur < 24)) rawDur = null;
-        let loc = resolveLoc(locKey && r[locKey]);
+        const locRaw = locKey ? r[locKey] : null;
+        let loc = resolveLoc(locRaw);
         if ((!locKey || !loc) && LOCMAP.size) { // geen locatieveld? zoek een veld dat via de locaties-dataset resolvet
           for (const v of Object.values(r)) { const nm = LOCMAP.get(((val(v) || '') + '').toLowerCase().trim()); if (nm) { loc = (val(nm) ?? nm) + ''; break; } }
         }
@@ -417,6 +444,17 @@ export async function loadLive(force = false): Promise<void> {
               return { id: pl.id, d: Math.min(...z.pts.map(pt => distZ(gLoc, pt))) };
             })
               .sort((a, b) => a.d - b.d)[0].id;
+          }
+        }
+        if (!pleinId) {
+          /* nog niet gekoppeld: valt deze (sub)locatie via containedinplace onder
+             een gekend plein? ("Kiosk" → "Kouter"). We hergebruiken dezelfde
+             alias-lijst, dus dit koppelt enkel aan de 15 gekende pleinen. */
+          const parent = parentNaam.get(((locRaw ?? '') + '').toLowerCase().trim());
+          if (parent) {
+            const lowPar = parent.toLowerCase();
+            const parHit = PLEIN_MATCH.find(([, words]) => words.some(w => lowPar.includes(w)));
+            if (parHit) pleinId = parHit[0];
           }
         }
         const echtDoorlopend = /tentoonstell|expo|museum|wandel|zoektocht|fiets|route|boot|water|sup|kajak|kano/.test(kw);
@@ -476,7 +514,10 @@ export async function loadLive(force = false): Promise<void> {
       Object.values(byRow).forEach(list => {
         list.sort((a, b) => a.start - b.start);
         list.forEach((e, i) => {
-          if (e.rawDur != null) { e.dur = Math.max(.5, Math.min(e.rawDur, END_H - e.start)); return; }
+          /* echt einduur: toon het exact (geen 0,5u-vloer meer — die was voor
+             tikbare blokjes in het oude desktopraster; korte events van 15-20 min
+             mogen nu hun echte duur tonen). ~5 min ondergrens tegen nul-breedte. */
+          if (e.rawDur != null) { e.dur = Math.max(.08, Math.min(e.rawDur, END_H - e.start)); return; }
           /* geen eindtijd: einde = start van het volgende event op dezelfde rij */
           const next = list[i + 1];
           let dur: number | null = null;

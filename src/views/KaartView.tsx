@@ -8,6 +8,12 @@ import type { Coord, GFEvent, Rij } from '../types';
 
 /* ================= KAARTWEERGAVE ================= */
 
+/** HTML-escape voor de Leaflet-popups: locatienamen/titels komen uit de open
+    data (organisator-ingevoerd) en worden als HTML-string aan Leaflet gegeven,
+    dus escapen we ze om DOM-XSS uit te sluiten. */
+const esc = (s: string) => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+
 /** enkel dataset-posities: dag-anker -> locatie-record -> gekalibreerd anker; anders geen marker */
 function rowCoords(p: Rij, dag: number): Coord | null {
   const geo = window._GF_LOCGEO, kal = window._GF_KAL_COORDS;
@@ -50,11 +56,11 @@ export function KaartView({ ROWS, dayEvents, stickyEl }: { ROWS: Rij[]; dayEvent
       });
       const m = L.marker(c, { icon }).addTo(MARKLAYER);
       const rows = [...bezig.map(e => ({ e, b: 1 })), ...straks.map(e => ({ e, b: 0 }))].slice(0, 5)
-        .map(({ e }) => `<button class="krow" onclick="window._gfOpen('${e.id}')">`
-          + `<span class="kdot" style="--c:${GENRES[e.genre].c}"></span><b>${fmt(e.start)}</b> ${e.titel.replace(/</g, '&lt;')}</button>`).join('');
-      m.bindPopup(`<div class="kpop"><h4>${p.naam}</h4>${rows || '<p class="kleeg">Niets rond dit uur</p>'}</div>`,
+        .map(({ e }) => `<button class="krow" onclick="window._gfOpen('${esc(e.id)}')">`
+          + `<span class="kdot" style="--c:${GENRES[e.genre].c}"></span><b>${fmt(e.start)}</b> ${esc(e.titel)}</button>`).join('');
+      m.bindPopup(`<div class="kpop"><h4>${esc(p.naam)}</h4>${rows || '<p class="kleeg">Niets rond dit uur</p>'}</div>`,
         { closeButton: false, maxWidth: 280 });
-      if (!mobiel) m.bindTooltip(p.naam, { direction: 'top', offset: [0, -size / 2 - 2] });
+      if (!mobiel) m.bindTooltip(esc(p.naam), { direction: 'top', offset: [0, -size / 2 - 2] });
     });
   };
 

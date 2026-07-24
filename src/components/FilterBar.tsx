@@ -40,7 +40,7 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
 
   const win = state.van != null || state.tot != null;
   const uur = (t: number | null) => t == null ? null : (t % 1 ? fmt(t) : (t % 24) + 'u');
-  const nActief = state.genres.size + state.pleinen.size + (state.paid ? 1 : 0) + (state.kids ? 1 : 0);
+  const nActief = state.genres.size + state.pleinen.size + (state.gratisOnly ? 1 : 0) + (state.kids ? 1 : 0);
 
   const syncVan = (v: string, t: string) => {
     let van = v ? +v : null, tot = t ? +t : null;
@@ -99,11 +99,11 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
         </div>
       </div>
       <div className={'gdrop' + (open === 'M' ? ' open' : '')}>
-        <button className={'chip gbtn' + ((state.paid || state.kids || state.genres.size) ? ' on' : '')} id="gbtnM" onClick={toggleDrop('M')}>
-          Meer{cnt((state.paid ? 1 : 0) + (state.kids ? 1 : 0) + state.genres.size)}<span className="car">▾</span></button>
+        <button className={'chip gbtn' + ((state.gratisOnly || state.kids || state.genres.size) ? ' on' : '')} id="gbtnM" onClick={toggleDrop('M')}>
+          Meer{cnt((state.gratisOnly ? 1 : 0) + (state.kids ? 1 : 0) + state.genres.size)}<span className="car">▾</span></button>
         <div className="gpanel" id="gpanelM" ref={el => { panelRefs.current.M = el; }} onClick={stop}>
-          <button className={state.paid ? 'on' : ''} onClick={() => set({ paid: !state.paid })}>
-            <span className="sw2" style={{ background: 'var(--gent-orange)' }} />Ook betalend · €<span className="ck">✓</span></button>
+          <button className={state.gratisOnly ? 'on' : ''} onClick={() => set({ gratisOnly: !state.gratisOnly })}>
+            <span className="sw2" style={{ background: 'var(--gent-blue)' }} />Enkel gratis<span className="ck">✓</span></button>
           <button className={state.kids ? 'on' : ''} onClick={() => set({ kids: !state.kids })}>
             <span className="sw2" style={{ background: 'var(--gent-red-pastel)' }} />Met kinderen<span className="ck">✓</span></button>
           <p className="gsec">Genres</p>
@@ -111,11 +111,11 @@ export function FilterBar({ dayEvents }: { dayEvents: GFEvent[] }) {
             <button key={k} className={state.genres.has(k) ? 'on' : ''} onClick={() => toggleIn('genres', k)}>
               <span className="sw2" style={{ background: g.c }} />{g.label}<span className="ck">✓</span></button>
           ))}
-          <button className="gclear" onClick={() => set({ genres: new Set(), pleinen: new Set(), paid: false, kids: false, van: null, tot: null })}>Alles wissen</button>
+          <button className="gclear" onClick={() => set({ genres: new Set(), pleinen: new Set(), gratisOnly: false, kids: false, van: null, tot: null })}>Alles wissen</button>
         </div>
       </div>
       <button className="reset" id="resetBtn" hidden={!(nActief || win || state.q)}
-        onClick={() => set({ genres: new Set(), pleinen: new Set(), paid: false, kids: false, q: '', van: null, tot: null })}>wis filters</button>
+        onClick={() => set({ genres: new Set(), pleinen: new Set(), gratisOnly: false, kids: false, q: '', van: null, tot: null })}>wis filters</button>
       {/* op mobiel één volle rij: geo-knop links, weergave-toggle rechts (space-between);
           op desktop is deze wrapper onzichtbaar (display:contents) */}
       <div className="georij">
